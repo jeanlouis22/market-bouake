@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Test inscription - Market Bouaké</title>
+
+</head>
+
+<body>
+
+    <h1>Test inscription acheteur</h1>
+
+    <input
+
+        type="email"
+
+        id="email"
+
+        placeholder="Email"
+
+    >
+
+    <br><br>
+
+    <input
+
+        type="password"
+
+        id="password"
+
+        placeholder="Mot de passe"
+
+    >
+
+    <br><br>
+
+    <button id="signup">
+
+        Créer le compte test
+
+    </button>
+
+    <p id="message"></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL =
+
+            "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+        const SUPABASE_PUBLISHABLE_KEY =
+
+            "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+        const supabaseClient =
+
+            window.supabase.createClient(
+
+                SUPABASE_URL,
+
+                SUPABASE_PUBLISHABLE_KEY
+
+            );
+
+        document
+
+            .getElementById("signup")
+
+            .addEventListener("click", async () => {
+
+                const email =
+
+                    document
+
+                        .getElementById("email")
+
+                        .value
+
+                        .trim();
+
+                const password =
+
+                    document
+
+                        .getElementById("password")
+
+                        .value;
+
+                const message =
+
+                    document.getElementById("message");
+
+                if (!email || !password) {
+
+                    message.textContent =
+
+                        "Remplis les deux champs.";
+
+                    return;
+
+                }
+
+                message.textContent =
+
+                    "Création du compte...";
+
+                const { data, error } =
+
+                    await supabaseClient.auth.signUp({
+
+                        email: email,
+
+                        password: password,
+
+                        options: {
+
+                            data: {
+
+                                first_name: "Test",
+
+                                last_name: "Acheteur",
+
+                                phone: "+2250000000000",
+
+                                gender: "Non précisé",
+
+                                requested_role: "buyer"
+
+                            }
+
+                        }
+
+                    });
+
+                if (error) {
+
+                    console.error(error);
+
+                    message.textContent =
+
+                        "Erreur : " + error.message;
+
+                    return;
+
+                }
+
+                console.log(
+
+                    "Utilisateur créé :",
+
+                    data.user
+
+                );
+
+                message.textContent =
+
+                    "Compte créé avec succès.";
+
+            });
+
+    </script>
+
+</body>
+
+</html>
