@@ -20,15 +20,47 @@
 
         <h1>Market Bouaké</h1>
 
-        <p id="connection-status">Connexion à Supabase...</p>
+        <p id="connection-status">
+
+            Connexion à Supabase...
+
+        </p>
+
+        <hr>
+
+        <h2>Test d'inscription</h2>
+
+        <input
+
+            type="email"
+
+            id="test-email"
+
+            placeholder="Email"
+
+        >
+
+        <input
+
+            type="password"
+
+            id="test-password"
+
+            placeholder="Mot de passe"
+
+        >
+
+        <button id="test-signup">
+
+            Créer un compte test
+
+        </button>
+
+        <p id="signup-status"></p>
 
     </main>
 
-    <!-- Bibliothèque officielle Supabase -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Notre code -->
 
     <script src="app.js"></script>
 
