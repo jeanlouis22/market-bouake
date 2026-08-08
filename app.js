@@ -28,19 +28,13 @@ async function testSupabaseConnection() {
 
     try {
 
-        const { error } = await supabaseClient
-
-            .from("profiles")
-
-            .select("id")
-
-            .limit(1);
+        const { data, error } = await supabaseClient.auth.getSession();
 
         if (error) {
 
             console.error("Erreur Supabase :", error);
 
-            status.textContent = "Supabase connecté, mais vérification de la base à contrôler.";
+            status.textContent = "Erreur de connexion à Supabase.";
 
             return;
 
@@ -50,9 +44,11 @@ async function testSupabaseConnection() {
 
         console.log("Connexion Supabase réussie.");
 
+        console.log("Session actuelle :", data.session);
+
     } catch (error) {
 
-        console.error("Erreur de connexion :", error);
+        console.error("Erreur :", error);
 
         status.textContent = "Erreur de connexion à Supabase.";
 
