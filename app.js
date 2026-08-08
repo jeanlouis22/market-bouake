@@ -20,7 +20,7 @@ const supabaseClient = window.supabase.createClient(
 
 );
 
-// Vérification de la connexion
+// Test de connexion à Supabase
 
 async function testSupabaseConnection() {
 
