@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Devenir vendeur | Market Bouaké</title>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7f6;
+
+            color: #17211b;
+
+            min-height: 100vh;
+
+            padding: 20px;
+
+        }
+
+        .container {
+
+            width: 100%;
+
+            max-width: 620px;
+
+            margin: 30px auto;
+
+            background: #ffffff;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+        }
+
+        .logo {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+        }
+
+        .logo-icon {
+
+            width: 65px;
+
+            height: 65px;
+
+            margin: auto;
+
+            border-radius: 18px;
+
+            background: #0b6b43;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 32px;
+
+        }
+
+        h1 {
+
+            text-align: center;
+
+            margin-top: 12px;
+
+            font-size: 26px;
+
+        }
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #6b7280;
+
+            margin-top: 8px;
+
+            margin-bottom: 25px;
+
+            line-height: 1.5;
+
+        }
+
+        .info-box {
+
+            background: #eef8f3;
+
+            border: 1px solid #cce9da;
+
+            border-radius: 12px;
+
+            padding: 14px;
+
+            margin-bottom: 22px;
+
+            line-height: 1.5;
+
+            font-size: 14px;
+
+        }
+
+        .form-group {
+
+            margin-bottom: 16px;
+
+        }
+
+        label {
+
+            display: block;
+
+            font-weight: 600;
+
+            margin-bottom: 7px;
+
+        }
+
+        .required {
+
+            color: #c62828;
+
+        }
+
+        input,
+
+        select,
+
+        textarea {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #d6ddd9;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            font-family: inherit;
+
+        }
+
+        textarea {
+
+            min-height: 110px;
+
+            resize: vertical;
+
+        }
+
+        input:focus,
+
+        select:focus,
+
+        textarea:focus {
+
+            border-color: #0b6b43;
+
+        }
+
+        .row {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+        }
+
+        .checkbox-group {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 10px;
+
+            margin: 15px 0;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+        }
+
+        .checkbox-group input {
+
+            width: 18px;
+
+            height: 18px;
+
+            margin-top: 2px;
+
+            flex-shrink: 0;
+
+        }
+
+        button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            background: #0b6b43;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 8px;
+
+        }
+
+        button:hover {
+
+            opacity: 0.92;
+
+        }
+
+        button:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+        }
+
+        #message {
+
+            margin-top: 18px;
+
+            text-align: center;
+
+            font-weight: 600;
+
+            line-height: 1.5;
+
+        }
+
+        .login {
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #6b7280;
+
+        }
+
+        .login a {
+
+            color: #0b6b43;
+
+            font-weight: bold;
+
+            text-decoration: none;
+
+        }
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 12px;
+
+            color: #6b7280;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+        }
+
+        .section-title {
+
+            margin: 25px 0 15px;
+
+            padding-bottom: 8px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            color: #0b6b43;
+
+            font-size: 18px;
+
+        }
+
+        .small {
+
+            color: #6b7280;
+
+            font-size: 13px;
+
+            margin-top: 5px;
+
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+
+                padding: 22px;
+
+                margin: 10px auto;
+
+            }
+
+            .row {
+
+                grid-template-columns: 1fr;
+
+                gap: 0;
+
+            }
+
+            h1 {
+
+                font-size: 23px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+
+        <div class="logo-icon">🛒</div>
+
+        <h1>Market Bouaké</h1>
+
+    </div>
+
+    <p class="subtitle">
+
+        Devenez vendeur sur Market Bouaké
+
+    </p>
+
+    <div class="info-box">
+
+        <strong>Important :</strong>
+
+        Votre compte reste utilisable comme acheteur pendant l'examen
+
+        de votre demande vendeur.
+
+        L'accès à l'espace vendeur sera disponible uniquement après
+
+        validation par l'administration.
+
+    </div>
+
+    <form id="sellerForm">
+
+        <!-- ========================================= -->
+
+        <!-- COMPTE -->
+
+        <!-- ========================================= -->
+
+        <h2 class="section-title">
+
+            🔐 Création du compte
+
+        </h2>
+
+        <div class="form-group">
+
+            <label for="email">
+
+                Email <span class="required">*</span>
+
+            </label>
+
+            <input
+
+                type="email"
+
+                id="email"
+
+                placeholder="exemple@email.com"
+
+                required
+
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="password">
+
+                Mot de passe <span class="required">*</span>
+
+            </label>
+
+            <input
+
+                type="password"
+
+                id="password"
+
+                placeholder="Minimum 6 caractères"
+
+                minlength="6"
+
+                required
+
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="confirmPassword">
+
+                Confirmer le mot de passe <span class="required">*</span>
+
+            </label>
+
+            <input
+
+                type="password"
+
+                id="confirmPassword"
+
+                placeholder="Confirmez votre mot de passe"
+
+                minlength="6"
+
+                required
+
+            >
+
+        </div>
+
+        <!-- ========================================= -->
+
+        <!-- INFORMATIONS PERSONNELLES -->
+
+        <!-- ========================================= -->
+
+        <h2 class="section-title">
+
+            👤 Informations personnelles
+
+        </h2>
+
+        <div class="row">
+
+            <div class="form-group">
+
+                <label for="firstName">
+
+                    Prénom <span class="required">*</span>
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="firstName"
+
+                    placeholder="Votre prénom"
+
+                    required
+
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="lastName">
+
+                    Nom <span class="required">*</span>
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="lastName"
+
+                    placeholder="Votre nom"
+
+                    required
+
+                >
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="gender">
+
+                Genre <span class="required">*</span>
+
+            </label>
+
+            <select id="gender" required>
+
+                <option value="">
+
+                    Sélectionner
+
+                </option>
+
+                <option value="homme">
+
+                    Homme
+
+                </option>
+
+                <option value="femme">
+
+                    Femme
+
+                </option>
+
+                <option value="autre">
+
+                    Autre
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="birthDate">
+
+                Date de naissance <span class="required">*</span>
+
+            </label>
+
+            <input
+
+                type="date"
+
+                id="birthDate"
+
+                required
+
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="phone">
+
+                WhatsApp professionnel <span class="required">*</span>
+
+            </label>
+
+            <input
+
+                type="tel"
+
+                id="phone"
+
+                placeholder="+225XXXXXXXXXX"
+
+                required
+
+            >
+
+            <p class="small">
+
+                Format : +225XXXXXXXXXX
+
+            </p>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="profilePhoto">
+
+                Photo de profil <span class="required">*</span>
+
+            </label>
+
+            <input
+
+                type="file"
+
+                id="profilePhoto"
+
+                accept="image/*"
+
+                required
+
+            >
+
+            <p class="small">
+
+                Cette photo pourra apparaître sur votre profil vendeur public.
+
+            </p>
+
+        </div>
+
+        <!-- ========================================= -->
+
+        <!-- BOUTIQUE -->
+
+        <!-- ========================================= -->
+
+        <h2 class="section-title">
+
+            🏪 Informations de la boutique
+
+        </h2>
+
+        <div class="form-group">
+
+            <label for="shopName">
+
+                Nom de la boutique <span class="required">*</span>
+
+            </label>
+
+            <input
+
+                type="text"
+
+                id="shopName"
+
+                placeholder="Exemple : Boutique Koko"
+
+                required
+
+            >
+
+        </div>
+
+        <div class="row">
+
+            <div class="form-group">
+
+                <label for="city">
+
+                    Ville <span class="required">*</span>
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="city"
+
+                    value="Bouaké"
+
+                    required
+
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="district">
+
+                    Quartier
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="district"
+
+                    placeholder="Votre quartier"
+
+                >
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="mainCategory">
+
+                Catégorie principale
+
+            </label>
+
+            <select id="mainCategory">
+
+                <option value="">
+
+                    Sélectionner une catégorie
+
+                </option>
+
+                <option value="Mode">
+
+                    Mode
+
+                </option>
+
+                <option value="Téléphones">
+
+                    Téléphones
+
+                </option>
+
+                <option value="Informatique">
+
+                    Informatique
+
+                </option>
+
+                <option value="Maison">
+
+                    Maison
+
+                </option>
+
+                <option value="Beauté">
+
+                    Beauté
+
+                </option>
+
+                <option value="Alimentation">
+
+                    Alimentation
+
+                </option>
+
+                <option value="Chaussures">
+
+                    Chaussures
+
+                </option>
+
+                <option value="Jeux">
+
+                    Jeux
+
+                </option>
+
+                <option value="Services">
+
+                    Services
+
+                </option>
+
+                <option value="Autre">
+
+                    Autre
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="description">
+
+                Description de la boutique
+
+            </label>
+
+            <textarea
+
+                id="description"
+
+                placeholder="Présentez brièvement votre boutique et vos produits..."
+
+            ></textarea>
+
+        </div>
+
+        <!-- ========================================= -->
+
+        <!-- RÉSEAUX SOCIAUX -->
+
+        <!-- ========================================= -->
+
+        <h2 class="section-title">
+
+            🌐 Réseaux sociaux
+
+        </h2>
+
+        <div class="info-box">
+
+            Facebook et TikTok sont facultatifs.
+
+            Vous pourrez également les ajouter plus tard depuis
+
+            votre espace vendeur.
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="facebook">
+
+                Facebook
+
+            </label>
+
+            <input
+
+                type="url"
+
+                id="facebook"
+
+                placeholder="https://facebook.com/..."
+
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="tiktok">
+
+                TikTok
+
+            </label>
+
+            <input
+
+                type="url"
+
+                id="tiktok"
+
+                placeholder="https://tiktok.com/@..."
+
+            >
+
+        </div>
+
+        <!-- ========================================= -->
+
+        <!-- CONFIRMATION -->
+
+        <!-- ========================================= -->
+
+        <h2 class="section-title">
+
+            📋 Confirmation
+
+        </h2>
+
+        <div class="checkbox-group">
+
+            <input
+
+                type="checkbox"
+
+                id="acceptTerms"
+
+                required
+
+            >
+
+            <label for="acceptTerms">
+
+                J'accepte les conditions d'utilisation
+
+                de Market Bouaké.
+
+                <span class="required">*</span>
+
+            </label>
+
+        </div>
+
+        <div class="checkbox-group">
+
+            <input
+
+                type="checkbox"
+
+                id="confirmInfo"
+
+                required
+
+            >
+
+            <label for="confirmInfo">
+
+                Je confirme que les informations fournies
+
+                sont exactes.
+
+                <span class="required">*</span>
+
+            </label>
+
+        </div>
+
+        <button
+
+            type="submit"
+
+            id="submitButton"
+
+        >
+
+            🏪 Créer mon compte vendeur
+
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <div class="login">
+
+        Vous avez déjà un compte ?
+
+        <a href="connexion.html">
+
+            Se connecter
+
+        </a>
+
+    </div>
+
+    <a
+
+        href="index.html"
+
+        class="back"
+
+    >
+
+        ← Retour à Market Bouaké
+
+    </a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+    // =====================================================
+
+    // MARKET BOUAKÉ
+
+    // SUPABASE
+
+    // =====================================================
+
+    const SUPABASE_URL =
+
+        "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+
+        "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+    const supabaseClient =
+
+        window.supabase.createClient(
+
+            SUPABASE_URL,
+
+            SUPABASE_PUBLISHABLE_KEY
+
+        );
+
+    // =====================================================
+
+    // ÉLÉMENTS
+
+    // =====================================================
+
+    const form =
+
+        document.getElementById("sellerForm");
+
+    const button =
+
+        document.getElementById("submitButton");
+
+    const message =
+
+        document.getElementById("message");
+
+    // =====================================================
+
+    // FORMULAIRE
+
+    // =====================================================
+
+    form.addEventListener(
+
+        "submit",
+
+        async function(event) {
+
+            event.preventDefault();
+
+            message.textContent = "";
+
+            message.style.color = "#17211b";
+
+            button.disabled = true;
+
+            button.textContent = "Création du compte...";
+
+            // =================================================
+
+            // RÉCUPÉRATION DES DONNÉES
+
+            // =================================================
+
+            const email =
+
+                document
+
+                    .getElementById("email")
+
+                    .value
+
+                    .trim();
+
+            const password =
+
+                document
+
+                    .getElementById("password")
+
+                    .value;
+
+            const confirmPassword =
+
+                document
+
+                    .getElementById("confirmPassword")
+
+                    .value;
+
+            const firstName =
+
+                document
+
+                    .getElementById("firstName")
+
+                    .value
+
+                    .trim();
+
+            const lastName =
+
+                document
+
+                    .getElementById("lastName")
+
+                    .value
+
+                    .trim();
+
+            const gender =
+
+                document
+
+                    .getElementById("gender")
+
+                    .value;
+
+            const birthDate =
+
+                document
+
+                    .getElementById("birthDate")
+
+                    .value;
+
+            const phone =
+
+                document
+
+                    .getElementById("phone")
+
+                    .value
+
+                    .trim();
+
+            const profilePhoto =
+
+                document
+
+                    .getElementById("profilePhoto")
+
+                    .files[0];
+
+            const shopName =
+
+                document
+
+                    .getElementById("shopName")
+
+                    .value
+
+                    .trim();
+
+            const city =
+
+                document
+
+                    .getElementById("city")
+
+                    .value
+
+                    .trim();
+
+            const district =
+
+                document
+
+                    .getElementById("district")
+
+                    .value
+
+                    .trim();
+
+            const mainCategory =
+
+                document
+
+                    .getElementById("mainCategory")
+
+                    .value;
+
+            const description =
+
+                document
+
+                    .getElementById("description")
+
+                    .value
+
+                    .trim();
+
+            const facebook =
+
+                document
+
+                    .getElementById("facebook")
+
+                    .value
+
+                    .trim();
+
+            const tiktok =
+
+                document
+
+                    .getElementById("tiktok")
+
+                    .value
+
+                    .trim();
+
+            const acceptTerms =
+
+                document
+
+                    .getElementById("acceptTerms")
+
+                    .checked;
+
+            const confirmInfo =
+
+                document
+
+                    .getElementById("confirmInfo")
+
+                    .checked;
+
+            // =================================================
+
+            // VALIDATIONS
+
+            // =================================================
+
+            if (
+
+                !email ||
+
+                !password ||
+
+                !confirmPassword ||
+
+                !firstName ||
+
+                !lastName ||
+
+                !gender ||
+
+                !birthDate ||
+
+                !phone ||
+
+                !profilePhoto ||
+
+                !shopName ||
+
+                !city
+
+            ) {
+
+                message.textContent =
+
+                    "Veuillez remplir tous les champs obligatoires.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+                return;
+
+            }
+
+            if (password.length < 6) {
+
+                message.textContent =
+
+                    "Le mot de passe doit contenir au moins 6 caractères.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+                return;
+
+            }
+
+            if (password !== confirmPassword) {
+
+                message.textContent =
+
+                    "Les deux mots de passe ne correspondent pas.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+                return;
+
+            }
+
+            const phoneRegex =
+
+                /^\+225\d{10}$/;
+
+            if (!phoneRegex.test(phone)) {
+
+                message.textContent =
+
+                    "Le numéro WhatsApp doit être au format +225XXXXXXXXXX.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+                return;
+
+            }
+
+            if (!acceptTerms) {
+
+                message.textContent =
+
+                    "Vous devez accepter les conditions d'utilisation.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+                return;
+
+            }
+
+            if (!confirmInfo) {
+
+                message.textContent =
+
+                    "Vous devez confirmer que les informations sont exactes.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+                return;
+
+            }
+
+            // =================================================
+
+            // VÉRIFICATION IMAGE
+
+            // =================================================
+
+            if (!profilePhoto.type.startsWith("image/")) {
+
+                message.textContent =
+
+                    "Veuillez sélectionner une image valide.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+                return;
+
+            }
+
+            if (profilePhoto.size > 5 * 1024 * 1024) {
+
+                message.textContent =
+
+                    "La photo ne doit pas dépasser 5 Mo.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+                return;
+
+            }
+
+            try {
+
+                // =================================================
+
+                // CRÉATION DU COMPTE AUTH
+
+                // =================================================
+
+                button.textContent =
+
+                    "Création du compte...";
+
+                const {
+
+                    data,
+
+                    error
+
+                } =
+
+                    await supabaseClient.auth.signUp({
+
+                        email: email,
+
+                        password: password,
+
+                        options: {
+
+                            data: {
+
+                                first_name:
+
+                                    firstName,
+
+                                last_name:
+
+                                    lastName,
+
+                                gender:
+
+                                    gender,
+
+                                birth_date:
+
+                                    birthDate,
+
+                                phone:
+
+                                    phone,
+
+                                requested_role:
+
+                                    "seller",
+
+                                role:
+
+                                    "seller"
+
+                            }
+
+                        }
+
+                    });
+
+                if (error) {
+
+                    console.error(
+
+                        "Erreur création compte :",
+
+                        error
+
+                    );
+
+                    throw error;
+
+                }
+
+                if (!data.user) {
+
+                    throw new Error(
+
+                        "Le compte utilisateur n'a pas pu être créé."
+
+                    );
+
+                }
+
+                const user =
+
+                    data.user;
+
+                // =================================================
+
+                // SESSION
+
+                // =================================================
+
+                let session =
+
+                    data.session;
+
+                if (!session) {
+
+                    const {
+
+                        data: sessionData
+
+                    } =
+
+                        await supabaseClient.auth.getSession();
+
+                    session =
+
+                        sessionData.session;
+
+                }
+
+                if (!session) {
+
+                    throw new Error(
+
+                        "La session n'a pas été créée. Vérifiez que la confirmation email est désactivée dans Supabase."
+
+                    );
+
+                }
+
+                // =================================================
+
+                // ATTENDRE LE TRIGGER PROFILE
+
+                // =================================================
+
+                await new Promise(
+
+                    resolve =>
+
+                        setTimeout(
+
+                            resolve,
+
+                            500
+
+                        )
+
+                );
+
+                // =================================================
+
+                // UPLOAD PHOTO
+
+                // BUCKET : profile-photos
+
+                // DOSSIER : ID UTILISATEUR
+
+                // =================================================
+
+                button.textContent =
+
+                    "Enregistrement de la photo...";
+
+                const extension =
+
+                    profilePhoto.name
+
+                        .split(".")
+
+                        .pop()
+
+                        .toLowerCase();
+
+                const filePath =
+
+                    user.id +
+
+                    "/" +
+
+                    "profile_" +
+
+                    Date.now() +
+
+                    "." +
+
+                    extension;
+
+                const {
+
+                    error: uploadError
+
+                } =
+
+                    await supabaseClient
+
+                        .storage
+
+                        .from("profile-photos")
+
+                        .upload(
+
+                            filePath,
+
+                            profilePhoto,
+
+                            {
+
+                                cacheControl: "3600",
+
+                                upsert: true
+
+                            }
+
+                        );
+
+                if (uploadError) {
+
+                    console.error(
+
+                        "Erreur upload photo :",
+
+                        uploadError
+
+                    );
+
+                    throw new Error(
+
+                        "La photo n'a pas pu être enregistrée : " +
+
+                        uploadError.message
+
+                    );
+
+                }
+
+                // =================================================
+
+                // URL PUBLIQUE
+
+                // =================================================
+
+                const {
+
+                    data: publicUrlData
+
+                } =
+
+                    supabaseClient
+
+                        .storage
+
+                        .from("profile-photos")
+
+                        .getPublicUrl(
+
+                            filePath
+
+                        );
+
+                const profilePhotoUrl =
+
+                    publicUrlData.publicUrl;
+
+                // =================================================
+
+                // MISE À JOUR DU PROFIL
+
+                // =================================================
+
+                button.textContent =
+
+                    "Enregistrement du profil...";
+
+                const {
+
+                    error: profileError
+
+                } =
+
+                    await supabaseClient
+
+                        .from("profiles")
+
+                        .update({
+
+                            first_name:
+
+                                firstName,
+
+                            last_name:
+
+                                lastName,
+
+                            email:
+
+                                email,
+
+                            phone:
+
+                                phone,
+
+                            gender:
+
+                                gender,
+
+                            birth_date:
+
+                                birthDate,
+
+                            profile_photo_url:
+
+                                profilePhotoUrl,
+
+                            seller_status:
+
+                                "pending"
+
+                        })
+
+                        .eq(
+
+                            "id",
+
+                            user.id
+
+                        );
+
+                if (profileError) {
+
+                    console.error(
+
+                        "Erreur profil :",
+
+                        profileError
+
+                    );
+
+                    throw profileError;
+
+                }
+
+                // =================================================
+
+                // CRÉATION DEMANDE VENDEUR
+
+                // =================================================
+
+                button.textContent =
+
+                    "Enregistrement de la demande...";
+
+                const {
+
+                    error: requestError
+
+                } =
+
+                    await supabaseClient
+
+                        .from("seller_requests")
+
+                        .insert({
+
+                            user_id:
+
+                                user.id,
+
+                            first_name:
+
+                                firstName,
+
+                            last_name:
+
+                                lastName,
+
+                            phone:
+
+                                phone,
+
+                            profile_photo_url:
+
+                                profilePhotoUrl,
+
+                            shop_name:
+
+                                shopName,
+
+                            city:
+
+                                city,
+
+                            district:
+
+                                district || null,
+
+                            description:
+
+                                description || null,
+
+                            main_category:
+
+                                mainCategory || null,
+
+                            facebook_url:
+
+                                facebook || null,
+
+                            tiktok_url:
+
+                                tiktok || null,
+
+                            status:
+
+                                "pending"
+
+                        });
+
+                if (requestError) {
+
+                    console.error(
+
+                        "Erreur demande vendeur :",
+
+                        requestError
+
+                    );
+
+                    throw requestError;
+
+                }
+
+                // =================================================
+
+                // SUCCÈS
+
+                // =================================================
+
+                message.textContent =
+
+                    "✅ Votre compte vendeur a été créé et votre demande a été envoyée. Vous allez être redirigé vers la connexion.";
+
+                message.style.color =
+
+                    "#0b6b43";
+
+                button.textContent =
+
+                    "Compte créé";
+
+                button.disabled =
+
+                    true;
+
+                // =================================================
+
+                // DÉCONNEXION
+
+                // IMPORTANT :
+
+                // L'utilisateur doit passer par connexion.html
+
+                // =================================================
+
+                await supabaseClient.auth.signOut();
+
+                // =================================================
+
+                // REDIRECTION CONNEXION
+
+                // =================================================
+
+                setTimeout(
+
+                    function() {
+
+                        window.location.href =
+
+                            "connexion.html";
+
+                    },
+
+                    1500
+
+                );
+
+            } catch (error) {
+
+                console.error(
+
+                    "Erreur inscription vendeur :",
+
+                    error
+
+                );
+
+                message.textContent =
+
+                    "❌ " +
+
+                    (
+
+                        error.message ||
+
+                        "Une erreur est survenue."
+
+                    );
+
+                message.style.color =
+
+                    "#c62828";
+
+                button.disabled =
+
+                    false;
+
+                button.textContent =
+
+                    "🏪 Créer mon compte vendeur";
+
+            }
+
+        }
+
+    );
+
+</script>
+
+</body>
+
+</html>
