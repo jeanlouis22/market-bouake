@@ -1,0 +1,3709 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ajouter un produit | Market Bouaké</title>
+
+<style>
+
+*{
+
+    box-sizing:border-box;
+
+    margin:0;
+
+    padding:0;
+
+}
+
+body{
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7f6;
+
+    color:#17211b;
+
+    min-height:100vh;
+
+}
+
+header{
+
+    background:#0b6b43;
+
+    color:white;
+
+    padding:14px 20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+}
+
+.logo{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:#0b6b43;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:22px;
+
+}
+
+.header-actions{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.header-button{
+
+    text-decoration:none;
+
+    border:none;
+
+    border-radius:9px;
+
+    padding:10px 13px;
+
+    background:white;
+
+    color:#0b6b43;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+.container{
+
+    width:100%;
+
+    max-width:900px;
+
+    margin:25px auto;
+
+    padding:0 18px;
+
+}
+
+.loading{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:50px 20px;
+
+    text-align:center;
+
+    color:#6b7280;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+
+}
+
+.page{
+
+    display:none;
+
+}
+
+.page-header{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:23px;
+
+    margin-bottom:18px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+
+}
+
+.page-header h1{
+
+    font-size:25px;
+
+    margin-bottom:7px;
+
+}
+
+.page-header p{
+
+    color:#6b7280;
+
+    line-height:1.5;
+
+}
+
+.seller-info{
+
+    margin-top:15px;
+
+    padding:12px 14px;
+
+    border-radius:10px;
+
+    background:#eef8f3;
+
+    color:#0b6b43;
+
+    font-weight:bold;
+
+}
+
+.form-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:23px;
+
+    margin-bottom:18px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+
+}
+
+.form-card h2{
+
+    font-size:19px;
+
+    margin-bottom:18px;
+
+}
+
+.form-group{
+
+    margin-bottom:17px;
+
+}
+
+label{
+
+    display:block;
+
+    font-weight:600;
+
+    margin-bottom:7px;
+
+}
+
+.required{
+
+    color:#c62828;
+
+}
+
+input,
+
+textarea,
+
+select{
+
+    width:100%;
+
+    padding:13px 14px;
+
+    border:1px solid #d6ddd9;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    outline:none;
+
+    background:white;
+
+    color:#17211b;
+
+}
+
+input:focus,
+
+textarea:focus,
+
+select:focus{
+
+    border-color:#0b6b43;
+
+}
+
+textarea{
+
+    min-height:120px;
+
+    resize:vertical;
+
+}
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+
+}
+
+.sizes{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+}
+
+.size-option{
+
+    position:relative;
+
+}
+
+.size-option input{
+
+    position:absolute;
+
+    opacity:0;
+
+    pointer-events:none;
+
+}
+
+.size-option label{
+
+    margin:0;
+
+    padding:9px 14px;
+
+    border:1px solid #d6ddd9;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    background:#f8faf9;
+
+    font-weight:600;
+
+}
+
+.size-option input:checked + label{
+
+    background:#e4f4ec;
+
+    border-color:#0b6b43;
+
+    color:#0b6b43;
+
+}
+
+.photo-upload{
+
+    border:2px dashed #cbd5d0;
+
+    border-radius:14px;
+
+    padding:25px 15px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    background:#fafcfb;
+
+}
+
+.photo-upload:hover{
+
+    border-color:#0b6b43;
+
+    background:#f4faf7;
+
+}
+
+.photo-upload-icon{
+
+    font-size:35px;
+
+    margin-bottom:8px;
+
+}
+
+.photo-upload p{
+
+    color:#6b7280;
+
+    line-height:1.5;
+
+}
+
+#photoInput{
+
+    display:none;
+
+}
+
+.photo-preview{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+    margin-top:15px;
+
+}
+
+.preview-item{
+
+    position:relative;
+
+    aspect-ratio:1/1;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    background:#eef2ef;
+
+    border:1px solid #dfe6e2;
+
+}
+
+.preview-item img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+.preview-number{
+
+    position:absolute;
+
+    top:7px;
+
+    left:7px;
+
+    background:rgba(0,0,0,.65);
+
+    color:white;
+
+    padding:4px 7px;
+
+    border-radius:6px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.remove-photo{
+
+    position:absolute;
+
+    top:7px;
+
+    right:7px;
+
+    width:30px;
+
+    height:30px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(198,40,40,.9);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+}
+
+.photo-help{
+
+    margin-top:8px;
+
+    color:#6b7280;
+
+    font-size:13px;
+
+}
+
+.switch-row{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    background:#f7faf8;
+
+}
+
+.switch-text strong{
+
+    display:block;
+
+    margin-bottom:4px;
+
+}
+
+.switch-text span{
+
+    color:#6b7280;
+
+    font-size:13px;
+
+    line-height:1.4;
+
+}
+
+.switch{
+
+    position:relative;
+
+    width:52px;
+
+    height:29px;
+
+    flex-shrink:0;
+
+}
+
+.switch input{
+
+    opacity:0;
+
+    width:0;
+
+    height:0;
+
+}
+
+.slider{
+
+    position:absolute;
+
+    inset:0;
+
+    cursor:pointer;
+
+    background:#cbd5d0;
+
+    border-radius:30px;
+
+    transition:.2s;
+
+}
+
+.slider:before{
+
+    content:"";
+
+    position:absolute;
+
+    width:21px;
+
+    height:21px;
+
+    left:4px;
+
+    top:4px;
+
+    background:white;
+
+    border-radius:50%;
+
+    transition:.2s;
+
+}
+
+.switch input:checked + .slider{
+
+    background:#0b6b43;
+
+}
+
+.switch input:checked + .slider:before{
+
+    transform:translateX(23px);
+
+}
+
+.shipping-box{
+
+    margin-top:15px;
+
+    padding:16px;
+
+    background:#f8faf9;
+
+    border-radius:12px;
+
+    display:none;
+
+}
+
+.shipping-box.show{
+
+    display:block;
+
+}
+
+.notice{
+
+    padding:13px 15px;
+
+    border-radius:10px;
+
+    background:#fff8e6;
+
+    color:#805f00;
+
+    margin-bottom:18px;
+
+    line-height:1.5;
+
+    font-size:14px;
+
+}
+
+.buttons{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:20px;
+
+}
+
+.button{
+
+    flex:1;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:14px;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    text-align:center;
+
+    text-decoration:none;
+
+}
+
+.button-primary{
+
+    background:#0b6b43;
+
+    color:white;
+
+}
+
+.button-secondary{
+
+    background:#edf2ef;
+
+    color:#17211b;
+
+}
+
+.button:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+}
+
+#message{
+
+    display:none;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    margin-bottom:18px;
+
+    font-weight:600;
+
+    line-height:1.5;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
+}
+
+#message.success{
+
+    display:block;
+
+    background:#e5f7ec;
+
+    color:#147a3f;
+
+}
+
+#message.error{
+
+    display:block;
+
+    background:#fdeaea;
+
+    color:#b71c1c;
+
+}
+
+.error-page{
+
+    display:none;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:40px 25px;
+
+    text-align:center;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+
+}
+
+.error-icon{
+
+    font-size:50px;
+
+    margin-bottom:15px;
+
+}
+
+.error-page h1{
+
+    margin-bottom:10px;
+
+}
+
+.error-page p{
+
+    color:#6b7280;
+
+    line-height:1.5;
+
+    margin-bottom:22px;
+
+}
+
+.debug{
+
+    display:none;
+
+    margin-top:12px;
+
+    padding:12px;
+
+    background:#111827;
+
+    color:#f9fafb;
+
+    border-radius:8px;
+
+    font-size:12px;
+
+    white-space:pre-wrap;
+
+    overflow:auto;
+
+}
+
+@media(max-width:650px){
+
+    header{
+
+        padding:12px 14px;
+
+    }
+
+    .brand{
+
+        font-size:17px;
+
+    }
+
+    .header-button{
+
+        padding:8px 9px;
+
+        font-size:12px;
+
+    }
+
+    .container{
+
+        margin:18px auto;
+
+        padding:0 13px;
+
+    }
+
+    .page-header,
+
+    .form-card{
+
+        padding:18px;
+
+    }
+
+    .page-header h1{
+
+        font-size:22px;
+
+    }
+
+    .grid{
+
+        grid-template-columns:1fr;
+
+        gap:0;
+
+    }
+
+    .photo-preview{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+    .buttons{
+
+        flex-direction:column;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+
+        <div class="logo">🛒</div>
+
+        <span>Market Bouaké</span>
+
+    </div>
+
+    <div class="header-actions">
+
+        <button
+
+            type="button"
+
+            class="header-button"
+
+            id="backSellerButton"
+
+        >
+
+            ← Espace vendeur
+
+        </button>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <div id="loading" class="loading">
+
+        Vérification de votre espace vendeur...
+
+    </div>
+
+    <div id="errorPage" class="error-page">
+
+        <div class="error-icon">🔒</div>
+
+        <h1 id="errorTitle">
+
+            Accès refusé
+
+        </h1>
+
+        <p id="errorMessage">
+
+            Vous n'avez pas accès à cette page.
+
+        </p>
+
+        <button
+
+            type="button"
+
+            class="button button-primary"
+
+            id="errorBackButton"
+
+        >
+
+            Retour à mon espace vendeur
+
+        </button>
+
+    </div>
+
+    <div id="page" class="page">
+
+        <div class="page-header">
+
+            <h1>
+
+                ➕ Ajouter un produit
+
+            </h1>
+
+            <p>
+
+                Ajoutez un produit à votre boutique Market Bouaké.
+
+                Les informations enregistrées seront directement utilisées
+
+                pour afficher votre produit aux acheteurs.
+
+            </p>
+
+            <div
+
+                class="seller-info"
+
+                id="sellerInfo"
+
+            >
+
+                Vérification de la boutique...
+
+            </div>
+
+        </div>
+
+        <div id="message"></div>
+
+        <div
+
+            id="debug"
+
+            class="debug"
+
+        ></div>
+
+        <form id="productForm">
+
+            <!-- INFORMATIONS DU PRODUIT -->
+
+            <div class="form-card">
+
+                <h2>
+
+                    📦 Informations du produit
+
+                </h2>
+
+                <div class="form-group">
+
+                    <label for="name">
+
+                        Nom du produit
+
+                        <span class="required">*</span>
+
+                    </label>
+
+                    <input
+
+                        type="text"
+
+                        id="name"
+
+                        maxlength="150"
+
+                        placeholder="Exemple : Ensemble homme"
+
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="description">
+
+                        Description
+
+                    </label>
+
+                    <textarea
+
+                        id="description"
+
+                        maxlength="3000"
+
+                        placeholder="Décrivez clairement votre produit..."
+
+                    ></textarea>
+
+                </div>
+
+                <div class="grid">
+
+                    <div class="form-group">
+
+                        <label for="category">
+
+                            Catégorie
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <select id="category">
+
+                            <option value="">
+
+                                Chargement des catégories...
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="price">
+
+                            Prix (FCFA)
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            id="price"
+
+                            min="1"
+
+                            step="1"
+
+                            placeholder="Exemple : 15000"
+
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="stock">
+
+                        📦 Stock disponible
+
+                        <span class="required">*</span>
+
+                    </label>
+
+                    <input
+
+                        type="number"
+
+                        id="stock"
+
+                        min="0"
+
+                        step="1"
+
+                        value="0"
+
+                        placeholder="Exemple : 10"
+
+                    >
+
+                </div>
+
+            </div>
+
+            <!-- TAILLES -->
+
+            <div class="form-card">
+
+                <h2>
+
+                    👕 Tailles disponibles
+
+                </h2>
+
+                <div class="notice">
+
+                    Les couleurs ne sont pas utilisées.
+
+                    Sélectionnez uniquement les tailles disponibles.
+
+                </div>
+
+                <div class="sizes">
+
+                    <div class="size-option">
+
+                        <input type="checkbox" id="sizeXS" value="XS">
+
+                        <label for="sizeXS">XS</label>
+
+                    </div>
+
+                    <div class="size-option">
+
+                        <input type="checkbox" id="sizeS" value="S">
+
+                        <label for="sizeS">S</label>
+
+                    </div>
+
+                    <div class="size-option">
+
+                        <input type="checkbox" id="sizeM" value="M">
+
+                        <label for="sizeM">M</label>
+
+                    </div>
+
+                    <div class="size-option">
+
+                        <input type="checkbox" id="sizeL" value="L">
+
+                        <label for="sizeL">L</label>
+
+                    </div>
+
+                    <div class="size-option">
+
+                        <input type="checkbox" id="sizeXL" value="XL">
+
+                        <label for="sizeXL">XL</label>
+
+                    </div>
+
+                    <div class="size-option">
+
+                        <input type="checkbox" id="sizeXXL" value="XXL">
+
+                        <label for="sizeXXL">XXL</label>
+
+                    </div>
+
+                    <div class="size-option">
+
+                        <input type="checkbox" id="size3XL" value="3XL">
+
+                        <label for="size3XL">3XL</label>
+
+                    </div>
+
+                    <div class="size-option">
+
+                        <input
+
+                            type="checkbox"
+
+                            id="sizeUnique"
+
+                            value="Taille unique"
+
+                        >
+
+                        <label for="sizeUnique">
+
+                            Taille unique
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- PHOTOS -->
+
+            <div class="form-card">
+
+                <h2>
+
+                    📸 Photos du produit
+
+                </h2>
+
+                <div
+
+                    class="photo-upload"
+
+                    id="photoUpload"
+
+                >
+
+                    <div class="photo-upload-icon">
+
+                        📷
+
+                    </div>
+
+                    <strong>
+
+                        Ajouter des photos
+
+                    </strong>
+
+                    <p>
+
+                        Cliquez ici pour sélectionner une ou plusieurs photos.
+
+                    </p>
+
+                    <div class="photo-help">
+
+                        Jusqu'à 3 photos • JPG, JPEG, PNG ou WEBP • 5 Mo maximum par photo
+
+                    </div>
+
+                </div>
+
+                <input
+
+                    type="file"
+
+                    id="photoInput"
+
+                    accept="image/jpeg,image/png,image/webp"
+
+                    multiple
+
+                >
+
+                <div
+
+                    class="photo-preview"
+
+                    id="photoPreview"
+
+                ></div>
+
+                <div class="photo-help">
+
+                    La première photo sera utilisée comme photo principale.
+
+                </div>
+
+            </div>
+
+            <!-- WHATSAPP -->
+
+            <div class="form-card">
+
+                <h2>
+
+                    📱 Contact vendeur
+
+                </h2>
+
+                <div class="form-group">
+
+                    <label for="whatsapp">
+
+                        WhatsApp professionnel
+
+                    </label>
+
+                    <input
+
+                        type="text"
+
+                        id="whatsapp"
+
+                        placeholder="+225..."
+
+                    >
+
+                </div>
+
+            </div>
+
+            <!-- EXPÉDITION -->
+
+            <div class="form-card">
+
+                <h2>
+
+                    🌍 Expédition hors de Bouaké
+
+                </h2>
+
+                <div class="switch-row">
+
+                    <div class="switch-text">
+
+                        <strong>
+
+                            Expédier ce produit hors de Bouaké
+
+                        </strong>
+
+                        <span>
+
+                            Activez cette option si vous acceptez
+
+                            d'expédier ce produit vers d'autres villes.
+
+                        </span>
+
+                    </div>
+
+                    <label class="switch">
+
+                        <input
+
+                            type="checkbox"
+
+                            id="shipsOutsideBouake"
+
+                        >
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+                <div
+
+                    class="shipping-box"
+
+                    id="shippingBox"
+
+                >
+
+                    <div class="form-group">
+
+                        <label for="outsideShippingPrice">
+
+                            Prix d'expédition hors de Bouaké
+
+                            (FCFA)
+
+                            <span class="required">
+
+                                *
+
+                            </span>
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            id="outsideShippingPrice"
+
+                            min="0"
+
+                            step="1"
+
+                            value="0"
+
+                            placeholder="Exemple : 2500"
+
+                        >
+
+                        <div class="photo-help">
+
+                            Indiquez le prix d'expédition appliqué à ce produit.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BOUTONS -->
+
+            <div class="form-card">
+
+                <div class="buttons">
+
+                    <button
+
+                        type="button"
+
+                        class="button button-secondary"
+
+                        id="cancelButton"
+
+                    >
+
+                        Annuler
+
+                    </button>
+
+                    <button
+
+                        type="submit"
+
+                        class="button button-primary"
+
+                        id="submitButton"
+
+                    >
+
+                        🚀 Publier le produit
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+
+    "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+
+    "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+const supabaseClient =
+
+    window.supabase.createClient(
+
+        SUPABASE_URL,
+
+        SUPABASE_PUBLISHABLE_KEY
+
+    );
+
+/* =========================================================
+
+   ELEMENTS
+
+========================================================= */
+
+const loading =
+
+    document.getElementById("loading");
+
+const page =
+
+    document.getElementById("page");
+
+const errorPage =
+
+    document.getElementById("errorPage");
+
+const errorTitle =
+
+    document.getElementById("errorTitle");
+
+const errorMessage =
+
+    document.getElementById("errorMessage");
+
+const sellerInfo =
+
+    document.getElementById("sellerInfo");
+
+const form =
+
+    document.getElementById("productForm");
+
+const submitButton =
+
+    document.getElementById("submitButton");
+
+const message =
+
+    document.getElementById("message");
+
+const debug =
+
+    document.getElementById("debug");
+
+const photoInput =
+
+    document.getElementById("photoInput");
+
+const photoUpload =
+
+    document.getElementById("photoUpload");
+
+const photoPreview =
+
+    document.getElementById("photoPreview");
+
+const shipsOutsideBouake =
+
+    document.getElementById("shipsOutsideBouake");
+
+const shippingBox =
+
+    document.getElementById("shippingBox");
+
+const outsideShippingPrice =
+
+    document.getElementById(
+
+        "outsideShippingPrice"
+
+    );
+
+const backSellerButton =
+
+    document.getElementById(
+
+        "backSellerButton"
+
+    );
+
+const cancelButton =
+
+    document.getElementById(
+
+        "cancelButton"
+
+    );
+
+const errorBackButton =
+
+    document.getElementById(
+
+        "errorBackButton"
+
+    );
+
+let currentUser = null;
+
+let currentProfile = null;
+
+let currentShop = null;
+
+let selectedPhotos = [];
+
+/* =========================================================
+
+   NAVIGATION
+
+   Utilisation directe de location.href.
+
+   Cela évite les liens morts/404 provoqués par le bouton.
+
+========================================================= */
+
+function goToSellerSpace(){
+
+    window.location.assign(
+
+        "./espace-vendeur.html"
+
+    );
+
+}
+
+backSellerButton.addEventListener(
+
+    "click",
+
+    function(){
+
+        goToSellerSpace();
+
+    }
+
+);
+
+cancelButton.addEventListener(
+
+    "click",
+
+    function(){
+
+        goToSellerSpace();
+
+    }
+
+);
+
+errorBackButton.addEventListener(
+
+    "click",
+
+    function(){
+
+        goToSellerSpace();
+
+    }
+
+);
+
+/* =========================================================
+
+   MESSAGES
+
+========================================================= */
+
+function showMessage(
+
+    text,
+
+    type
+
+){
+
+    message.textContent =
+
+        text;
+
+    message.className =
+
+        "";
+
+    message.id =
+
+        "message";
+
+    message.classList.add(
+
+        type
+
+    );
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+function clearMessage(){
+
+    message.textContent =
+
+        "";
+
+    message.className =
+
+        "";
+
+    message.id =
+
+        "message";
+
+}
+
+function showDebug(text){
+
+    debug.textContent =
+
+        text;
+
+    debug.style.display =
+
+        "block";
+
+}
+
+function hideDebug(){
+
+    debug.textContent =
+
+        "";
+
+    debug.style.display =
+
+        "none";
+
+}
+
+/* =========================================================
+
+   ERREUR D'ACCÈS
+
+========================================================= */
+
+function showAccessError(
+
+    title,
+
+    text
+
+){
+
+    loading.style.display =
+
+        "none";
+
+    page.style.display =
+
+        "none";
+
+    errorPage.style.display =
+
+        "block";
+
+    errorTitle.textContent =
+
+        title;
+
+    errorMessage.textContent =
+
+        text;
+
+}
+
+/* =========================================================
+
+   RÉCUPÉRER L'UTILISATEUR
+
+========================================================= */
+
+async function getCurrentUser(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+        await supabaseClient.auth.getUser();
+
+    if(error){
+
+        console.error(
+
+            "Erreur utilisateur :",
+
+            error
+
+        );
+
+        throw new Error(
+
+            "Impossible de récupérer votre session : " +
+
+            error.message
+
+        );
+
+    }
+
+    if(!data || !data.user){
+
+        return null;
+
+    }
+
+    return data.user;
+
+}
+
+/* =========================================================
+
+   RÉCUPÉRER LA BOUTIQUE
+
+========================================================= */
+
+async function getSellerShop(
+
+    userId
+
+){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+        await supabaseClient
+
+            .from("shops")
+
+            .select("*")
+
+            .eq(
+
+                "user_id",
+
+                userId
+
+            )
+
+            .eq(
+
+                "status",
+
+                "active"
+
+            )
+
+            .order(
+
+                "created_at",
+
+                {
+
+                    ascending:false
+
+                }
+
+            )
+
+            .limit(1)
+
+            .maybeSingle();
+
+    if(error){
+
+        console.error(
+
+            "Erreur boutique :",
+
+            error
+
+        );
+
+        throw new Error(
+
+            "Impossible de récupérer votre boutique : " +
+
+            error.message
+
+        );
+
+    }
+
+    return data;
+
+}
+
+/* =========================================================
+
+   VÉRIFICATION VENDEUR
+
+========================================================= */
+
+async function loadSellerAccess(){
+
+    try{
+
+        const user =
+
+            await getCurrentUser();
+
+        if(!user){
+
+            window.location.assign(
+
+                "./connexion.html"
+
+            );
+
+            return;
+
+        }
+
+        currentUser =
+
+            user;
+
+        /* -------------------------------------------------
+
+           PROFIL
+
+        ------------------------------------------------- */
+
+        const {
+
+            data:profile,
+
+            error:profileError
+
+        } =
+
+            await supabaseClient
+
+                .from("profiles")
+
+                .select("*")
+
+                .eq(
+
+                    "id",
+
+                    user.id
+
+                )
+
+                .maybeSingle();
+
+        if(profileError){
+
+            throw new Error(
+
+                "Impossible de récupérer votre profil : " +
+
+                profileError.message
+
+            );
+
+        }
+
+        if(!profile){
+
+            throw new Error(
+
+                "Votre profil est introuvable."
+
+            );
+
+        }
+
+        currentProfile =
+
+            profile;
+
+        /* -------------------------------------------------
+
+           STATUT VENDEUR
+
+        ------------------------------------------------- */
+
+        if(
+
+            profile.seller_status !==
+
+            "approved"
+
+        ){
+
+            showAccessError(
+
+                "Accès refusé",
+
+                "Votre compte vendeur n'est pas encore validé par l'administration."
+
+            );
+
+            return;
+
+        }
+
+        /* -------------------------------------------------
+
+           BOUTIQUE
+
+        ------------------------------------------------- */
+
+        currentShop =
+
+            await getSellerShop(
+
+                user.id
+
+            );
+
+        if(!currentShop){
+
+            showAccessError(
+
+                "Boutique introuvable",
+
+                "Votre compte vendeur est validé, mais aucune boutique active n'est associée à votre compte."
+
+            );
+
+            return;
+
+        }
+
+        /* -------------------------------------------------
+
+           INFORMATIONS
+
+        ------------------------------------------------- */
+
+        sellerInfo.textContent =
+
+            "🏪 " +
+
+            (
+
+                currentShop.shop_name ||
+
+                "Ma boutique"
+
+            ) +
+
+            " • " +
+
+            (
+
+                currentShop.city ||
+
+                "Bouaké"
+
+            ) +
+
+            " • Vendeur validé";
+
+        document.getElementById(
+
+            "whatsapp"
+
+        ).value =
+
+            profile.phone ||
+
+            currentShop.whatsapp_phone ||
+
+            "";
+
+        /* -------------------------------------------------
+
+           AFFICHER PAGE
+
+        ------------------------------------------------- */
+
+        loading.style.display =
+
+            "none";
+
+        errorPage.style.display =
+
+            "none";
+
+        page.style.display =
+
+            "block";
+
+        await loadCategories();
+
+    }
+
+    catch(error){
+
+        console.error(
+
+            "Erreur accès vendeur :",
+
+            error
+
+        );
+
+        showAccessError(
+
+            "Erreur",
+
+            error.message ||
+
+            "Une erreur est survenue."
+
+        );
+
+    }
+
+}
+
+/* =========================================================
+
+   CATÉGORIES
+
+========================================================= */
+
+async function loadCategories(){
+
+    const categorySelect =
+
+        document.getElementById(
+
+            "category"
+
+        );
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+        await supabaseClient
+
+            .from("categories")
+
+            .select(
+
+                "id,name,is_active"
+
+            )
+
+            .eq(
+
+                "is_active",
+
+                true
+
+            )
+
+            .order(
+
+                "name",
+
+                {
+
+                    ascending:true
+
+                }
+
+            );
+
+    if(error){
+
+        console.error(
+
+            "Erreur catégories :",
+
+            error
+
+        );
+
+        categorySelect.innerHTML =
+
+            `
+
+            <option value="">
+
+                Impossible de charger les catégories
+
+            </option>
+
+            `;
+
+        showMessage(
+
+            "⚠️ Les catégories n'ont pas pu être chargées.\n\n" +
+
+            error.message,
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+    categorySelect.innerHTML =
+
+        `
+
+        <option value="">
+
+            Choisir une catégorie
+
+        </option>
+
+        `;
+
+    if(!data || data.length === 0){
+
+        categorySelect.innerHTML =
+
+            `
+
+            <option value="">
+
+                Aucune catégorie disponible
+
+            </option>
+
+            `;
+
+        return;
+
+    }
+
+    data.forEach(
+
+        function(category){
+
+            const option =
+
+                document.createElement(
+
+                    "option"
+
+                );
+
+            option.value =
+
+                category.id;
+
+            option.textContent =
+
+                category.name;
+
+            categorySelect.appendChild(
+
+                option
+
+            );
+
+        }
+
+    );
+
+}
+
+/* =========================================================
+
+   PHOTOS
+
+========================================================= */
+
+photoUpload.addEventListener(
+
+    "click",
+
+    function(){
+
+        photoInput.click();
+
+    }
+
+);
+
+photoInput.addEventListener(
+
+    "change",
+
+    function(event){
+
+        clearMessage();
+
+        const files =
+
+            Array.from(
+
+                event.target.files || []
+
+            );
+
+        if(!files.length){
+
+            return;
+
+        }
+
+        for(
+
+            const file of files
+
+        ){
+
+            if(
+
+                selectedPhotos.length >= 3
+
+            ){
+
+                showMessage(
+
+                    "Vous pouvez ajouter au maximum 3 photos.",
+
+                    "error"
+
+                );
+
+                break;
+
+            }
+
+            if(
+
+                ![
+
+                    "image/jpeg",
+
+                    "image/png",
+
+                    "image/webp"
+
+                ].includes(
+
+                    file.type
+
+                )
+
+            ){
+
+                showMessage(
+
+                    "Format non accepté : " +
+
+                    file.name +
+
+                    ". Utilisez JPG, PNG ou WEBP.",
+
+                    "error"
+
+                );
+
+                continue;
+
+            }
+
+            if(
+
+                file.size >
+
+                5 * 1024 * 1024
+
+            ){
+
+                showMessage(
+
+                    "La photo " +
+
+                    file.name +
+
+                    " dépasse 5 Mo.",
+
+                    "error"
+
+                );
+
+                continue;
+
+            }
+
+            selectedPhotos.push(
+
+                file
+
+            );
+
+        }
+
+        photoInput.value =
+
+            "";
+
+        renderPhotoPreview();
+
+    }
+
+);
+
+function renderPhotoPreview(){
+
+    photoPreview.innerHTML =
+
+        "";
+
+    selectedPhotos.forEach(
+
+        function(
+
+            file,
+
+            index
+
+        ){
+
+            const item =
+
+                document.createElement(
+
+                    "div"
+
+                );
+
+            item.className =
+
+                "preview-item";
+
+            const img =
+
+                document.createElement(
+
+                    "img"
+
+                );
+
+            const objectUrl =
+
+                URL.createObjectURL(
+
+                    file
+
+                );
+
+            img.src =
+
+                objectUrl;
+
+            img.alt =
+
+                "Photo produit " +
+
+                (
+
+                    index + 1
+
+                );
+
+            const number =
+
+                document.createElement(
+
+                    "div"
+
+                );
+
+            number.className =
+
+                "preview-number";
+
+            number.textContent =
+
+                "Photo " +
+
+                (
+
+                    index + 1
+
+                );
+
+            const remove =
+
+                document.createElement(
+
+                    "button"
+
+                );
+
+            remove.type =
+
+                "button";
+
+            remove.className =
+
+                "remove-photo";
+
+            remove.textContent =
+
+                "×";
+
+            remove.addEventListener(
+
+                "click",
+
+                function(){
+
+                    URL.revokeObjectURL(
+
+                        objectUrl
+
+                    );
+
+                    selectedPhotos.splice(
+
+                        index,
+
+                        1
+
+                    );
+
+                    renderPhotoPreview();
+
+                }
+
+            );
+
+            item.appendChild(
+
+                img
+
+            );
+
+            item.appendChild(
+
+                number
+
+            );
+
+            item.appendChild(
+
+                remove
+
+            );
+
+            photoPreview.appendChild(
+
+                item
+
+            );
+
+        }
+
+    );
+
+}
+
+/* =========================================================
+
+   EXPÉDITION
+
+========================================================= */
+
+shipsOutsideBouake.addEventListener(
+
+    "change",
+
+    function(){
+
+        if(
+
+            shipsOutsideBouake.checked
+
+        ){
+
+            shippingBox.classList.add(
+
+                "show"
+
+            );
+
+            outsideShippingPrice.required =
+
+                true;
+
+        }
+
+        else{
+
+            shippingBox.classList.remove(
+
+                "show"
+
+            );
+
+            outsideShippingPrice.required =
+
+                false;
+
+            outsideShippingPrice.value =
+
+                "0";
+
+        }
+
+    }
+
+);
+
+/* =========================================================
+
+   TAILLES
+
+========================================================= */
+
+function getSelectedSizes(){
+
+    const checked =
+
+        document.querySelectorAll(
+
+            ".size-option input[type='checkbox']:checked"
+
+        );
+
+    return Array.from(
+
+        checked
+
+    ).map(
+
+        function(input){
+
+            return input.value;
+
+        }
+
+    );
+
+}
+
+/* =========================================================
+
+   UPLOAD PHOTO
+
+========================================================= */
+
+async function uploadProductPhoto(
+
+    file,
+
+    userId,
+
+    index
+
+){
+
+    if(!file){
+
+        return null;
+
+    }
+
+    const extension =
+
+        file.name
+
+            .split(".")
+
+            .pop()
+
+            .toLowerCase();
+
+    const uniqueName =
+
+        Date.now() +
+
+        "-" +
+
+        index +
+
+        "-" +
+
+        Math.random()
+
+            .toString(36)
+
+            .substring(2) +
+
+        "." +
+
+        extension;
+
+    const filePath =
+
+        userId +
+
+        "/" +
+
+        uniqueName;
+
+    const {
+
+        error
+
+    } =
+
+        await supabaseClient
+
+            .storage
+
+            .from("product-images")
+
+            .upload(
+
+                filePath,
+
+                file,
+
+                {
+
+                    cacheControl:"3600",
+
+                    upsert:false,
+
+                    contentType:file.type
+
+                }
+
+            );
+
+    if(error){
+
+        console.error(
+
+            "Erreur upload photo :",
+
+            error
+
+        );
+
+        throw new Error(
+
+            "Impossible d'envoyer la photo " +
+
+            index +
+
+            " : " +
+
+            error.message
+
+        );
+
+    }
+
+    const {
+
+        data
+
+    } =
+
+        supabaseClient
+
+            .storage
+
+            .from("product-images")
+
+            .getPublicUrl(
+
+                filePath
+
+            );
+
+    if(
+
+        !data ||
+
+        !data.publicUrl
+
+    ){
+
+        throw new Error(
+
+            "La photo a été envoyée mais son URL n'a pas pu être récupérée."
+
+        );
+
+    }
+
+    return data.publicUrl;
+
+}
+
+/* =========================================================
+
+   SUPPRESSION DES PHOTOS EN CAS D'ÉCHEC
+
+========================================================= */
+
+async function deleteUploadedPhotos(
+
+    paths
+
+){
+
+    if(
+
+        !paths ||
+
+        !paths.length
+
+    ){
+
+        return;
+
+    }
+
+    try{
+
+        await supabaseClient
+
+            .storage
+
+            .from("product-images")
+
+            .remove(
+
+                paths
+
+            );
+
+    }
+
+    catch(error){
+
+        console.warn(
+
+            "Impossible de supprimer les fichiers temporaires :",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* =========================================================
+
+   PUBLICATION
+
+========================================================= */
+
+form.addEventListener(
+
+    "submit",
+
+    async function(event){
+
+        event.preventDefault();
+
+        clearMessage();
+
+        hideDebug();
+
+        if(
+
+            !currentUser ||
+
+            !currentProfile ||
+
+            !currentShop
+
+        ){
+
+            showMessage(
+
+                "Votre session vendeur n'est plus disponible. Rechargez la page.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        const name =
+
+            document
+
+                .getElementById("name")
+
+                .value
+
+                .trim();
+
+        const description =
+
+            document
+
+                .getElementById("description")
+
+                .value
+
+                .trim();
+
+        const categoryId =
+
+            document
+
+                .getElementById("category")
+
+                .value;
+
+        const price =
+
+            Number(
+
+                document
+
+                    .getElementById("price")
+
+                    .value
+
+            );
+
+        const stock =
+
+            Number(
+
+                document
+
+                    .getElementById("stock")
+
+                    .value
+
+            );
+
+        const whatsapp =
+
+            document
+
+                .getElementById("whatsapp")
+
+                .value
+
+                .trim();
+
+        const sizes =
+
+            getSelectedSizes();
+
+        const shipsOutside =
+
+            shipsOutsideBouake.checked;
+
+        const shippingPrice =
+
+            shipsOutside
+
+                ? Number(
+
+                    outsideShippingPrice.value
+
+                )
+
+                : 0;
+
+        /* -------------------------------------------------
+
+           VALIDATIONS
+
+        ------------------------------------------------- */
+
+        if(!name){
+
+            showMessage(
+
+                "❌ Le nom du produit est obligatoire.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        if(!categoryId){
+
+            showMessage(
+
+                "❌ Veuillez choisir une catégorie.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        if(
+
+            !Number.isFinite(price) ||
+
+            price <= 0
+
+        ){
+
+            showMessage(
+
+                "❌ Veuillez entrer un prix valide supérieur à 0.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        if(
+
+            !Number.isInteger(stock) ||
+
+            stock < 0
+
+        ){
+
+            showMessage(
+
+                "❌ Veuillez entrer un stock valide.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        if(
+
+            shipsOutside &&
+
+            (
+
+                !Number.isFinite(
+
+                    shippingPrice
+
+                ) ||
+
+                shippingPrice < 0
+
+            )
+
+        ){
+
+            showMessage(
+
+                "❌ Veuillez entrer un prix d'expédition hors de Bouaké valide.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        if(
+
+            selectedPhotos.length === 0
+
+        ){
+
+            showMessage(
+
+                "❌ Ajoutez au moins une photo du produit.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        /* -------------------------------------------------
+
+           DÉSACTIVER BOUTON
+
+        ------------------------------------------------- */
+
+        submitButton.disabled =
+
+            true;
+
+        submitButton.textContent =
+
+            "⏳ Publication en cours...";
+
+        const uploadedPaths =
+
+            [];
+
+        try{
+
+            /* =============================================
+
+               VÉRIFICATION SESSION
+
+            ============================================= */
+
+            submitButton.textContent =
+
+                "🔐 Vérification du compte...";
+
+            const {
+
+                data:sessionData,
+
+                error:sessionError
+
+            } =
+
+                await supabaseClient.auth.getSession();
+
+            if(sessionError){
+
+                throw new Error(
+
+                    "Erreur de session : " +
+
+                    sessionError.message
+
+                );
+
+            }
+
+            if(
+
+                !sessionData ||
+
+                !sessionData.session
+
+            ){
+
+                throw new Error(
+
+                    "Votre session a expiré. Reconnectez-vous."
+
+                );
+
+            }
+
+            /* =============================================
+
+               UPLOAD DES PHOTOS
+
+            ============================================= */
+
+            const photoUrls = [];
+
+            for(
+
+                let i = 0;
+
+                i < selectedPhotos.length;
+
+                i++
+
+            ){
+
+                submitButton.textContent =
+
+                    "📸 Envoi photo " +
+
+                    (
+
+                        i + 1
+
+                    ) +
+
+                    "/" +
+
+                    selectedPhotos.length +
+
+                    "...";
+
+                const file =
+
+                    selectedPhotos[i];
+
+                const extension =
+
+                    file.name
+
+                        .split(".")
+
+                        .pop()
+
+                        .toLowerCase();
+
+                const uniqueName =
+
+                    Date.now() +
+
+                    "-" +
+
+                    (
+
+                        i + 1
+
+                    ) +
+
+                    "-" +
+
+                    Math.random()
+
+                        .toString(36)
+
+                        .substring(2) +
+
+                    "." +
+
+                    extension;
+
+                const filePath =
+
+                    currentUser.id +
+
+                    "/" +
+
+                    uniqueName;
+
+                const {
+
+                    error:uploadError
+
+                } =
+
+                    await supabaseClient
+
+                        .storage
+
+                        .from("product-images")
+
+                        .upload(
+
+                            filePath,
+
+                            file,
+
+                            {
+
+                                cacheControl:"3600",
+
+                                upsert:false,
+
+                                contentType:file.type
+
+                            }
+
+                        );
+
+                if(uploadError){
+
+                    console.error(
+
+                        "Upload error :",
+
+                        uploadError
+
+                    );
+
+                    throw new Error(
+
+                        "Erreur lors de l'envoi de la photo " +
+
+                        (
+
+                            i + 1
+
+                        ) +
+
+                        " : " +
+
+                        uploadError.message
+
+                    );
+
+                }
+
+                uploadedPaths.push(
+
+                    filePath
+
+                );
+
+                const {
+
+                    data:publicData
+
+                } =
+
+                    supabaseClient
+
+                        .storage
+
+                        .from("product-images")
+
+                        .getPublicUrl(
+
+                            filePath
+
+                        );
+
+                if(
+
+                    !publicData ||
+
+                    !publicData.publicUrl
+
+                ){
+
+                    throw new Error(
+
+                        "Impossible de récupérer l'URL de la photo " +
+
+                        (
+
+                            i + 1
+
+                        ) +
+
+                        "."
+
+                    );
+
+                }
+
+                photoUrls.push(
+
+                    publicData.publicUrl
+
+                );
+
+            }
+
+            /* =============================================
+
+               DONNÉES DU PRODUIT
+
+            ============================================= */
+
+            submitButton.textContent =
+
+                "🛍️ Enregistrement du produit...";
+
+            const productData = {
+
+                seller_id:
+
+                    currentUser.id,
+
+                shop_id:
+
+                    currentShop.id,
+
+                category_id:
+
+                    categoryId,
+
+                name:
+
+                    name,
+
+                description:
+
+                    description ||
+
+                    null,
+
+                price:
+
+                    price,
+
+                stock:
+
+                    stock,
+
+                sizes:
+
+                    sizes,
+
+                image_url_1:
+
+                    photoUrls[0] ||
+
+                    null,
+
+                image_url_2:
+
+                    photoUrls[1] ||
+
+                    null,
+
+                image_url_3:
+
+                    photoUrls[2] ||
+
+                    null,
+
+                whatsapp_phone:
+
+                    whatsapp ||
+
+                    currentProfile.phone ||
+
+                    null,
+
+                is_active:
+
+                    true,
+
+                ships_outside_bouake:
+
+                    shipsOutside,
+
+                outside_bouake_shipping_price:
+
+                    shippingPrice
+
+            };
+
+            console.log(
+
+                "Données envoyées à products :",
+
+                productData
+
+            );
+
+            /* =============================================
+
+               INSERT PRODUCTS
+
+            ============================================= */
+
+            const {
+
+                data:product,
+
+                error:productError
+
+            } =
+
+                await supabaseClient
+
+                    .from("products")
+
+                    .insert(
+
+                        productData
+
+                    )
+
+                    .select()
+
+                    .single();
+
+            if(productError){
+
+                console.error(
+
+                    "Erreur INSERT products :",
+
+                    productError
+
+                );
+
+                await deleteUploadedPhotos(
+
+                    uploadedPaths
+
+                );
+
+                showDebug(
+
+                    "CODE : " +
+
+                    (
+
+                        productError.code ||
+
+                        "inconnu"
+
+                    ) +
+
+                    "\n\nMESSAGE : " +
+
+                    (
+
+                        productError.message ||
+
+                        "aucun message"
+
+                    ) +
+
+                    "\n\nDETAIL : " +
+
+                    (
+
+                        productError.details ||
+
+                        "aucun détail"
+
+                    ) +
+
+                    "\n\nHINT : " +
+
+                    (
+
+                        productError.hint ||
+
+                        "aucun indice"
+
+                    )
+
+                );
+
+                throw new Error(
+
+                    "Impossible de publier le produit.\n\n" +
+
+                    productError.message
+
+                );
+
+            }
+
+            /* =============================================
+
+               SUCCÈS
+
+            ============================================= */
+
+            console.log(
+
+                "Produit créé :",
+
+                product
+
+            );
+
+            showMessage(
+
+                "✅ Produit publié avec succès !\n\n" +
+
+                "Votre produit est maintenant actif dans votre boutique.",
+
+                "success"
+
+            );
+
+            hideDebug();
+
+            form.reset();
+
+            selectedPhotos =
+
+                [];
+
+            renderPhotoPreview();
+
+            shippingBox.classList.remove(
+
+                "show"
+
+            );
+
+            outsideShippingPrice.required =
+
+                false;
+
+            outsideShippingPrice.value =
+
+                "0";
+
+            document.getElementById(
+
+                "whatsapp"
+
+            ).value =
+
+                currentProfile.phone ||
+
+                "";
+
+            submitButton.disabled =
+
+                false;
+
+            submitButton.textContent =
+
+                "🚀 Publier le produit";
+
+            /* -------------------------------------------------
+
+               RETOUR AUTOMATIQUE
+
+            ------------------------------------------------- */
+
+            setTimeout(
+
+                function(){
+
+                    window.location.assign(
+
+                        "./mes-produits.html"
+
+                    );
+
+                },
+
+                1500
+
+            );
+
+        }
+
+        catch(error){
+
+            console.error(
+
+                "ERREUR FINALE PUBLICATION :",
+
+                error
+
+            );
+
+            showMessage(
+
+                "❌ " +
+
+                (
+
+                    error.message ||
+
+                    "Une erreur inconnue est survenue."
+
+                ),
+
+                "error"
+
+            );
+
+            submitButton.disabled =
+
+                false;
+
+            submitButton.textContent =
+
+                "🚀 Publier le produit";
+
+        }
+
+    }
+
+);
+
+/* =========================================================
+
+   LANCEMENT
+
+========================================================= */
+
+loadSellerAccess();
+
+</script>
+
+</body>
+
+</html>
