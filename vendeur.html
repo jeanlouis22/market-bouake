@@ -1,0 +1,5571 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Espace vendeur | Market Bouaké</title>
+
+<style>
+
+*{
+
+    box-sizing:border-box;
+
+    margin:0;
+
+    padding:0;
+
+}
+
+body{
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7f6;
+
+    color:#17211b;
+
+    min-height:100vh;
+
+}
+
+button,input,textarea,select{
+
+    font-family:inherit;
+
+}
+
+button{
+
+    cursor:pointer;
+
+}
+
+header{
+
+    height:70px;
+
+    background:#0b6b43;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:0 18px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+}
+
+.menu-btn{
+
+    width:44px;
+
+    height:44px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.12);
+
+    color:white;
+
+    font-size:25px;
+
+}
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-weight:bold;
+
+    font-size:20px;
+
+}
+
+.logo{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:#0b6b43;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:22px;
+
+}
+
+.header-right{
+
+    margin-left:auto;
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+}
+
+.header-btn{
+
+    border:0;
+
+    border-radius:9px;
+
+    padding:10px 13px;
+
+    background:white;
+
+    color:#0b6b43;
+
+    font-weight:bold;
+
+}
+
+.sidebar{
+
+    position:fixed;
+
+    left:-300px;
+
+    top:0;
+
+    width:300px;
+
+    height:100vh;
+
+    background:white;
+
+    z-index:2000;
+
+    box-shadow:5px 0 25px rgba(0,0,0,.15);
+
+    transition:.25s;
+
+    overflow-y:auto;
+
+}
+
+.sidebar.open{
+
+    left:0;
+
+}
+
+.sidebar-header{
+
+    height:70px;
+
+    background:#0b6b43;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    font-weight:bold;
+
+}
+
+.close-btn{
+
+    border:0;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:28px;
+
+}
+
+.menu{
+
+    padding:14px 10px;
+
+}
+
+.menu-item{
+
+    width:100%;
+
+    border:0;
+
+    background:white;
+
+    padding:13px 14px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    text-align:left;
+
+    font-weight:bold;
+
+    margin-bottom:5px;
+
+}
+
+.menu-item:hover,
+
+.menu-item.active{
+
+    background:#e7f5ed;
+
+    color:#0b6b43;
+
+}
+
+.menu-separator{
+
+    height:1px;
+
+    background:#e5e7eb;
+
+    margin:12px 5px;
+
+}
+
+.logout{
+
+    color:#c62828;
+
+}
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.35);
+
+    z-index:1500;
+
+    display:none;
+
+}
+
+.overlay.show{
+
+    display:block;
+
+}
+
+.container{
+
+    width:100%;
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:25px 18px 50px;
+
+}
+
+.loading{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:60px 20px;
+
+    text-align:center;
+
+    color:#6b7280;
+
+}
+
+.dashboard{
+
+    display:none;
+
+}
+
+.page{
+
+    display:none;
+
+}
+
+.page.active{
+
+    display:block;
+
+}
+
+.welcome{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:24px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+
+}
+
+.welcome h1{
+
+    font-size:25px;
+
+    margin-bottom:8px;
+
+}
+
+.welcome p{
+
+    color:#6b7280;
+
+    line-height:1.5;
+
+}
+
+.seller-profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    margin-top:18px;
+
+}
+
+.seller-photo{
+
+    width:68px;
+
+    height:68px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    background:#e7f5ed;
+
+    color:#0b6b43;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:bold;
+
+    font-size:24px;
+
+    flex-shrink:0;
+
+}
+
+.seller-photo img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+.seller-name{
+
+    font-size:19px;
+
+    font-weight:bold;
+
+}
+
+.shop-name{
+
+    margin-top:4px;
+
+    color:#0b6b43;
+
+    font-weight:bold;
+
+}
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:14px;
+
+    margin-bottom:20px;
+
+}
+
+.stat{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:19px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+}
+
+.stat-icon{
+
+    font-size:25px;
+
+    margin-bottom:10px;
+
+}
+
+.stat-title{
+
+    color:#6b7280;
+
+    font-size:13px;
+
+    margin-bottom:6px;
+
+}
+
+.stat-value{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+.section{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:22px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+}
+
+.section-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    margin-bottom:18px;
+
+}
+
+.section-header h2{
+
+    font-size:19px;
+
+}
+
+.actions{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+}
+
+.action{
+
+    border:0;
+
+    border-radius:12px;
+
+    padding:17px;
+
+    background:#f2f7f4;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    text-align:left;
+
+    font-weight:bold;
+
+    color:#17211b;
+
+}
+
+.action:hover{
+
+    background:#e5f3eb;
+
+    color:#0b6b43;
+
+}
+
+.action-icon{
+
+    font-size:22px;
+
+}
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:12px;
+
+}
+
+.info{
+
+    background:#f8faf9;
+
+    border-radius:11px;
+
+    padding:14px;
+
+}
+
+.info-label{
+
+    color:#6b7280;
+
+    font-size:13px;
+
+    margin-bottom:6px;
+
+}
+
+.info-value{
+
+    font-weight:600;
+
+    word-break:break-word;
+
+}
+
+.status{
+
+    display:inline-block;
+
+    background:#dff7e8;
+
+    color:#147a3f;
+
+    padding:6px 10px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.badge-count{
+
+    background:#d9534f;
+
+    color:white;
+
+    border-radius:20px;
+
+    padding:2px 7px;
+
+    font-size:11px;
+
+    margin-left:auto;
+
+}
+
+.toolbar{
+
+    display:flex;
+
+    gap:9px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:16px;
+
+}
+
+.primary,
+
+.secondary,
+
+.danger,
+
+.whatsapp{
+
+    border:0;
+
+    border-radius:9px;
+
+    padding:10px 13px;
+
+    font-weight:bold;
+
+}
+
+.primary{
+
+    background:#0b6b43;
+
+    color:white;
+
+}
+
+.secondary{
+
+    background:#eef3f0;
+
+    color:#17211b;
+
+}
+
+.danger{
+
+    background:#fdeaea;
+
+    color:#c62828;
+
+}
+
+.whatsapp{
+
+    background:#25d366;
+
+    color:white;
+
+}
+
+.table-wrap{
+
+    width:100%;
+
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:700px;
+
+}
+
+th,td{
+
+    padding:12px 10px;
+
+    border-bottom:1px solid #e5e7eb;
+
+    text-align:left;
+
+    vertical-align:middle;
+
+}
+
+th{
+
+    font-size:13px;
+
+    color:#6b7280;
+
+    background:#f8faf9;
+
+}
+
+td{
+
+    font-size:14px;
+
+}
+
+.product-img{
+
+    width:55px;
+
+    height:55px;
+
+    object-fit:cover;
+
+    border-radius:9px;
+
+    background:#eee;
+
+}
+
+.empty{
+
+    padding:35px 15px;
+
+    text-align:center;
+
+    color:#6b7280;
+
+}
+
+.notification{
+
+    border:1px solid #e5e7eb;
+
+    border-radius:13px;
+
+    padding:15px;
+
+    margin-bottom:10px;
+
+    background:white;
+
+}
+
+.notification.unread{
+
+    background:#eef8f3;
+
+    border-color:#bde4cc;
+
+}
+
+.notification-title{
+
+    font-weight:bold;
+
+    margin-bottom:5px;
+
+}
+
+.notification-message{
+
+    color:#4b5563;
+
+    line-height:1.5;
+
+}
+
+.notification-date{
+
+    margin-top:8px;
+
+    color:#8a9290;
+
+    font-size:12px;
+
+}
+
+.review{
+
+    border:1px solid #e5e7eb;
+
+    border-radius:13px;
+
+    padding:15px;
+
+    margin-bottom:10px;
+
+}
+
+.stars{
+
+    color:#e09b00;
+
+    margin-bottom:7px;
+
+}
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:15px;
+
+    z-index:3000;
+
+}
+
+.modal.show{
+
+    display:flex;
+
+}
+
+.modal-box{
+
+    width:100%;
+
+    max-width:600px;
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:22px;
+
+}
+
+.modal-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+.modal-close{
+
+    border:0;
+
+    background:#f0f2f1;
+
+    border-radius:8px;
+
+    width:36px;
+
+    height:36px;
+
+    font-size:20px;
+
+}
+
+.form-group{
+
+    margin-bottom:14px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    font-weight:bold;
+
+    margin-bottom:6px;
+
+}
+
+.form-group input,
+
+.form-group textarea,
+
+.form-group select{
+
+    width:100%;
+
+    border:1px solid #d7ded9;
+
+    border-radius:9px;
+
+    padding:12px;
+
+    outline:none;
+
+    background:white;
+
+}
+
+.form-group textarea{
+
+    min-height:100px;
+
+    resize:vertical;
+
+}
+
+.form-actions{
+
+    display:flex;
+
+    gap:10px;
+
+    justify-content:flex-end;
+
+    margin-top:18px;
+
+}
+
+.toast{
+
+    position:fixed;
+
+    right:18px;
+
+    bottom:18px;
+
+    max-width:360px;
+
+    background:#17211b;
+
+    color:white;
+
+    padding:14px 16px;
+
+    border-radius:10px;
+
+    display:none;
+
+    z-index:5000;
+
+    line-height:1.4;
+
+}
+
+.toast.show{
+
+    display:block;
+
+}
+
+.error-page{
+
+    display:none;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:50px 25px;
+
+    text-align:center;
+
+}
+
+.error-page h1{
+
+    margin-bottom:10px;
+
+}
+
+.error-page p{
+
+    color:#6b7280;
+
+    margin-bottom:20px;
+
+    line-height:1.5;
+
+}
+
+@media(max-width:900px){
+
+    .stats{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+    .actions{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    header{
+
+        padding:0 11px;
+
+    }
+
+    .brand{
+
+        font-size:17px;
+
+    }
+
+    .header-btn{
+
+        padding:8px 9px;
+
+        font-size:12px;
+
+    }
+
+    .container{
+
+        padding:18px 12px 40px;
+
+    }
+
+    .welcome,
+
+    .section{
+
+        padding:18px;
+
+    }
+
+    .stats{
+
+        grid-template-columns:1fr 1fr;
+
+        gap:9px;
+
+    }
+
+    .stat{
+
+        padding:14px;
+
+    }
+
+    .stat-value{
+
+        font-size:19px;
+
+    }
+
+    .actions{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .welcome h1{
+
+        font-size:21px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <button class="menu-btn" id="menuButton" type="button">☰</button>
+
+    <div class="brand">
+
+        <div class="logo">🛒</div>
+
+        <span>Market Bouaké</span>
+
+    </div>
+
+    <div class="header-right">
+
+        <button class="header-btn" id="accountButton" type="button">
+
+            Mon compte
+
+        </button>
+
+        <button class="header-btn" id="logoutButton" type="button">
+
+            Déconnexion
+
+        </button>
+
+    </div>
+
+</header>
+
+<!-- ================= MENU ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+        <span>🏪 Espace vendeur</span>
+
+        <button class="close-btn" id="closeMenu" type="button">
+
+            ×
+
+        </button>
+
+    </div>
+
+    <nav class="menu">
+
+        <button class="menu-item active" data-page="dashboard" type="button">
+
+            🏠
+
+            <span>Tableau de bord</span>
+
+        </button>
+
+        <button class="menu-item" data-page="notifications" type="button">
+
+            🔔
+
+            <span>Notifications</span>
+
+            <span class="badge-count" id="notificationBadge">0</span>
+
+        </button>
+
+        <button class="menu-item" data-page="products" type="button">
+
+            🛍️
+
+            <span>Mes produits</span>
+
+        </button>
+
+        <button class="menu-item" data-page="orders" type="button">
+
+            📦
+
+            <span>Mes commandes</span>
+
+        </button>
+
+        <button class="menu-item" data-page="delivery" type="button">
+
+            🚚
+
+            <span>Tarifs de livraison</span>
+
+        </button>
+
+        <button class="menu-item" data-page="reviews" type="button">
+
+            ⭐
+
+            <span>Mes avis</span>
+
+        </button>
+
+        <div class="menu-separator"></div>
+
+        <button class="menu-item" data-page="shop" type="button">
+
+            🏪
+
+            <span>Ma boutique</span>
+
+        </button>
+
+        <button class="menu-item" data-page="statistics" type="button">
+
+            📊
+
+            <span>Mes statistiques</span>
+
+        </button>
+
+        <button class="menu-item" id="addProductMenu" type="button">
+
+            ➕
+
+            <span>Ajouter un produit</span>
+
+        </button>
+
+        <div class="menu-separator"></div>
+
+        <button class="menu-item logout" id="logoutMenu" type="button">
+
+            🚪
+
+            <span>Déconnexion</span>
+
+        </button>
+
+    </nav>
+
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- ================= CONTENU ================= -->
+
+<main class="container">
+
+    <div class="loading" id="loading">
+
+        Vérification de votre espace vendeur...
+
+    </div>
+
+    <div class="error-page" id="errorPage">
+
+        <div style="font-size:50px;margin-bottom:15px;">🔒</div>
+
+        <h1 id="errorTitle">Accès refusé</h1>
+
+        <p id="errorMessage">
+
+            Vous n'avez pas accès à cet espace.
+
+        </p>
+
+        <button class="primary" id="backAccountButton" type="button">
+
+            Retour à mon compte
+
+        </button>
+
+    </div>
+
+    <div class="dashboard" id="dashboard">
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section class="page active" id="page-dashboard">
+
+            <div class="welcome">
+
+                <h1>
+
+                    👋 Bienvenue dans votre espace vendeur
+
+                </h1>
+
+                <p>
+
+                    Gérez votre boutique, vos produits,
+
+                    vos commandes, vos livraisons et vos ventes
+
+                    depuis cet espace.
+
+                </p>
+
+                <div class="seller-profile">
+
+                    <div class="seller-photo" id="sellerPhoto">
+
+                        🏪
+
+                    </div>
+
+                    <div>
+
+                        <div class="seller-name" id="sellerName">
+
+                            —
+
+                        </div>
+
+                        <div class="shop-name" id="shopName">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <div class="stat-icon">💰</div>
+
+                    <div class="stat-title">Revenus</div>
+
+                    <div class="stat-value" id="revenueValue">
+
+                        0 FCFA
+
+                    </div>
+
+                </div>
+
+                <div class="stat">
+
+                    <div class="stat-icon">📦</div>
+
+                    <div class="stat-title">Commandes</div>
+
+                    <div class="stat-value" id="ordersValue">
+
+                        0
+
+                    </div>
+
+                </div>
+
+                <div class="stat">
+
+                    <div class="stat-icon">🛍️</div>
+
+                    <div class="stat-title">Produits actifs</div>
+
+                    <div class="stat-value" id="productsValue">
+
+                        0
+
+                    </div>
+
+                </div>
+
+                <div class="stat">
+
+                    <div class="stat-icon">⭐</div>
+
+                    <div class="stat-title">Note</div>
+
+                    <div class="stat-value" id="ratingValue">
+
+                        —
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>⚡ Gestion de ma boutique</h2>
+
+                </div>
+
+                <div class="actions">
+
+                    <button class="action" data-page-action="add-product" type="button">
+
+                        <span class="action-icon">➕</span>
+
+                        Ajouter un produit
+
+                    </button>
+
+                    <button class="action" data-page-action="products" type="button">
+
+                        <span class="action-icon">🛍️</span>
+
+                        Mes produits
+
+                    </button>
+
+                    <button class="action" data-page-action="orders" type="button">
+
+                        <span class="action-icon">📦</span>
+
+                        Mes commandes
+
+                    </button>
+
+                    <button class="action" data-page-action="delivery" type="button">
+
+                        <span class="action-icon">🚚</span>
+
+                        Tarifs de livraison
+
+                    </button>
+
+                    <button class="action" data-page-action="reviews" type="button">
+
+                        <span class="action-icon">⭐</span>
+
+                        Mes avis
+
+                    </button>
+
+                    <button class="action" data-page-action="notifications" type="button">
+
+                        <span class="action-icon">🔔</span>
+
+                        Notifications
+
+                    </button>
+
+                    <button class="action" data-page-action="shop" type="button">
+
+                        <span class="action-icon">⚙️</span>
+
+                        Ma boutique
+
+                    </button>
+
+                    <button class="action" data-page-action="statistics" type="button">
+
+                        <span class="action-icon">📊</span>
+
+                        Mes statistiques
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>🏪 Informations de ma boutique</h2>
+
+                    <span class="status">
+
+                        ✓ Vendeur validé
+
+                    </span>
+
+                </div>
+
+                <div class="info-grid">
+
+                    <div class="info">
+
+                        <div class="info-label">Nom de la boutique</div>
+
+                        <div class="info-value" id="shopNameInfo">—</div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">Ville</div>
+
+                        <div class="info-value" id="cityInfo">—</div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">Quartier</div>
+
+                        <div class="info-value" id="districtInfo">—</div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">Catégorie principale</div>
+
+                        <div class="info-value" id="categoryInfo">—</div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">WhatsApp professionnel</div>
+
+                        <div class="info-value" id="phoneInfo">—</div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">Description</div>
+
+                        <div class="info-value" id="descriptionInfo">
+
+                            Aucune description
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= NOTIFICATIONS ================= -->
+
+        <section class="page" id="page-notifications">
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>🔔 Mes notifications</h2>
+
+                    <div class="toolbar">
+
+                        <button class="secondary" id="refreshNotifications" type="button">
+
+                            🔄 Actualiser
+
+                        </button>
+
+                        <button class="primary" id="readAllNotifications" type="button">
+
+                            ✓ Tout lire
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div id="notificationsList">
+
+                    <div class="empty">
+
+                        Chargement des notifications...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= PRODUITS ================= -->
+
+        <section class="page" id="page-products">
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>🛍️ Mes produits</h2>
+
+                    <div class="toolbar">
+
+                        <button class="primary" id="newProductButton" type="button">
+
+                            ➕ Ajouter
+
+                        </button>
+
+                        <button class="secondary" id="refreshProducts" type="button">
+
+                            🔄 Actualiser
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Produit</th>
+
+                                <th>Prix</th>
+
+                                <th>Stock</th>
+
+                                <th>Statut</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="productsTable">
+
+                            <tr>
+
+                                <td colspan="5" class="empty">
+
+                                    Chargement...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= COMMANDES ================= -->
+
+        <section class="page" id="page-orders">
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>📦 Mes commandes</h2>
+
+                    <button class="secondary" id="refreshOrders" type="button">
+
+                        🔄 Actualiser
+
+                    </button>
+
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Client</th>
+
+                                <th>Montant</th>
+
+                                <th>Livraison</th>
+
+                                <th>Statut</th>
+
+                                <th>Date</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="ordersTable">
+
+                            <tr>
+
+                                <td colspan="6" class="empty">
+
+                                    Chargement...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= LIVRAISON ================= -->
+
+        <section class="page" id="page-delivery">
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>🚚 Tarifs de livraison</h2>
+
+                    <button class="primary" id="newDeliveryButton" type="button">
+
+                        ➕ Ajouter un tarif
+
+                    </button>
+
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Quartier</th>
+
+                                <th>Prix</th>
+
+                                <th>Statut</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="deliveryTable">
+
+                            <tr>
+
+                                <td colspan="4" class="empty">
+
+                                    Chargement...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= AVIS ================= -->
+
+        <section class="page" id="page-reviews">
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>⭐ Mes avis</h2>
+
+                    <button class="secondary" id="refreshReviews" type="button">
+
+                        🔄 Actualiser
+
+                    </button>
+
+                </div>
+
+                <div id="reviewsList">
+
+                    <div class="empty">
+
+                        Chargement...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= BOUTIQUE ================= -->
+
+        <section class="page" id="page-shop">
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>🏪 Ma boutique</h2>
+
+                    <span class="status">
+
+                        ✓ Vendeur validé
+
+                    </span>
+
+                </div>
+
+                <form id="shopForm">
+
+                    <div class="info-grid">
+
+                        <div class="form-group">
+
+                            <label>Nom de la boutique</label>
+
+                            <input id="shopFormName" required>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Ville</label>
+
+                            <input id="shopFormCity">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Quartier</label>
+
+                            <input id="shopFormDistrict">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Catégorie principale</label>
+
+                            <input id="shopFormCategory">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>WhatsApp professionnel</label>
+
+                            <input id="shopFormPhone">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Facebook</label>
+
+                            <input id="shopFormFacebook" type="url">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>TikTok</label>
+
+                            <input id="shopFormTiktok" type="url">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Description</label>
+
+                        <textarea id="shopFormDescription"></textarea>
+
+                    </div>
+
+                    <button class="primary" type="submit">
+
+                        💾 Enregistrer les modifications
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <!-- ================= STATISTIQUES ================= -->
+
+        <section class="page" id="page-statistics">
+
+            <div class="section">
+
+                <div class="section-header">
+
+                    <h2>📊 Mes statistiques</h2>
+
+                    <button class="secondary" id="refreshStats" type="button">
+
+                        🔄 Actualiser
+
+                    </button>
+
+                </div>
+
+                <div class="stats">
+
+                    <div class="stat">
+
+                        <div class="stat-icon">💰</div>
+
+                        <div class="stat-title">Chiffre d'affaires livré</div>
+
+                        <div class="stat-value" id="statsRevenue">
+
+                            0 FCFA
+
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-icon">📦</div>
+
+                        <div class="stat-title">Commandes</div>
+
+                        <div class="stat-value" id="statsOrders">
+
+                            0
+
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-icon">🛍️</div>
+
+                        <div class="stat-title">Produits</div>
+
+                        <div class="stat-value" id="statsProducts">
+
+                            0
+
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-icon">⭐</div>
+
+                        <div class="stat-title">Avis</div>
+
+                        <div class="stat-value" id="statsReviews">
+
+                            0
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<!-- ================= MODAL TARIF ================= -->
+
+<div class="modal" id="deliveryModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>🚚 Tarif de livraison</h2>
+
+            <button class="modal-close" type="button" data-close-modal="deliveryModal">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <form id="deliveryForm">
+
+            <input type="hidden" id="deliveryId">
+
+            <div class="form-group">
+
+                <label>Quartier</label>
+
+                <input id="deliveryDistrict" required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Prix en FCFA</label>
+
+                <input id="deliveryPrice" type="number" min="0" required>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button class="secondary" type="button" data-close-modal="deliveryModal">
+
+                    Annuler
+
+                </button>
+
+                <button class="primary" type="submit">
+
+                    💾 Enregistrer
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- ================= TOAST ================= -->
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================================================
+
+   MARKET BOUAKÉ
+
+   ESPACE VENDEUR COMPLET
+
+========================================================= */
+
+const SUPABASE_URL =
+
+"https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+
+"sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+const supabaseClient =
+
+window.supabase.createClient(
+
+    SUPABASE_URL,
+
+    SUPABASE_PUBLISHABLE_KEY
+
+);
+
+let currentUser = null;
+
+let currentProfile = null;
+
+let currentSellerRequest = null;
+
+let currentShop = null;
+
+/* =========================================================
+
+   ELEMENTS
+
+========================================================= */
+
+const loading =
+
+document.getElementById("loading");
+
+const dashboard =
+
+document.getElementById("dashboard");
+
+const errorPage =
+
+document.getElementById("errorPage");
+
+const sidebar =
+
+document.getElementById("sidebar");
+
+const overlay =
+
+document.getElementById("overlay");
+
+const toast =
+
+document.getElementById("toast");
+
+/* =========================================================
+
+   UTILITAIRES
+
+========================================================= */
+
+function showToast(text, type="normal"){
+
+    toast.textContent = text;
+
+    toast.style.background =
+
+        type === "error"
+
+        ? "#c62828"
+
+        : type === "success"
+
+        ? "#0b6b43"
+
+        : "#17211b";
+
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer =
+
+    setTimeout(function(){
+
+        toast.classList.remove("show");
+
+    },3500);
+
+}
+
+function formatMoney(value){
+
+    return Number(value || 0)
+
+        .toLocaleString("fr-FR") + " FCFA";
+
+}
+
+function formatDate(date){
+
+    if(!date) return "—";
+
+    return new Date(date).toLocaleDateString(
+
+        "fr-FR",
+
+        {
+
+            day:"2-digit",
+
+            month:"2-digit",
+
+            year:"numeric"
+
+        }
+
+    );
+
+}
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+function getInitials(first,last){
+
+    const value =
+
+        ((first || "").charAt(0) +
+
+        (last || "").charAt(0))
+
+        .toUpperCase();
+
+    return value || "🏪";
+
+}
+
+function whatsappNumber(phone){
+
+    if(!phone) return "";
+
+    let number =
+
+        String(phone).replace(/[^\d+]/g,"");
+
+    if(number.startsWith("00")){
+
+        number = "+" + number.substring(2);
+
+    }
+
+    if(number.startsWith("+")){
+
+        return number.substring(1);
+
+    }
+
+    if(number.startsWith("225")){
+
+        return number;
+
+    }
+
+    return "225" + number.replace(/^0/,"");
+
+}
+
+function openWhatsApp(phone,message){
+
+    if(!phone){
+
+        showToast(
+
+            "Aucun numéro WhatsApp disponible.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+    const number =
+
+        whatsappNumber(phone);
+
+    const url =
+
+        "https://wa.me/" +
+
+        number +
+
+        "?text=" +
+
+        encodeURIComponent(message || "");
+
+    window.open(url,"_blank");
+
+}
+
+/* =========================================================
+
+   MENU
+
+========================================================= */
+
+function openMenu(){
+
+    sidebar.classList.add("open");
+
+    overlay.classList.add("show");
+
+}
+
+function closeMenu(){
+
+    sidebar.classList.remove("open");
+
+    overlay.classList.remove("show");
+
+}
+
+document
+
+.getElementById("menuButton")
+
+.addEventListener("click",openMenu);
+
+document
+
+.getElementById("closeMenu")
+
+.addEventListener("click",closeMenu);
+
+overlay.addEventListener("click",closeMenu);
+
+/* =========================================================
+
+   NAVIGATION
+
+========================================================= */
+
+async function showPage(page){
+
+    document
+
+    .querySelectorAll(".page")
+
+    .forEach(function(item){
+
+        item.classList.remove("active");
+
+    });
+
+    const target =
+
+        document.getElementById(
+
+            "page-" + page
+
+        );
+
+    if(!target) return;
+
+    target.classList.add("active");
+
+    document
+
+    .querySelectorAll(".menu-item[data-page]")
+
+    .forEach(function(item){
+
+        item.classList.toggle(
+
+            "active",
+
+            item.dataset.page === page
+
+        );
+
+    });
+
+    closeMenu();
+
+    if(page === "notifications"){
+
+        await loadNotifications();
+
+    }
+
+    if(page === "products"){
+
+        await loadProducts();
+
+    }
+
+    if(page === "orders"){
+
+        await loadOrders();
+
+    }
+
+    if(page === "delivery"){
+
+        await loadDeliveryRates();
+
+    }
+
+    if(page === "reviews"){
+
+        await loadReviews();
+
+    }
+
+    if(page === "shop"){
+
+        loadShopForm();
+
+    }
+
+    if(page === "statistics"){
+
+        await loadStatistics();
+
+    }
+
+}
+
+document
+
+.querySelectorAll(".menu-item[data-page]")
+
+.forEach(function(item){
+
+    item.addEventListener(
+
+        "click",
+
+        function(){
+
+            showPage(
+
+                item.dataset.page
+
+            );
+
+        }
+
+    );
+
+});
+
+document
+
+.querySelectorAll("[data-page-action]")
+
+.forEach(function(button){
+
+    button.addEventListener(
+
+        "click",
+
+        function(){
+
+            const action =
+
+                button.dataset.pageAction;
+
+            if(action === "add-product"){
+
+                window.location.href =
+
+                    "ajouter-produit.html";
+
+                return;
+
+            }
+
+            showPage(action);
+
+        }
+
+    );
+
+});
+
+/* =========================================================
+
+   AJOUTER PRODUIT
+
+========================================================= */
+
+document
+
+.getElementById("addProductMenu")
+
+.addEventListener("click",function(){
+
+    window.location.href =
+
+        "ajouter-produit.html";
+
+});
+
+document
+
+.getElementById("newProductButton")
+
+.addEventListener("click",function(){
+
+    window.location.href =
+
+        "ajouter-produit.html";
+
+});
+
+/* =========================================================
+
+   COMPTE
+
+========================================================= */
+
+document
+
+.getElementById("accountButton")
+
+.addEventListener("click",function(){
+
+    window.location.href =
+
+        "compte.html";
+
+});
+
+document
+
+.getElementById("backAccountButton")
+
+.addEventListener("click",function(){
+
+    window.location.href =
+
+        "compte.html";
+
+});
+
+/* =========================================================
+
+   VERIFICATION VENDEUR
+
+========================================================= */
+
+async function loadSeller(){
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+        await supabaseClient.auth.getSession();
+
+        if(error) throw error;
+
+        if(
+
+            !data.session ||
+
+            !data.session.user
+
+        ){
+
+            window.location.href =
+
+                "connexion.html";
+
+            return;
+
+        }
+
+        currentUser =
+
+            data.session.user;
+
+        /* PROFIL */
+
+        const {
+
+            data:profile,
+
+            error:profileError
+
+        } =
+
+        await supabaseClient
+
+        .from("profiles")
+
+        .select("*")
+
+        .eq("id",currentUser.id)
+
+        .single();
+
+        if(profileError){
+
+            console.error(profileError);
+
+            showAccessError(
+
+                "Profil introuvable",
+
+                "Impossible de charger votre profil."
+
+            );
+
+            return;
+
+        }
+
+        currentProfile =
+
+            profile;
+
+        /* PROTECTION */
+
+        if(
+
+            profile.seller_status !==
+
+            "approved"
+
+        ){
+
+            if(profile.seller_status === "pending"){
+
+                showAccessError(
+
+                    "Demande en attente",
+
+                    "Votre demande vendeur n'a pas encore été validée."
+
+                );
+
+                return;
+
+            }
+
+            if(profile.seller_status === "rejected"){
+
+                showAccessError(
+
+                    "Demande refusée",
+
+                    "Votre demande vendeur a été refusée."
+
+                );
+
+                return;
+
+            }
+
+            if(profile.seller_status === "suspended"){
+
+                showAccessError(
+
+                    "Compte vendeur suspendu",
+
+                    "Votre accès vendeur est actuellement suspendu."
+
+                );
+
+                return;
+
+            }
+
+            showAccessError(
+
+                "Accès refusé",
+
+                "Vous devez être un vendeur validé."
+
+            );
+
+            return;
+
+        }
+
+        /* DEMANDE VENDEUR */
+
+        const {
+
+            data:sellerRequest,
+
+            error:sellerRequestError
+
+        } =
+
+        await supabaseClient
+
+        .from("seller_requests")
+
+        .select("*")
+
+        .eq("user_id",currentUser.id)
+
+        .eq("status","approved")
+
+        .order(
+
+            "created_at",
+
+            {ascending:false}
+
+        )
+
+        .limit(1)
+
+        .maybeSingle();
+
+        if(sellerRequestError){
+
+            console.error(
+
+                sellerRequestError
+
+            );
+
+        }
+
+        currentSellerRequest =
+
+            sellerRequest;
+
+        /* BOUTIQUE */
+
+        const {
+
+            data:shop,
+
+            error:shopError
+
+        } =
+
+        await supabaseClient
+
+        .from("shops")
+
+        .select("*")
+
+        .eq("user_id",currentUser.id)
+
+        .limit(1)
+
+        .maybeSingle();
+
+        if(shopError){
+
+            console.error(shopError);
+
+        }
+
+        currentShop =
+
+            shop;
+
+        fillSellerInformation();
+
+        await Promise.all([
+
+            loadDashboardStats(),
+
+            loadUnreadNotifications()
+
+        ]);
+
+        loading.style.display =
+
+            "none";
+
+        errorPage.style.display =
+
+            "none";
+
+        dashboard.style.display =
+
+            "block";
+
+    }catch(error){
+
+        console.error(
+
+            "Erreur vendeur:",
+
+            error
+
+        );
+
+        showAccessError(
+
+            "Erreur",
+
+            "Une erreur est survenue lors du chargement de votre espace vendeur."
+
+        );
+
+    }
+
+}
+
+function showAccessError(title,text){
+
+    loading.style.display =
+
+        "none";
+
+    dashboard.style.display =
+
+        "none";
+
+    errorPage.style.display =
+
+        "block";
+
+    document.getElementById(
+
+        "errorTitle"
+
+    ).textContent = title;
+
+    document.getElementById(
+
+        "errorMessage"
+
+    ).textContent = text;
+
+}
+
+/* =========================================================
+
+   INFORMATIONS VENDEUR
+
+========================================================= */
+
+function fillSellerInformation(){
+
+    const firstName =
+
+        currentProfile?.first_name ||
+
+        currentSellerRequest?.first_name ||
+
+        "";
+
+    const lastName =
+
+        currentProfile?.last_name ||
+
+        currentSellerRequest?.last_name ||
+
+        "";
+
+    const shopName =
+
+        currentShop?.shop_name ||
+
+        currentSellerRequest?.shop_name ||
+
+        "Ma boutique";
+
+    document.getElementById(
+
+        "sellerName"
+
+    ).textContent =
+
+        (
+
+            firstName + " " + lastName
+
+        ).trim() || "Vendeur";
+
+    document.getElementById(
+
+        "shopName"
+
+    ).textContent =
+
+        shopName;
+
+    document.getElementById(
+
+        "shopNameInfo"
+
+    ).textContent =
+
+        shopName;
+
+    document.getElementById(
+
+        "cityInfo"
+
+    ).textContent =
+
+        currentShop?.city ||
+
+        currentSellerRequest?.city ||
+
+        currentProfile?.city ||
+
+        "Bouaké";
+
+    document.getElementById(
+
+        "districtInfo"
+
+    ).textContent =
+
+        currentShop?.district ||
+
+        currentSellerRequest?.district ||
+
+        currentProfile?.district ||
+
+        "—";
+
+    document.getElementById(
+
+        "categoryInfo"
+
+    ).textContent =
+
+        currentSellerRequest?.main_category ||
+
+        "—";
+
+    document.getElementById(
+
+        "phoneInfo"
+
+    ).textContent =
+
+        currentShop?.phone ||
+
+        currentSellerRequest?.phone ||
+
+        currentProfile?.phone ||
+
+        "—";
+
+    document.getElementById(
+
+        "descriptionInfo"
+
+    ).textContent =
+
+        currentShop?.description ||
+
+        currentSellerRequest?.description ||
+
+        "Aucune description";
+
+    const photo =
+
+        currentProfile?.profile_photo_url ||
+
+        currentShop?.profile_photo_url ||
+
+        currentSellerRequest?.profile_photo_url;
+
+    const photoBox =
+
+        document.getElementById("sellerPhoto");
+
+    if(photo){
+
+        photoBox.innerHTML =
+
+            '<img src="' +
+
+            escapeHTML(photo) +
+
+            '" alt="Photo du vendeur">';
+
+    }else{
+
+        photoBox.textContent =
+
+            getInitials(
+
+                firstName,
+
+                lastName
+
+            );
+
+    }
+
+}
+
+/* =========================================================
+
+   STATISTIQUES DASHBOARD
+
+========================================================= */
+
+async function loadDashboardStats(){
+
+    try{
+
+        const {
+
+            data:products
+
+        } =
+
+        await supabaseClient
+
+        .from("products")
+
+        .select("id,is_active")
+
+        .eq(
+
+            "seller_id",
+
+            currentUser.id
+
+        );
+
+        const activeProducts =
+
+            (products || [])
+
+            .filter(
+
+                item => item.is_active !== false
+
+            )
+
+            .length;
+
+        document.getElementById(
+
+            "productsValue"
+
+        ).textContent =
+
+            activeProducts;
+
+        const {
+
+            data:orders
+
+        } =
+
+        await supabaseClient
+
+        .from("orders")
+
+        .select(
+
+            "id,total_amount,status"
+
+        )
+
+        .eq(
+
+            "seller_id",
+
+            currentUser.id
+
+        );
+
+        const orderList =
+
+            orders || [];
+
+        document.getElementById(
+
+            "ordersValue"
+
+        ).textContent =
+
+            orderList.length;
+
+        const completed =
+
+            orderList.filter(
+
+                order =>
+
+                    order.status === "delivered" ||
+
+                    order.status === "received" ||
+
+                    order.status === "completed"
+
+            );
+
+        const revenue =
+
+            completed.reduce(
+
+                (sum,order) =>
+
+                    sum + Number(
+
+                        order.total_amount || 0
+
+                    ),
+
+                0
+
+            );
+
+        document.getElementById(
+
+            "revenueValue"
+
+        ).textContent =
+
+            formatMoney(revenue);
+
+        const {
+
+            data:reviews
+
+        } =
+
+        await supabaseClient
+
+        .from("reviews")
+
+        .select("rating")
+
+        .eq(
+
+            "seller_id",
+
+            currentUser.id
+
+        )
+
+        .eq(
+
+            "is_visible",
+
+            true
+
+        );
+
+        if(reviews && reviews.length){
+
+            const average =
+
+                reviews.reduce(
+
+                    (sum,item) =>
+
+                        sum + Number(item.rating || 0),
+
+                    0
+
+                ) / reviews.length;
+
+            document.getElementById(
+
+                "ratingValue"
+
+            ).textContent =
+
+                average.toFixed(1) + "/5";
+
+        }else{
+
+            document.getElementById(
+
+                "ratingValue"
+
+            ).textContent =
+
+                "—";
+
+        }
+
+    }catch(error){
+
+        console.error(
+
+            "Erreur statistiques:",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* =========================================================
+
+   NOTIFICATIONS
+
+========================================================= */
+
+async function loadUnreadNotifications(){
+
+    const {
+
+        count,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("notifications")
+
+    .select(
+
+        "id",
+
+        {
+
+            count:"exact",
+
+            head:true
+
+        }
+
+    )
+
+    .eq(
+
+        "user_id",
+
+        currentUser.id
+
+    )
+
+    .eq(
+
+        "is_read",
+
+        false
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
+
+    document.getElementById(
+
+        "notificationBadge"
+
+    ).textContent =
+
+        count || 0;
+
+}
+
+async function loadNotifications(){
+
+    const container =
+
+        document.getElementById(
+
+            "notificationsList"
+
+        );
+
+    container.innerHTML =
+
+        '<div class="empty">Chargement...</div>';
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("notifications")
+
+    .select("*")
+
+    .eq(
+
+        "user_id",
+
+        currentUser.id
+
+    )
+
+    .order(
+
+        "created_at",
+
+        {ascending:false}
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        container.innerHTML =
+
+            '<div class="empty">Impossible de charger les notifications.</div>';
+
+        return;
+
+    }
+
+    if(!data || !data.length){
+
+        container.innerHTML =
+
+            '<div class="empty">🔔 Aucune notification pour le moment.</div>';
+
+        await loadUnreadNotifications();
+
+        return;
+
+    }
+
+    container.innerHTML =
+
+        data.map(function(notification){
+
+            return `
+
+                <div class="notification ${notification.is_read ? "" : "unread"}">
+
+                    <div class="notification-title">
+
+                        ${escapeHTML(notification.title)}
+
+                    </div>
+
+                    <div class="notification-message">
+
+                        ${escapeHTML(notification.message)}
+
+                    </div>
+
+                    <div class="notification-date">
+
+                        ${formatDate(notification.created_at)}
+
+                    </div>
+
+                    ${
+
+                        notification.is_read
+
+                        ? ""
+
+                        :
+
+                        `
+
+                        <button
+
+                            class="secondary"
+
+                            style="margin-top:10px;"
+
+                            onclick="markNotificationRead('${notification.id}')"
+
+                            type="button"
+
+                        >
+
+                            ✓ Marquer comme lue
+
+                        </button>
+
+                        `
+
+                    }
+
+                </div>
+
+            `;
+
+        }).join("");
+
+    await loadUnreadNotifications();
+
+}
+
+async function markNotificationRead(id){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("notifications")
+
+    .update({
+
+        is_read:true
+
+    })
+
+    .eq(
+
+        "id",
+
+        id
+
+    )
+
+    .eq(
+
+        "user_id",
+
+        currentUser.id
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        showToast(
+
+            "Impossible de modifier la notification.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+    showToast(
+
+        "Notification marquée comme lue.",
+
+        "success"
+
+    );
+
+    await loadNotifications();
+
+}
+
+async function markAllNotificationsRead(){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("notifications")
+
+    .update({
+
+        is_read:true
+
+    })
+
+    .eq(
+
+        "user_id",
+
+        currentUser.id
+
+    )
+
+    .eq(
+
+        "is_read",
+
+        false
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        showToast(
+
+            "Impossible de modifier les notifications.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+    showToast(
+
+        "Toutes les notifications ont été lues.",
+
+        "success"
+
+    );
+
+    await loadNotifications();
+
+}
+
+document
+
+.getElementById("refreshNotifications")
+
+.addEventListener(
+
+    "click",
+
+    loadNotifications
+
+);
+
+document
+
+.getElementById("readAllNotifications")
+
+.addEventListener(
+
+    "click",
+
+    markAllNotificationsRead
+
+);
+
+/* =========================================================
+
+   PRODUITS
+
+========================================================= */
+
+async function loadProducts(){
+
+    const tbody =
+
+        document.getElementById(
+
+            "productsTable"
+
+        );
+
+    tbody.innerHTML =
+
+        '<tr><td colspan="5" class="empty">Chargement...</td></tr>';
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("products")
+
+    .select("*")
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    )
+
+    .order(
+
+        "created_at",
+
+        {ascending:false}
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        tbody.innerHTML =
+
+            '<tr><td colspan="5" class="empty">Impossible de charger les produits.</td></tr>';
+
+        return;
+
+    }
+
+    if(!data || !data.length){
+
+        tbody.innerHTML =
+
+            '<tr><td colspan="5" class="empty">🛍️ Vous n’avez encore aucun produit.</td></tr>';
+
+        return;
+
+    }
+
+    tbody.innerHTML =
+
+        data.map(function(product){
+
+            const image =
+
+                product.image_url_1;
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        <div style="display:flex;align-items:center;gap:9px;">
+
+                            ${
+
+                                image
+
+                                ?
+
+                                `<img class="product-img" src="${escapeHTML(image)}" alt="">`
+
+                                :
+
+                                `<div class="product-img" style="display:flex;align-items:center;justify-content:center;">🛍️</div>`
+
+                            }
+
+                            <strong>
+
+                                ${escapeHTML(product.name)}
+
+                            </strong>
+
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        ${formatMoney(product.price)}
+
+                    </td>
+
+                    <td>
+
+                        ${product.stock ?? 0}
+
+                    </td>
+
+                    <td>
+
+                        ${
+
+                            product.is_active
+
+                            ?
+
+                            '<span class="status">Actif</span>'
+
+                            :
+
+                            '<span class="status" style="background:#eee;color:#666;">Inactif</span>'
+
+                        }
+
+                    </td>
+
+                    <td>
+
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+
+                            <button
+
+                                class="secondary"
+
+                                type="button"
+
+                                onclick="toggleProduct('${product.id}',${product.is_active})"
+
+                            >
+
+                                ${product.is_active ? "⏸ Désactiver" : "▶ Activer"}
+
+                            </button>
+
+                            <button
+
+                                class="danger"
+
+                                type="button"
+
+                                onclick="deleteProduct('${product.id}')"
+
+                            >
+
+                                🗑 Supprimer
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+    await loadDashboardStats();
+
+}
+
+async function toggleProduct(id,currentStatus){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("products")
+
+    .update({
+
+        is_active:!currentStatus
+
+    })
+
+    .eq(
+
+        "id",
+
+        id
+
+    )
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        showToast(
+
+            "Impossible de modifier le produit.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+    showToast(
+
+        currentStatus
+
+        ? "Produit désactivé."
+
+        : "Produit activé.",
+
+        "success"
+
+    );
+
+    await loadProducts();
+
+}
+
+async function deleteProduct(id){
+
+    const confirmation =
+
+        confirm(
+
+            "Voulez-vous vraiment supprimer ce produit ?"
+
+        );
+
+    if(!confirmation) return;
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("products")
+
+    .delete()
+
+    .eq(
+
+        "id",
+
+        id
+
+    )
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        showToast(
+
+            "Impossible de supprimer le produit.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+    showToast(
+
+        "Produit supprimé.",
+
+        "success"
+
+    );
+
+    await loadProducts();
+
+}
+
+document
+
+.getElementById("refreshProducts")
+
+.addEventListener(
+
+    "click",
+
+    loadProducts
+
+);
+
+/* =========================================================
+
+   COMMANDES
+
+========================================================= */
+
+async function loadOrders(){
+
+    const tbody =
+
+        document.getElementById(
+
+            "ordersTable"
+
+        );
+
+    tbody.innerHTML =
+
+        '<tr><td colspan="6" class="empty">Chargement...</td></tr>';
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("orders")
+
+    .select("*")
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    )
+
+    .order(
+
+        "created_at",
+
+        {ascending:false}
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        tbody.innerHTML =
+
+            '<tr><td colspan="6" class="empty">Impossible de charger les commandes.</td></tr>';
+
+        return;
+
+    }
+
+    if(!data || !data.length){
+
+        tbody.innerHTML =
+
+            '<tr><td colspan="6" class="empty">📦 Aucune commande pour le moment.</td></tr>';
+
+        return;
+
+    }
+
+    tbody.innerHTML =
+
+        data.map(function(order){
+
+            const phone =
+
+                order.buyer_phone;
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            ${escapeHTML(
+
+                                (
+
+                                    order.buyer_first_name || ""
+
+                                ) +
+
+                                " " +
+
+                                (
+
+                                    order.buyer_last_name || ""
+
+                                )
+
+                            )}
+
+                        </strong>
+
+                        <br>
+
+                        <small>
+
+                            ${escapeHTML(phone || "—")}
+
+                        </small>
+
+                    </td>
+
+                    <td>
+
+                        ${formatMoney(order.total_amount)}
+
+                    </td>
+
+                    <td>
+
+                        ${formatMoney(order.delivery_fee)}
+
+                    </td>
+
+                    <td>
+
+                        <select
+
+                            onchange="changeOrderStatus('${order.id}',this.value)"
+
+                            style="padding:8px;border:1px solid #ddd;border-radius:8px;"
+
+                        >
+
+                            ${orderStatusOption("pending","En attente",order.status)}
+
+                            ${orderStatusOption("confirmed","Confirmée",order.status)}
+
+                            ${orderStatusOption("preparing","Préparation",order.status)}
+
+                            ${orderStatusOption("shipped","Expédiée",order.status)}
+
+                            ${orderStatusOption("delivered","Livrée",order.status)}
+
+                            ${orderStatusOption("received","Reçue",order.status)}
+
+                            ${orderStatusOption("completed","Terminée",order.status)}
+
+                            ${orderStatusOption("cancelled","Annulée",order.status)}
+
+                        </select>
+
+                    </td>
+
+                    <td>
+
+                        ${formatDate(order.created_at)}
+
+                    </td>
+
+                    <td>
+
+                        ${
+
+                            phone
+
+                            ?
+
+                            `
+
+                            <button
+
+                                class="whatsapp"
+
+                                type="button"
+
+                                onclick="contactBuyer('${escapeHTML(phone)}','Bonjour, je vous contacte concernant votre commande Market Bouaké.')"
+
+                            >
+
+                                WhatsApp
+
+                            </button>
+
+                            `
+
+                            :
+
+                            "—"
+
+                        }
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+    await loadDashboardStats();
+
+}
+
+function orderStatusOption(
+
+    value,
+
+    label,
+
+    current
+
+){
+
+    return `
+
+        <option
+
+            value="${value}"
+
+            ${current === value ? "selected" : ""}
+
+        >
+
+            ${label}
+
+        </option>
+
+    `;
+
+}
+
+async function changeOrderStatus(
+
+    orderId,
+
+    status
+
+){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("orders")
+
+    .update({
+
+        status:status,
+
+        updated_at:new Date().toISOString()
+
+    })
+
+    .eq(
+
+        "id",
+
+        orderId
+
+    )
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        showToast(
+
+            "Impossible de modifier le statut.",
+
+            "error"
+
+        );
+
+        await loadOrders();
+
+        return;
+
+    }
+
+    showToast(
+
+        "Statut de la commande mis à jour.",
+
+        "success"
+
+    );
+
+    await loadOrders();
+
+}
+
+function contactBuyer(
+
+    phone,
+
+    message
+
+){
+
+    openWhatsApp(
+
+        phone,
+
+        message
+
+    );
+
+}
+
+document
+
+.getElementById("refreshOrders")
+
+.addEventListener(
+
+    "click",
+
+    loadOrders
+
+);
+
+/* =========================================================
+
+   LIVRAISON
+
+========================================================= */
+
+async function loadDeliveryRates(){
+
+    const tbody =
+
+        document.getElementById(
+
+            "deliveryTable"
+
+        );
+
+    tbody.innerHTML =
+
+        '<tr><td colspan="4" class="empty">Chargement...</td></tr>';
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("delivery_rates")
+
+    .select("*")
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    )
+
+    .order(
+
+        "district",
+
+        {ascending:true}
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        tbody.innerHTML =
+
+            '<tr><td colspan="4" class="empty">Impossible de charger les tarifs.</td></tr>';
+
+        return;
+
+    }
+
+    if(!data || !data.length){
+
+        tbody.innerHTML =
+
+            '<tr><td colspan="4" class="empty">🚚 Aucun tarif de livraison enregistré.</td></tr>';
+
+        return;
+
+    }
+
+    tbody.innerHTML =
+
+        data.map(function(rate){
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        ${escapeHTML(rate.district)}
+
+                    </td>
+
+                    <td>
+
+                        ${formatMoney(rate.price)}
+
+                    </td>
+
+                    <td>
+
+                        ${
+
+                            rate.is_active
+
+                            ?
+
+                            '<span class="status">Actif</span>'
+
+                            :
+
+                            '<span class="status" style="background:#eee;color:#666;">Inactif</span>'
+
+                        }
+
+                    </td>
+
+                    <td>
+
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+
+                            <button
+
+                                class="secondary"
+
+                                type="button"
+
+                                onclick="editDelivery('${rate.id}','${escapeHTML(rate.district)}',${rate.price})"
+
+                            >
+
+                                ✏️ Modifier
+
+                            </button>
+
+                            <button
+
+                                class="danger"
+
+                                type="button"
+
+                                onclick="deleteDelivery('${rate.id}')"
+
+                            >
+
+                                🗑 Supprimer
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+}
+
+function openDeliveryModal(
+
+    id="",
+
+    district="",
+
+    price=""
+
+){
+
+    document.getElementById(
+
+        "deliveryId"
+
+    ).value = id;
+
+    document.getElementById(
+
+        "deliveryDistrict"
+
+    ).value = district;
+
+    document.getElementById(
+
+        "deliveryPrice"
+
+    ).value = price;
+
+    document.getElementById(
+
+        "deliveryModal"
+
+    ).classList.add("show");
+
+}
+
+function editDelivery(
+
+    id,
+
+    district,
+
+    price
+
+){
+
+    openDeliveryModal(
+
+        id,
+
+        district,
+
+        price
+
+    );
+
+}
+
+async function deleteDelivery(id){
+
+    if(
+
+        !confirm(
+
+            "Voulez-vous supprimer ce tarif ?"
+
+        )
+
+    ) return;
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("delivery_rates")
+
+    .delete()
+
+    .eq(
+
+        "id",
+
+        id
+
+    )
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        showToast(
+
+            "Impossible de supprimer le tarif.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+    showToast(
+
+        "Tarif supprimé.",
+
+        "success"
+
+    );
+
+    await loadDeliveryRates();
+
+}
+
+document
+
+.getElementById("newDeliveryButton")
+
+.addEventListener(
+
+    "click",
+
+    function(){
+
+        openDeliveryModal();
+
+    }
+
+);
+
+document
+
+.getElementById("deliveryForm")
+
+.addEventListener(
+
+    "submit",
+
+    async function(event){
+
+        event.preventDefault();
+
+        const id =
+
+            document.getElementById(
+
+                "deliveryId"
+
+            ).value;
+
+        const district =
+
+            document.getElementById(
+
+                "deliveryDistrict"
+
+            ).value.trim();
+
+        const price =
+
+            Number(
+
+                document.getElementById(
+
+                    "deliveryPrice"
+
+                ).value
+
+            );
+
+        if(!district){
+
+            showToast(
+
+                "Veuillez saisir un quartier.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        if(price < 0){
+
+            showToast(
+
+                "Le prix ne peut pas être négatif.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        let error;
+
+        if(id){
+
+            const result =
+
+                await supabaseClient
+
+                .from("delivery_rates")
+
+                .update({
+
+                    district:district,
+
+                    price:price,
+
+                    updated_at:new Date().toISOString()
+
+                })
+
+                .eq(
+
+                    "id",
+
+                    id
+
+                )
+
+                .eq(
+
+                    "seller_id",
+
+                    currentUser.id
+
+                );
+
+            error =
+
+                result.error;
+
+        }else{
+
+            const result =
+
+                await supabaseClient
+
+                .from("delivery_rates")
+
+                .insert({
+
+                    seller_id:currentUser.id,
+
+                    district:district,
+
+                    price:price,
+
+                    is_active:true
+
+                });
+
+            error =
+
+                result.error;
+
+        }
+
+        if(error){
+
+            console.error(error);
+
+            showToast(
+
+                "Impossible d'enregistrer le tarif.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        document
+
+        .getElementById("deliveryModal")
+
+        .classList.remove("show");
+
+        showToast(
+
+            id
+
+            ? "Tarif modifié."
+
+            : "Tarif ajouté.",
+
+            "success"
+
+        );
+
+        await loadDeliveryRates();
+
+    }
+
+);
+
+/* =========================================================
+
+   AVIS
+
+========================================================= */
+
+async function loadReviews(){
+
+    const container =
+
+        document.getElementById(
+
+            "reviewsList"
+
+        );
+
+    container.innerHTML =
+
+        '<div class="empty">Chargement...</div>';
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+    .from("reviews")
+
+    .select("*")
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    )
+
+    .eq(
+
+        "is_visible",
+
+        true
+
+    )
+
+    .order(
+
+        "created_at",
+
+        {ascending:false}
+
+    );
+
+    if(error){
+
+        console.error(error);
+
+        container.innerHTML =
+
+            '<div class="empty">Impossible de charger les avis.</div>';
+
+        return;
+
+    }
+
+    if(!data || !data.length){
+
+        container.innerHTML =
+
+            '<div class="empty">⭐ Vous n’avez pas encore reçu d’avis.</div>';
+
+        return;
+
+    }
+
+    container.innerHTML =
+
+        data.map(function(review){
+
+            const rating =
+
+                Math.max(
+
+                    0,
+
+                    Math.min(
+
+                        5,
+
+                        Number(review.rating || 0)
+
+                    )
+
+                );
+
+            return `
+
+                <div class="review">
+
+                    <div class="stars">
+
+                        ${"★".repeat(rating)}
+
+                        ${"☆".repeat(5-rating)}
+
+                    </div>
+
+                    <div>
+
+                        ${escapeHTML(
+
+                            review.comment ||
+
+                            "Aucun commentaire."
+
+                        )}
+
+                    </div>
+
+                    <div style="margin-top:8px;color:#8a9290;font-size:12px;">
+
+                        ${formatDate(review.created_at)}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+    await loadDashboardStats();
+
+}
+
+document
+
+.getElementById("refreshReviews")
+
+.addEventListener(
+
+    "click",
+
+    loadReviews
+
+);
+
+/* =========================================================
+
+   BOUTIQUE
+
+========================================================= */
+
+function loadShopForm(){
+
+    document.getElementById(
+
+        "shopFormName"
+
+    ).value =
+
+        currentShop?.shop_name ||
+
+        currentSellerRequest?.shop_name ||
+
+        "";
+
+    document.getElementById(
+
+        "shopFormCity"
+
+    ).value =
+
+        currentShop?.city ||
+
+        currentSellerRequest?.city ||
+
+        currentProfile?.city ||
+
+        "Bouaké";
+
+    document.getElementById(
+
+        "shopFormDistrict"
+
+    ).value =
+
+        currentShop?.district ||
+
+        currentSellerRequest?.district ||
+
+        currentProfile?.district ||
+
+        "";
+
+    document.getElementById(
+
+        "shopFormCategory"
+
+    ).value =
+
+        currentSellerRequest?.main_category ||
+
+        "";
+
+    document.getElementById(
+
+        "shopFormPhone"
+
+    ).value =
+
+        currentShop?.phone ||
+
+        currentSellerRequest?.phone ||
+
+        currentProfile?.phone ||
+
+        "";
+
+    document.getElementById(
+
+        "shopFormFacebook"
+
+    ).value =
+
+        currentShop?.facebook_url ||
+
+        currentSellerRequest?.facebook_url ||
+
+        "";
+
+    document.getElementById(
+
+        "shopFormTiktok"
+
+    ).value =
+
+        currentShop?.tiktok_url ||
+
+        currentSellerRequest?.tiktok_url ||
+
+        "";
+
+    document.getElementById(
+
+        "shopFormDescription"
+
+    ).value =
+
+        currentShop?.description ||
+
+        currentSellerRequest?.description ||
+
+        "";
+
+}
+
+document
+
+.getElementById("shopForm")
+
+.addEventListener(
+
+    "submit",
+
+    async function(event){
+
+        event.preventDefault();
+
+        const shopData = {
+
+            shop_name:
+
+                document.getElementById(
+
+                    "shopFormName"
+
+                ).value.trim(),
+
+            city:
+
+                document.getElementById(
+
+                    "shopFormCity"
+
+                ).value.trim() || "Bouaké",
+
+            district:
+
+                document.getElementById(
+
+                    "shopFormDistrict"
+
+                ).value.trim(),
+
+            description:
+
+                document.getElementById(
+
+                    "shopFormDescription"
+
+                ).value.trim(),
+
+            facebook_url:
+
+                document.getElementById(
+
+                    "shopFormFacebook"
+
+                ).value.trim(),
+
+            tiktok_url:
+
+                document.getElementById(
+
+                    "shopFormTiktok"
+
+                ).value.trim(),
+
+            profile_photo_url:
+
+                currentProfile?.profile_photo_url ||
+
+                currentSellerRequest?.profile_photo_url ||
+
+                null,
+
+            updated_at:
+
+                new Date().toISOString()
+
+        };
+
+        const phone =
+
+            document.getElementById(
+
+                "shopFormPhone"
+
+            ).value.trim();
+
+        if(!shopData.shop_name){
+
+            showToast(
+
+                "Le nom de la boutique est obligatoire.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        let result;
+
+        if(currentShop?.id){
+
+            result =
+
+                await supabaseClient
+
+                .from("shops")
+
+                .update(shopData)
+
+                .eq(
+
+                    "id",
+
+                    currentShop.id
+
+                )
+
+                .eq(
+
+                    "user_id",
+
+                    currentUser.id
+
+                );
+
+        }else{
+
+            result =
+
+                await supabaseClient
+
+                .from("shops")
+
+                .insert({
+
+                    ...shopData,
+
+                    user_id:currentUser.id,
+
+                    status:"active"
+
+                });
+
+        }
+
+        if(result.error){
+
+            console.error(
+
+                result.error
+
+            );
+
+            showToast(
+
+                "Impossible d'enregistrer la boutique.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        /*
+
+         * Le téléphone professionnel existe
+
+         * actuellement dans seller_requests.
+
+         * On le met également à jour dans la demande
+
+         * approuvée pour conserver les informations.
+
+         */
+
+        if(currentSellerRequest?.id){
+
+            const {
+
+                error:requestError
+
+            } =
+
+            await supabaseClient
+
+            .from("seller_requests")
+
+            .update({
+
+                phone:phone,
+
+                district:shopData.district,
+
+                description:shopData.description,
+
+                facebook_url:shopData.facebook_url,
+
+                tiktok_url:shopData.tiktok_url,
+
+                updated_at:new Date().toISOString()
+
+            })
+
+            .eq(
+
+                "id",
+
+                currentSellerRequest.id
+
+            )
+
+            .eq(
+
+                "user_id",
+
+                currentUser.id
+
+            );
+
+            if(requestError){
+
+                console.error(
+
+                    requestError
+
+                );
+
+            }
+
+        }
+
+        showToast(
+
+            "Informations de la boutique enregistrées.",
+
+            "success"
+
+        );
+
+        await reloadSellerData();
+
+    }
+
+);
+
+/* =========================================================
+
+   RECHARGER LES INFORMATIONS VENDEUR
+
+========================================================= */
+
+async function reloadSellerData(){
+
+    const {
+
+        data:shop
+
+    } =
+
+    await supabaseClient
+
+    .from("shops")
+
+    .select("*")
+
+    .eq(
+
+        "user_id",
+
+        currentUser.id
+
+    )
+
+    .limit(1)
+
+    .maybeSingle();
+
+    currentShop =
+
+        shop;
+
+    const {
+
+        data:sellerRequest
+
+    } =
+
+    await supabaseClient
+
+    .from("seller_requests")
+
+    .select("*")
+
+    .eq(
+
+        "user_id",
+
+        currentUser.id
+
+    )
+
+    .eq(
+
+        "status",
+
+        "approved"
+
+    )
+
+    .order(
+
+        "created_at",
+
+        {ascending:false}
+
+    )
+
+    .limit(1)
+
+    .maybeSingle();
+
+    currentSellerRequest =
+
+        sellerRequest;
+
+    fillSellerInformation();
+
+    loadShopForm();
+
+}
+
+/* =========================================================
+
+   STATISTIQUES
+
+========================================================= */
+
+async function loadStatistics(){
+
+    const {
+
+        data:products
+
+    } =
+
+    await supabaseClient
+
+    .from("products")
+
+    .select("id")
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    );
+
+    const {
+
+        data:orders
+
+    } =
+
+    await supabaseClient
+
+    .from("orders")
+
+    .select("id,total_amount,status")
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    );
+
+    const {
+
+        data:reviews
+
+    } =
+
+    await supabaseClient
+
+    .from("reviews")
+
+    .select("id")
+
+    .eq(
+
+        "seller_id",
+
+        currentUser.id
+
+    )
+
+    .eq(
+
+        "is_visible",
+
+        true
+
+    );
+
+    const orderList =
+
+        orders || [];
+
+    const completed =
+
+        orderList.filter(
+
+            item =>
+
+                item.status === "delivered" ||
+
+                item.status === "received" ||
+
+                item.status === "completed"
+
+        );
+
+    const revenue =
+
+        completed.reduce(
+
+            (sum,item) =>
+
+                sum + Number(
+
+                    item.total_amount || 0
+
+                ),
+
+            0
+
+        );
+
+    document.getElementById(
+
+        "statsRevenue"
+
+    ).textContent =
+
+        formatMoney(revenue);
+
+    document.getElementById(
+
+        "statsOrders"
+
+    ).textContent =
+
+        orderList.length;
+
+    document.getElementById(
+
+        "statsProducts"
+
+    ).textContent =
+
+        (products || []).length;
+
+    document.getElementById(
+
+        "statsReviews"
+
+    ).textContent =
+
+        (reviews || []).length;
+
+}
+
+document
+
+.getElementById("refreshStats")
+
+.addEventListener(
+
+    "click",
+
+    loadStatistics
+
+);
+
+/* =========================================================
+
+   MODALS
+
+========================================================= */
+
+document
+
+.querySelectorAll("[data-close-modal]")
+
+.forEach(function(button){
+
+    button.addEventListener(
+
+        "click",
+
+        function(){
+
+            const id =
+
+                button.dataset.closeModal;
+
+            document
+
+            .getElementById(id)
+
+            .classList.remove("show");
+
+        }
+
+    );
+
+});
+
+/* =========================================================
+
+   DECONNEXION
+
+========================================================= */
+
+async function logout(){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient.auth.signOut();
+
+    if(error){
+
+        console.error(error);
+
+        showToast(
+
+            "Impossible de vous déconnecter.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+    window.location.href =
+
+        "connexion.html";
+
+}
+
+document
+
+.getElementById("logoutButton")
+
+.addEventListener(
+
+    "click",
+
+    logout
+
+);
+
+document
+
+.getElementById("logoutMenu")
+
+.addEventListener(
+
+    "click",
+
+    logout
+
+);
+
+/* =========================================================
+
+   INITIALISATION
+
+========================================================= */
+
+loadSeller();
+
+</script>
+
+</body>
+
+</html>
