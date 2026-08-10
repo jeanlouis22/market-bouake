@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Test compte | Market Bouaké</title>
+
+</head>
+
+<body>
+
+    <h1>🛒 Market Bouaké</h1>
+
+    <h2>Test du compte</h2>
+
+    <pre id="result">Test en cours...</pre>
+
+    <button id="logout">
+
+        Se déconnecter
+
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL =
+
+            "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+        const SUPABASE_PUBLISHABLE_KEY =
+
+            "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+        const supabaseClient =
+
+            window.supabase.createClient(
+
+                SUPABASE_URL,
+
+                SUPABASE_PUBLISHABLE_KEY
+
+            );
+
+        async function test() {
+
+            const result =
+
+                document.getElementById("result");
+
+            // =====================================
+
+            // TEST SESSION
+
+            // =====================================
+
+            const {
+
+                data: sessionData,
+
+                error: sessionError
+
+            } =
+
+                await supabaseClient.auth.getSession();
+
+            if (sessionError) {
+
+                result.textContent =
+
+                    "ERREUR SESSION\n\n" +
+
+                    sessionError.message;
+
+                return;
+
+            }
+
+            if (!sessionData.session) {
+
+                result.textContent =
+
+                    "AUCUNE SESSION\n\n" +
+
+                    "Supabase ne voit aucun utilisateur connecté.";
+
+                return;
+
+            }
+
+            const user =
+
+                sessionData.session.user;
+
+            result.textContent =
+
+                "SESSION OK\n\n" +
+
+                "User ID : " +
+
+                user.id +
+
+                "\n\n" +
+
+                "Email : " +
+
+                user.email;
+
+            // =====================================
+
+            // TEST PROFIL
+
+            // =====================================
+
+            const {
+
+                data: profile,
+
+                error: profileError
+
+            } =
+
+                await supabaseClient
+
+                    .from("profiles")
+
+                    .select("*")
+
+                    .eq("id", user.id)
+
+                    .single();
+
+            if (profileError) {
+
+                result.textContent +=
+
+                    "\n\nERREUR PROFIL\n\n" +
+
+                    "Code : " +
+
+                    profileError.code +
+
+                    "\n\n" +
+
+                    "Message : " +
+
+                    profileError.message +
+
+                    "\n\n" +
+
+                    "Details : " +
+
+                    profileError.details +
+
+                    "\n\n" +
+
+                    "Hint : " +
+
+                    profileError.hint;
+
+                console.error(
+
+                    "Erreur profil :",
+
+                    profileError
+
+                );
+
+                return;
+
+            }
+
+            result.textContent +=
+
+                "\n\nPROFIL OK\n\n" +
+
+                JSON.stringify(
+
+                    profile,
+
+                    null,
+
+                    2
+
+                );
+
+        }
+
+        document
+
+            .getElementById("logout")
+
+            .addEventListener(
+
+                "click",
+
+                async function() {
+
+                    await supabaseClient.auth.signOut();
+
+                    window.location.href =
+
+                        "connexion.html";
+
+                }
+
+            );
+
+        test();
+
+    </script>
+
+</body>
+
+</html>
