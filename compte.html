@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mon compte | Market Bouaké</title>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7f6;
+
+            color: #17211b;
+
+            min-height: 100vh;
+
+        }
+
+        header {
+
+            background: #0b6b43;
+
+            color: white;
+
+            padding: 16px 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .logo {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 12px;
+
+            background: white;
+
+            color: #0b6b43;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+        }
+
+        .container {
+
+            width: 100%;
+
+            max-width: 900px;
+
+            margin: 30px auto;
+
+            padding: 0 18px;
+
+        }
+
+        .profile-card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 28px;
+
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+
+        }
+
+        .profile-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            padding-bottom: 25px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+        }
+
+        .profile-photo {
+
+            width: 75px;
+
+            height: 75px;
+
+            border-radius: 50%;
+
+            background: #e8f3ed;
+
+            color: #0b6b43;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            overflow: hidden;
+
+            flex-shrink: 0;
+
+        }
+
+        .profile-photo img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+        }
+
+        .profile-name {
+
+            font-size: 24px;
+
+            font-weight: bold;
+
+        }
+
+        .profile-email {
+
+            color: #6b7280;
+
+            margin-top: 5px;
+
+            word-break: break-word;
+
+        }
+
+        .section {
+
+            margin-top: 25px;
+
+        }
+
+        .section h2 {
+
+            font-size: 18px;
+
+            margin-bottom: 15px;
+
+        }
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 14px;
+
+        }
+
+        .info {
+
+            background: #f8faf9;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+        }
+
+        .info-label {
+
+            font-size: 13px;
+
+            color: #6b7280;
+
+            margin-bottom: 6px;
+
+        }
+
+        .info-value {
+
+            font-weight: 600;
+
+            word-break: break-word;
+
+        }
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+        }
+
+        .status-buyer {
+
+            background: #e8f3ed;
+
+            color: #0b6b43;
+
+        }
+
+        .status-pending {
+
+            background: #fff4d6;
+
+            color: #946200;
+
+        }
+
+        .status-approved {
+
+            background: #dff7e8;
+
+            color: #147a3f;
+
+        }
+
+        .status-rejected,
+
+        .status-blocked,
+
+        .status-suspended {
+
+            background: #fde7e7;
+
+            color: #b42318;
+
+        }
+
+        .actions {
+
+            margin-top: 25px;
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 12px;
+
+        }
+
+        button,
+
+        .button {
+
+            border: none;
+
+            border-radius: 11px;
+
+            padding: 14px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+        .primary {
+
+            background: #0b6b43;
+
+            color: white;
+
+        }
+
+        .secondary {
+
+            background: #edf2ef;
+
+            color: #17211b;
+
+        }
+
+        .danger {
+
+            background: #c62828;
+
+            color: white;
+
+        }
+
+        .seller-box {
+
+            margin-top: 25px;
+
+            background: #fff8e7;
+
+            border: 1px solid #f3d58a;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+        }
+
+        .seller-box h3 {
+
+            margin-bottom: 8px;
+
+        }
+
+        .seller-box p {
+
+            color: #5f5540;
+
+            line-height: 1.5;
+
+        }
+
+        .seller-button {
+
+            margin-top: 15px;
+
+            width: 100%;
+
+        }
+
+        .approved-box {
+
+            background: #eef8f3;
+
+            border-color: #cce9da;
+
+        }
+
+        .approved-box p {
+
+            color: #285d47;
+
+        }
+
+        .rejected-box {
+
+            background: #fff3f3;
+
+            border-color: #f1c5c5;
+
+        }
+
+        .rejected-box p {
+
+            color: #7a3434;
+
+        }
+
+        .blocked-box,
+
+        .suspended-box {
+
+            background: #fff3f3;
+
+            border-color: #f1c5c5;
+
+        }
+
+        .blocked-box p,
+
+        .suspended-box p {
+
+            color: #7a3434;
+
+        }
+
+        #message {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .loading {
+
+            text-align: center;
+
+            padding: 50px 20px;
+
+            color: #6b7280;
+
+        }
+
+        .account-badge {
+
+            display: inline-block;
+
+            margin-top: 8px;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            background: #e8f3ed;
+
+            color: #0b6b43;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+
+                margin: 18px auto;
+
+            }
+
+            .profile-card {
+
+                padding: 20px;
+
+            }
+
+            .profile-header {
+
+                align-items: flex-start;
+
+            }
+
+            .profile-name {
+
+                font-size: 20px;
+
+            }
+
+            .info-grid,
+
+            .actions {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+
+        <div class="logo">🛒</div>
+
+        <span>Market Bouaké</span>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <div id="loading" class="loading">
+
+        Chargement de votre compte...
+
+    </div>
+
+    <div id="accountContent" style="display:none;">
+
+        <div class="profile-card">
+
+            <!-- PROFIL -->
+
+            <div class="profile-header">
+
+                <div class="profile-photo" id="profilePhoto">
+
+                    👤
+
+                </div>
+
+                <div>
+
+                    <div class="profile-name" id="profileName">
+
+                        —
+
+                    </div>
+
+                    <div class="profile-email" id="profileEmail">
+
+                        —
+
+                    </div>
+
+                    <div class="account-badge">
+
+                        Compte Market Bouaké
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- INFORMATIONS PERSONNELLES -->
+
+            <div class="section">
+
+                <h2>Informations personnelles</h2>
+
+                <div class="info-grid">
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Prénom
+
+                        </div>
+
+                        <div class="info-value" id="firstName">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Nom
+
+                        </div>
+
+                        <div class="info-value" id="lastName">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Email
+
+                        </div>
+
+                        <div class="info-value" id="email">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            WhatsApp / Téléphone
+
+                        </div>
+
+                        <div class="info-value" id="phone">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Genre
+
+                        </div>
+
+                        <div class="info-value" id="gender">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Date de naissance
+
+                        </div>
+
+                        <div class="info-value" id="birthDate">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Ville
+
+                        </div>
+
+                        <div class="info-value" id="city">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Quartier
+
+                        </div>
+
+                        <div class="info-value" id="district">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- STATUT -->
+
+            <div class="section">
+
+                <h2>Statut du compte</h2>
+
+                <div class="info-grid">
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Rôle
+
+                        </div>
+
+                        <div class="info-value" id="role">
+
+                            —
+
+                        </div>
+
+                    </div>
+
+                    <div class="info">
+
+                        <div class="info-label">
+
+                            Statut vendeur
+
+                        </div>
+
+                        <div class="info-value">
+
+                            <span id="sellerStatus" class="status">
+
+                                —
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- MESSAGE VENDEUR -->
+
+            <div id="sellerMessage"></div>
+
+            <!-- ACTIONS -->
+
+            <div class="actions">
+
+                <a
+
+                    href="index.html"
+
+                    class="button secondary"
+
+                >
+
+                    🏠 Retour à l'accueil
+
+                </a>
+
+                <button
+
+                    type="button"
+
+                    class="button danger"
+
+                    id="logoutButton"
+
+                >
+
+                    Se déconnecter
+
+                </button>
+
+            </div>
+
+            <div id="message"></div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+    // ==================================================
+
+    // MARKET BOUAKÉ
+
+    // SUPABASE
+
+    // ==================================================
+
+    const SUPABASE_URL =
+
+        "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+
+        "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+    const supabaseClient =
+
+        window.supabase.createClient(
+
+            SUPABASE_URL,
+
+            SUPABASE_PUBLISHABLE_KEY
+
+        );
+
+    // ==================================================
+
+    // ÉLÉMENTS
+
+    // ==================================================
+
+    const loading =
+
+        document.getElementById("loading");
+
+    const accountContent =
+
+        document.getElementById("accountContent");
+
+    const message =
+
+        document.getElementById("message");
+
+    const logoutButton =
+
+        document.getElementById("logoutButton");
+
+    const sellerMessage =
+
+        document.getElementById("sellerMessage");
+
+    // ==================================================
+
+    // CHARGER LE COMPTE
+
+    // ==================================================
+
+    async function loadAccount() {
+
+        try {
+
+            // ------------------------------------------
+
+            // SESSION
+
+            // ------------------------------------------
+
+            const {
+
+                data: {
+
+                    session
+
+                },
+
+                error: sessionError
+
+            } =
+
+                await supabaseClient.auth.getSession();
+
+            if (sessionError) {
+
+                throw sessionError;
+
+            }
+
+            // ------------------------------------------
+
+            // PAS CONNECTÉ
+
+            // ------------------------------------------
+
+            if (!session || !session.user) {
+
+                window.location.href =
+
+                    "connexion.html";
+
+                return;
+
+            }
+
+            const user =
+
+                session.user;
+
+            // ------------------------------------------
+
+            // PROFIL
+
+            // ------------------------------------------
+
+            const {
+
+                data: profile,
+
+                error: profileError
+
+            } =
+
+                await supabaseClient
+
+                    .from("profiles")
+
+                    .select("*")
+
+                    .eq("id", user.id)
+
+                    .single();
+
+            if (profileError) {
+
+                console.error(
+
+                    "Erreur profil :",
+
+                    profileError
+
+                );
+
+                loading.innerHTML =
+
+                    "Impossible de charger votre profil.";
+
+                return;
+
+            }
+
+            // ==================================================
+
+            // INFORMATIONS
+
+            // ==================================================
+
+            const firstName =
+
+                profile.first_name || "";
+
+            const lastName =
+
+                profile.last_name || "";
+
+            const fullName =
+
+                (firstName + " " + lastName).trim();
+
+            document.getElementById("profileName")
+
+                .textContent =
+
+                fullName || "Utilisateur";
+
+            document.getElementById("profileEmail")
+
+                .textContent =
+
+                profile.email ||
+
+                user.email ||
+
+                "—";
+
+            document.getElementById("firstName")
+
+                .textContent =
+
+                profile.first_name || "—";
+
+            document.getElementById("lastName")
+
+                .textContent =
+
+                profile.last_name || "—";
+
+            document.getElementById("email")
+
+                .textContent =
+
+                profile.email ||
+
+                user.email ||
+
+                "—";
+
+            document.getElementById("phone")
+
+                .textContent =
+
+                profile.phone || "—";
+
+            document.getElementById("gender")
+
+                .textContent =
+
+                profile.gender || "—";
+
+            document.getElementById("birthDate")
+
+                .textContent =
+
+                profile.birth_date || "—";
+
+            document.getElementById("city")
+
+                .textContent =
+
+                profile.city || "—";
+
+            document.getElementById("district")
+
+                .textContent =
+
+                profile.district || "—";
+
+            // ==================================================
+
+            // RÔLE
+
+            // ==================================================
+
+            //
+
+            // IMPORTANT :
+
+            // Un vendeur peut également être acheteur.
+
+            // Le rôle reste donc celui enregistré dans profiles.
+
+            // L'accès vendeur dépend du seller_status.
+
+            //
+
+            let roleText =
+
+                "Acheteur";
+
+            if (profile.role === "seller") {
+
+                roleText =
+
+                    "Vendeur";
+
+            }
+
+            if (profile.role === "admin") {
+
+                roleText =
+
+                    "Administrateur";
+
+            }
+
+            document.getElementById("role")
+
+                .textContent =
+
+                roleText;
+
+            // ==================================================
+
+            // STATUT VENDEUR
+
+            // ==================================================
+
+            const sellerStatus =
+
+                profile.seller_status ||
+
+                "not_seller";
+
+            const sellerStatusElement =
+
+                document.getElementById("sellerStatus");
+
+            sellerStatusElement.className =
+
+                "status";
+
+            // ------------------------------------------
+
+            // PAS VENDEUR
+
+            // ------------------------------------------
+
+            if (
+
+                sellerStatus ===
+
+                "not_seller"
+
+            ) {
+
+                sellerStatusElement.textContent =
+
+                    "Pas encore vendeur";
+
+                sellerStatusElement.classList.add(
+
+                    "status-buyer"
+
+                );
+
+                sellerMessage.innerHTML = `
+
+                    <div class="seller-box">
+
+                        <h3>🏪 Devenir vendeur</h3>
+
+                        <p>
+
+                            Vous utilisez actuellement
+
+                            votre compte comme acheteur.
+
+                            Vous pouvez envoyer une demande
+
+                            pour devenir vendeur.
+
+                        </p>
+
+                        <a
+
+                            href="devenir-vendeur.html"
+
+                            class="button primary seller-button"
+
+                        >
+
+                            Devenir vendeur
+
+                        </a>
+
+                    </div>
+
+                `;
+
+            }
+
+            // ------------------------------------------
+
+            // DEMANDE EN ATTENTE
+
+            // ------------------------------------------
+
+            else if (
+
+                sellerStatus ===
+
+                "pending"
+
+            ) {
+
+                sellerStatusElement.textContent =
+
+                    "Demande en attente";
+
+                sellerStatusElement.classList.add(
+
+                    "status-pending"
+
+                );
+
+                sellerMessage.innerHTML = `
+
+                    <div class="seller-box">
+
+                        <h3>⏳ Demande vendeur en attente</h3>
+
+                        <p>
+
+                            Votre demande est actuellement
+
+                            examinée par l'administration.
+
+                            Votre compte acheteur reste
+
+                            totalement utilisable pendant
+
+                            l'examen.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+            // ------------------------------------------
+
+            // VENDEUR APPROUVÉ
+
+            // ------------------------------------------
+
+            else if (
+
+                sellerStatus ===
+
+                "approved"
+
+            ) {
+
+                sellerStatusElement.textContent =
+
+                    "Vendeur accepté";
+
+                sellerStatusElement.classList.add(
+
+                    "status-approved"
+
+                );
+
+                sellerMessage.innerHTML = `
+
+                    <div class="seller-box approved-box">
+
+                        <h3>🎉 Votre demande vendeur est acceptée</h3>
+
+                        <p>
+
+                            Félicitations !
+
+                            Vous pouvez maintenant accéder
+
+                            à votre espace vendeur.
+
+                            Votre compte reste également
+
+                            utilisable comme acheteur.
+
+                        </p>
+
+                        <a
+
+                            href="vendeur.html"
+
+                            class="button primary seller-button"
+
+                        >
+
+                            🏪 Accéder à mon espace vendeur
+
+                        </a>
+
+                    </div>
+
+                `;
+
+            }
+
+            // ------------------------------------------
+
+            // DEMANDE REFUSÉE
+
+            // ------------------------------------------
+
+            else if (
+
+                sellerStatus ===
+
+                "rejected"
+
+            ) {
+
+                sellerStatusElement.textContent =
+
+                    "Demande refusée";
+
+                sellerStatusElement.classList.add(
+
+                    "status-rejected"
+
+                );
+
+                sellerMessage.innerHTML = `
+
+                    <div class="seller-box rejected-box">
+
+                        <h3>❌ Demande vendeur refusée</h3>
+
+                        <p>
+
+                            Votre compte acheteur reste actif.
+
+                            Vous pouvez envoyer une nouvelle
+
+                            demande vendeur sans créer un
+
+                            nouveau compte.
+
+                        </p>
+
+                        <a
+
+                            href="devenir-vendeur.html"
+
+                            class="button primary seller-button"
+
+                        >
+
+                            🔄 Faire une nouvelle demande vendeur
+
+                        </a>
+
+                    </div>
+
+                `;
+
+            }
+
+            // ------------------------------------------
+
+            // VENDEUR SUSPENDU
+
+            // ------------------------------------------
+
+            else if (
+
+                sellerStatus ===
+
+                "suspended"
+
+            ) {
+
+                sellerStatusElement.textContent =
+
+                    "Vendeur suspendu";
+
+                sellerStatusElement.classList.add(
+
+                    "status-suspended"
+
+                );
+
+                sellerMessage.innerHTML = `
+
+                    <div class="seller-box suspended-box">
+
+                        <h3>⚠️ Espace vendeur suspendu</h3>
+
+                        <p>
+
+                            Votre accès vendeur est
+
+                            actuellement suspendu.
+
+                            Votre compte acheteur reste
+
+                            accessible.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+            // ------------------------------------------
+
+            // VENDEUR BLOQUÉ
+
+            // ------------------------------------------
+
+            else if (
+
+                sellerStatus ===
+
+                "blocked"
+
+            ) {
+
+                sellerStatusElement.textContent =
+
+                    "Vendeur bloqué";
+
+                sellerStatusElement.classList.add(
+
+                    "status-blocked"
+
+                );
+
+                sellerMessage.innerHTML = `
+
+                    <div class="seller-box blocked-box">
+
+                        <h3>🚫 Espace vendeur bloqué</h3>
+
+                        <p>
+
+                            Votre accès vendeur a été bloqué
+
+                            par l'administration.
+
+                            Votre compte acheteur reste
+
+                            accessible si aucune autre
+
+                            restriction ne s'applique.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+            // ==================================================
+
+            // PHOTO DE PROFIL
+
+            // ==================================================
+
+            const photoElement =
+
+                document.getElementById(
+
+                    "profilePhoto"
+
+                );
+
+            if (
+
+                profile.profile_photo_url
+
+            ) {
+
+                const img =
+
+                    document.createElement("img");
+
+                img.src =
+
+                    profile.profile_photo_url;
+
+                img.alt =
+
+                    "Photo de profil";
+
+                img.onerror =
+
+                    function() {
+
+                        photoElement.innerHTML =
+
+                            getInitials(
+
+                                firstName,
+
+                                lastName
+
+                            );
+
+                    };
+
+                photoElement.innerHTML = "";
+
+                photoElement.appendChild(
+
+                    img
+
+                );
+
+            }
+
+            else {
+
+                photoElement.textContent =
+
+                    getInitials(
+
+                        firstName,
+
+                        lastName
+
+                    );
+
+            }
+
+            // ==================================================
+
+            // AFFICHER LA PAGE
+
+            // ==================================================
+
+            loading.style.display =
+
+                "none";
+
+            accountContent.style.display =
+
+                "block";
+
+        } catch (error) {
+
+            console.error(
+
+                "Erreur compte :",
+
+                error
+
+            );
+
+            loading.innerHTML =
+
+                "Une erreur est survenue lors du chargement de votre compte.";
+
+        }
+
+    }
+
+    // ==================================================
+
+    // INITIALES
+
+    // ==================================================
+
+    function getInitials(
+
+        firstName,
+
+        lastName
+
+    ) {
+
+        const initials =
+
+            (
+
+                (firstName.charAt(0) || "") +
+
+                (lastName.charAt(0) || "")
+
+            ).toUpperCase();
+
+        return initials || "👤";
+
+    }
+
+    // ==================================================
+
+    // DÉCONNEXION
+
+    // ==================================================
+
+    logoutButton.addEventListener(
+
+        "click",
+
+        async function() {
+
+            logoutButton.disabled =
+
+                true;
+
+            logoutButton.textContent =
+
+                "Déconnexion...";
+
+            const {
+
+                error
+
+            } =
+
+                await supabaseClient.auth.signOut();
+
+            if (error) {
+
+                console.error(
+
+                    "Erreur déconnexion :",
+
+                    error
+
+                );
+
+                message.textContent =
+
+                    "Impossible de vous déconnecter.";
+
+                message.style.color =
+
+                    "#c62828";
+
+                logoutButton.disabled =
+
+                    false;
+
+                logoutButton.textContent =
+
+                    "Se déconnecter";
+
+                return;
+
+            }
+
+            window.location.href =
+
+                "connexion.html";
+
+        }
+
+    );
+
+    // ==================================================
+
+    // LANCEMENT
+
+    // ==================================================
+
+    loadAccount();
+
+</script>
+
+</body>
+
+</html>
