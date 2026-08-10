@@ -26,15 +26,21 @@ const supabaseClient =
 
 // ============================================
 
+// ÉLÉMENTS DE LA PAGE
+
+// ============================================
+
+const accountButton =
+
+    document.querySelector(".account-button");
+
+// ============================================
+
 // GESTION DU COMPTE
 
 // ============================================
 
 async function updateAccountInterface() {
-
-    const accountButton =
-
-        document.querySelector(".account-button");
 
     if (!accountButton) {
 
@@ -54,7 +60,11 @@ async function updateAccountInterface() {
 
         } = await supabaseClient.auth.getSession();
 
+        // ====================================
+
         // UTILISATEUR NON CONNECTÉ
+
+        // ====================================
 
         if (!session) {
 
@@ -70,7 +80,11 @@ async function updateAccountInterface() {
 
         }
 
+        // ====================================
+
         // UTILISATEUR CONNECTÉ
+
+        // ====================================
 
         accountButton.textContent =
 
@@ -296,7 +310,7 @@ function getCategoryIcon(name) {
 
 // ============================================
 
-// PROTECTION CONTRE L'INJECTION HTML
+// PROTECTION DU HTML
 
 // ============================================
 
@@ -360,7 +374,7 @@ function escapeHtml(value) {
 
 // ============================================
 
-// CHANGEMENT DE SESSION
+// SURVEILLANCE DE LA SESSION
 
 // ============================================
 
@@ -376,7 +390,7 @@ supabaseClient.auth.onAuthStateChange(
 
 // ============================================
 
-// INITIALISATION
+// INITIALISATION DE L'ACCUEIL
 
 // ============================================
 
