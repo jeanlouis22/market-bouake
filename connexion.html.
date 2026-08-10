@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Connexion | Market Bouaké</title>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7f6;
+
+            color: #17211b;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+        }
+
+        .container {
+
+            width: 100%;
+
+            max-width: 450px;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+        }
+
+        .logo {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+        }
+
+        .logo-icon {
+
+            width: 65px;
+
+            height: 65px;
+
+            margin: auto;
+
+            border-radius: 18px;
+
+            background: #0b6b43;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 32px;
+
+        }
+
+        h1 {
+
+            text-align: center;
+
+            margin-top: 12px;
+
+            font-size: 26px;
+
+        }
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #6b7280;
+
+            margin-top: 8px;
+
+            margin-bottom: 25px;
+
+        }
+
+        .form-group {
+
+            margin-bottom: 17px;
+
+        }
+
+        label {
+
+            display: block;
+
+            font-weight: 600;
+
+            margin-bottom: 7px;
+
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #d6ddd9;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+
+        }
+
+        input:focus {
+
+            border-color: #0b6b43;
+
+        }
+
+        button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            background: #0b6b43;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 8px;
+
+        }
+
+        button:hover {
+
+            opacity: 0.92;
+
+        }
+
+        button:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+        }
+
+        #message {
+
+            margin-top: 18px;
+
+            text-align: center;
+
+            font-weight: 600;
+
+            line-height: 1.5;
+
+        }
+
+        .register {
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #6b7280;
+
+        }
+
+        .register a {
+
+            color: #0b6b43;
+
+            font-weight: bold;
+
+            text-decoration: none;
+
+        }
+
+        @media (max-width: 500px) {
+
+            .container {
+
+                padding: 22px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+
+                🛒
+
+            </div>
+
+            <h1>
+
+                Market Bouaké
+
+            </h1>
+
+        </div>
+
+        <p class="subtitle">
+
+            Connectez-vous à votre compte
+
+        </p>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label for="email">
+
+                    Email
+
+                </label>
+
+                <input
+
+                    type="email"
+
+                    id="email"
+
+                    placeholder="exemple@email.com"
+
+                    required
+
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">
+
+                    Mot de passe
+
+                </label>
+
+                <input
+
+                    type="password"
+
+                    id="password"
+
+                    placeholder="Votre mot de passe"
+
+                    required
+
+                >
+
+            </div>
+
+            <button
+
+                type="submit"
+
+                id="loginButton"
+
+            >
+
+                Se connecter
+
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+        <div class="register">
+
+            Vous n'avez pas encore de compte ?
+
+            <a href="inscription.html">
+
+                Créer un compte
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        // ============================================
+
+        // MARKET BOUAKÉ
+
+        // CONNEXION SUPABASE
+
+        // ============================================
+
+        const SUPABASE_URL =
+
+            "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+        const SUPABASE_PUBLISHABLE_KEY =
+
+            "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+        const supabaseClient =
+
+            window.supabase.createClient(
+
+                SUPABASE_URL,
+
+                SUPABASE_PUBLISHABLE_KEY
+
+            );
+
+        // ============================================
+
+        // ÉLÉMENTS
+
+        // ============================================
+
+        const form =
+
+            document.getElementById("loginForm");
+
+        const button =
+
+            document.getElementById("loginButton");
+
+        const message =
+
+            document.getElementById("message");
+
+        // ============================================
+
+        // CONNEXION
+
+        // ============================================
+
+        form.addEventListener(
+
+            "submit",
+
+            async function(event) {
+
+                event.preventDefault();
+
+                const email =
+
+                    document
+
+                        .getElementById("email")
+
+                        .value
+
+                        .trim();
+
+                const password =
+
+                    document
+
+                        .getElementById("password")
+
+                        .value;
+
+                // ========================================
+
+                // VÉRIFICATION
+
+                // ========================================
+
+                if (!email || !password) {
+
+                    message.textContent =
+
+                        "Veuillez remplir tous les champs.";
+
+                    message.style.color =
+
+                        "#c62828";
+
+                    return;
+
+                }
+
+                // ========================================
+
+                // CHARGEMENT
+
+                // ========================================
+
+                button.disabled = true;
+
+                button.textContent =
+
+                    "Connexion...";
+
+                message.textContent = "";
+
+                try {
+
+                    // ====================================
+
+                    // CONNEXION SUPABASE AUTH
+
+                    // ====================================
+
+                    const {
+
+                        data,
+
+                        error
+
+                    } =
+
+                        await supabaseClient.auth
+
+                            .signInWithPassword({
+
+                                email: email,
+
+                                password: password
+
+                            });
+
+                    // ====================================
+
+                    // ERREUR
+
+                    // ====================================
+
+                    if (error) {
+
+                        console.error(
+
+                            "Erreur connexion :",
+
+                            error
+
+                        );
+
+                        message.textContent =
+
+                            "Email ou mot de passe incorrect.";
+
+                        message.style.color =
+
+                            "#c62828";
+
+                        button.disabled = false;
+
+                        button.textContent =
+
+                            "Se connecter";
+
+                        return;
+
+                    }
+
+                    // ====================================
+
+                    // CONNEXION RÉUSSIE
+
+                    // ====================================
+
+                    console.log(
+
+                        "Connexion réussie :",
+
+                        data.user
+
+                    );
+
+                    message.textContent =
+
+                        "Connexion réussie !";
+
+                    message.style.color =
+
+                        "#0b6b43";
+
+                    // ====================================
+
+                    // REDIRECTION
+
+                    // ====================================
+
+                    setTimeout(function() {
+
+                        window.location.href =
+
+                            "compte.html";
+
+                    }, 700);
+
+                } catch (error) {
+
+                    console.error(
+
+                        "Erreur inattendue :",
+
+                        error
+
+                    );
+
+                    message.textContent =
+
+                        "Une erreur est survenue. Réessayez.";
+
+                    message.style.color =
+
+                        "#c62828";
+
+                    button.disabled = false;
+
+                    button.textContent =
+
+                        "Se connecter";
+
+                }
+
+            }
+
+        );
+
+    </script>
+
+</body>
+
+</html>
