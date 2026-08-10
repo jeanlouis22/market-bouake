@@ -1,0 +1,7047 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Administration | Market Bouaké</title>
+
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f7f6;
+
+    color:#17211b;
+
+    min-height:100vh;
+
+}
+
+button,input,select,textarea{font-family:inherit}
+
+button{cursor:pointer}
+
+header{
+
+    height:70px;
+
+    background:#0b6b43;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 20px;
+
+    gap:15px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+}
+
+.menu-button{
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:28px;
+
+    border-radius:10px;
+
+}
+
+.menu-button:hover{
+
+    background:rgba(255,255,255,.12);
+
+}
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+}
+
+.logo{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:#0b6b43;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:22px;
+
+}
+
+.admin-label{
+
+    margin-left:auto;
+
+    font-size:14px;
+
+}
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+
+    left:-300px;
+
+    width:300px;
+
+    height:100vh;
+
+    background:white;
+
+    box-shadow:5px 0 25px rgba(0,0,0,.12);
+
+    z-index:2000;
+
+    transition:left .25s ease;
+
+    overflow-y:auto;
+
+}
+
+.sidebar.open{left:0}
+
+.sidebar-header{
+
+    height:70px;
+
+    background:#0b6b43;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 18px;
+
+}
+
+.sidebar-title{
+
+    font-weight:bold;
+
+    font-size:18px;
+
+}
+
+.close-menu{
+
+    background:transparent;
+
+    border:none;
+
+    color:white;
+
+    font-size:28px;
+
+}
+
+.menu-list{
+
+    padding:15px 10px;
+
+}
+
+.menu-item{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:13px 14px;
+
+    margin-bottom:5px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:transparent;
+
+    color:#17211b;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    text-align:left;
+
+}
+
+.menu-item:hover,
+
+.menu-item.active{
+
+    background:#e4f4ec;
+
+    color:#0b6b43;
+
+}
+
+.menu-separator{
+
+    height:1px;
+
+    background:#e5e7eb;
+
+    margin:12px 5px;
+
+}
+
+.logout-menu{color:#c62828}
+
+.logout-menu:hover{
+
+    background:#fdeaea;
+
+    color:#c62828;
+
+}
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.35);
+
+    z-index:1500;
+
+    display:none;
+
+}
+
+.overlay.show{display:block}
+
+.container{
+
+    width:100%;
+
+    max-width:1250px;
+
+    margin:auto;
+
+    padding:25px 20px;
+
+}
+
+.page-title{
+
+    font-size:28px;
+
+    margin-bottom:6px;
+
+}
+
+.page-subtitle{
+
+    color:#6b7280;
+
+    margin-bottom:25px;
+
+}
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:16px;
+
+}
+
+.stat-card{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+}
+
+.stat-icon{
+
+    font-size:28px;
+
+    margin-bottom:12px;
+
+}
+
+.stat-label{
+
+    color:#6b7280;
+
+    font-size:14px;
+
+    margin-bottom:7px;
+
+}
+
+.stat-value{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}
+
+.section{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:22px;
+
+    margin-top:20px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+}
+
+.section h2{
+
+    font-size:20px;
+
+    margin-bottom:8px;
+
+}
+
+.section-description{
+
+    color:#6b7280;
+
+    margin-bottom:18px;
+
+    line-height:1.5;
+
+}
+
+.toolbar{
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:18px;
+
+}
+
+.search{
+
+    flex:1;
+
+    min-width:200px;
+
+    padding:12px 14px;
+
+    border:1px solid #d6ddd9;
+
+    border-radius:10px;
+
+    outline:none;
+
+}
+
+.select{
+
+    padding:12px 14px;
+
+    border:1px solid #d6ddd9;
+
+    border-radius:10px;
+
+    background:white;
+
+}
+
+.btn{
+
+    border:none;
+
+    border-radius:9px;
+
+    padding:10px 13px;
+
+    font-weight:bold;
+
+}
+
+.btn-primary{
+
+    background:#0b6b43;
+
+    color:white;
+
+}
+
+.btn-secondary{
+
+    background:#edf2ef;
+
+    color:#17211b;
+
+}
+
+.btn-success{
+
+    background:#198754;
+
+    color:white;
+
+}
+
+.btn-danger{
+
+    background:#c62828;
+
+    color:white;
+
+}
+
+.btn-warning{
+
+    background:#f4c542;
+
+    color:#17211b;
+
+}
+
+.btn-whatsapp{
+
+    background:#25d366;
+
+    color:white;
+
+}
+
+.btn:disabled{
+
+    opacity:.5;
+
+    cursor:not-allowed;
+
+}
+
+.table-wrapper{
+
+    width:100%;
+
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:800px;
+
+}
+
+th,td{
+
+    padding:13px 10px;
+
+    border-bottom:1px solid #e5e7eb;
+
+    text-align:left;
+
+    vertical-align:top;
+
+    font-size:14px;
+
+}
+
+th{
+
+    background:#f8faf9;
+
+    font-size:13px;
+
+}
+
+td strong{
+
+    display:block;
+
+    margin-bottom:4px;
+
+}
+
+.actions{
+
+    display:flex;
+
+    gap:7px;
+
+    flex-wrap:wrap;
+
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.badge-pending{
+
+    background:#fff4d6;
+
+    color:#946200;
+
+}
+
+.badge-approved{
+
+    background:#dff7e8;
+
+    color:#147a3f;
+
+}
+
+.badge-rejected,
+
+.badge-danger{
+
+    background:#fde7e7;
+
+    color:#b42318;
+
+}
+
+.badge-active{
+
+    background:#e4f4ec;
+
+    color:#0b6b43;
+
+}
+
+.badge-neutral{
+
+    background:#edf2ef;
+
+    color:#5f6b64;
+
+}
+
+.empty{
+
+    text-align:center;
+
+    padding:35px 15px;
+
+    color:#6b7280;
+
+}
+
+.loading-small{
+
+    text-align:center;
+
+    padding:25px;
+
+    color:#6b7280;
+
+}
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.5);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:3000;
+
+}
+
+.modal.show{display:flex}
+
+.modal-box{
+
+    width:100%;
+
+    max-width:650px;
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:24px;
+
+}
+
+.modal-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+.modal-close{
+
+    border:none;
+
+    background:#edf2ef;
+
+    width:35px;
+
+    height:35px;
+
+    border-radius:50%;
+
+    font-size:20px;
+
+}
+
+.detail-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+
+}
+
+.detail{
+
+    background:#f8faf9;
+
+    border-radius:10px;
+
+    padding:13px;
+
+}
+
+.detail-label{
+
+    color:#6b7280;
+
+    font-size:12px;
+
+    margin-bottom:5px;
+
+}
+
+.detail-value{
+
+    font-weight:600;
+
+    word-break:break-word;
+
+}
+
+.modal-actions{
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin-top:20px;
+
+}
+
+.form-group{
+
+    margin-bottom:15px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    font-weight:bold;
+
+    margin-bottom:7px;
+
+}
+
+.form-control{
+
+    width:100%;
+
+    padding:12px 13px;
+
+    border:1px solid #d6ddd9;
+
+    border-radius:9px;
+
+    outline:none;
+
+}
+
+textarea.form-control{
+
+    min-height:100px;
+
+    resize:vertical;
+
+}
+
+.notice{
+
+    padding:13px;
+
+    border-radius:10px;
+
+    margin-bottom:15px;
+
+    line-height:1.5;
+
+}
+
+.notice-info{
+
+    background:#eef8f3;
+
+    border:1px solid #cce9da;
+
+}
+
+.notice-warning{
+
+    background:#fff8e7;
+
+    border:1px solid #f3d58a;
+
+}
+
+#message{
+
+    margin-top:20px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+    line-height:1.5;
+
+}
+
+#loading{
+
+    text-align:center;
+
+    padding:70px 20px;
+
+    color:#6b7280;
+
+}
+
+.hidden{display:none!important}
+
+.whatsapp-link{
+
+    color:white;
+
+    text-decoration:none;
+
+    display:inline-block;
+
+}
+
+@media(max-width:950px){
+
+    .stats-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    header{padding:0 12px}
+
+    .admin-label{display:none}
+
+    .container{padding:20px 14px}
+
+    .page-title{font-size:23px}
+
+    .stats-grid{
+
+        grid-template-columns:1fr 1fr;
+
+        gap:10px;
+
+    }
+
+    .stat-card{padding:15px}
+
+    .stat-value{font-size:23px}
+
+    .detail-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+        <div class="sidebar-title">🛒 Administration</div>
+
+        <button class="close-menu" id="closeMenu">×</button>
+
+    </div>
+
+    <nav class="menu-list">
+
+        <button class="menu-item active" data-section="dashboard">🏠 <span>Tableau de bord</span></button>
+
+        <button class="menu-item" data-section="users">👥 <span>Utilisateurs</span></button>
+
+        <button class="menu-item" data-section="seller-requests">🏪 <span>Demandes vendeurs</span></button>
+
+        <button class="menu-item" data-section="products">📦 <span>Produits</span></button>
+
+        <button class="menu-item" data-section="orders">🛒 <span>Commandes</span></button>
+
+        <button class="menu-item" data-section="problems">⚠️ <span>Problèmes</span></button>
+
+        <button class="menu-item" data-section="reviews">⭐ <span>Avis</span></button>
+
+        <div class="menu-separator"></div>
+
+        <button class="menu-item" data-section="categories">🏷️ <span>Catégories</span></button>
+
+        <button class="menu-item" data-section="shops">🏪 <span>Boutiques</span></button>
+
+        <button class="menu-item" data-section="delivery">🚚 <span>Livraison</span></button>
+
+        <button class="menu-item" data-section="notifications">🔔 <span>Notifications</span></button>
+
+        <button class="menu-item" data-section="badges">🏅 <span>Badges</span></button>
+
+        <button class="menu-item" data-section="statistics">📊 <span>Statistiques</span></button>
+
+        <div class="menu-separator"></div>
+
+        <button class="menu-item" data-section="settings">⚙️ <span>Paramètres</span></button>
+
+        <button class="menu-item logout-menu" id="logoutMenu">🚪 <span>Déconnexion</span></button>
+
+    </nav>
+
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<header>
+
+    <button class="menu-button" id="menuButton">☰</button>
+
+    <div class="brand">
+
+        <div class="logo">🛒</div>
+
+        <span>Market Bouaké</span>
+
+    </div>
+
+    <div class="admin-label">Administration</div>
+
+</header>
+
+<main class="container">
+
+    <div id="loading">
+
+        Vérification de votre accès administrateur...
+
+    </div>
+
+    <div id="adminContent" class="hidden">
+
+        <div id="pageContent"></div>
+
+        <div id="message"></div>
+
+    </div>
+
+</main>
+
+<!-- MODALE -->
+
+<div class="modal" id="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">Détails</h2>
+
+            <button class="modal-close" id="modalClose">×</button>
+
+        </div>
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================================================
+
+   CONFIGURATION
+
+========================================================= */
+
+const SUPABASE_URL =
+
+    "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+
+    "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+const supabaseClient =
+
+    window.supabase.createClient(
+
+        SUPABASE_URL,
+
+        SUPABASE_PUBLISHABLE_KEY
+
+    );
+
+/* =========================================================
+
+   ÉLÉMENTS
+
+========================================================= */
+
+const sidebar =
+
+    document.getElementById("sidebar");
+
+const overlay =
+
+    document.getElementById("overlay");
+
+const menuButton =
+
+    document.getElementById("menuButton");
+
+const closeMenu =
+
+    document.getElementById("closeMenu");
+
+const loading =
+
+    document.getElementById("loading");
+
+const adminContent =
+
+    document.getElementById("adminContent");
+
+const pageContent =
+
+    document.getElementById("pageContent");
+
+const message =
+
+    document.getElementById("message");
+
+const modal =
+
+    document.getElementById("modal");
+
+const modalTitle =
+
+    document.getElementById("modalTitle");
+
+const modalContent =
+
+    document.getElementById("modalContent");
+
+const modalClose =
+
+    document.getElementById("modalClose");
+
+/* =========================================================
+
+   UTILITAIRES
+
+========================================================= */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+
+        return "";
+
+    }
+
+    return String(value)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+function showMessage(text,color="#0b6b43"){
+
+    message.textContent = text;
+
+    message.style.color = color;
+
+    setTimeout(function(){
+
+        if(message.textContent === text){
+
+            message.textContent = "";
+
+        }
+
+    },5000);
+
+}
+
+function formatDate(value){
+
+    if(!value){
+
+        return "—";
+
+    }
+
+    try{
+
+        return new Date(value).toLocaleString(
+
+            "fr-FR",
+
+            {
+
+                dateStyle:"short",
+
+                timeStyle:"short"
+
+            }
+
+        );
+
+    }catch(e){
+
+        return value;
+
+    }
+
+}
+
+function money(value){
+
+    const number =
+
+        Number(value || 0);
+
+    return number.toLocaleString(
+
+        "fr-FR"
+
+    ) + " FCFA";
+
+}
+
+function whatsapp(phone,messageText){
+
+    if(!phone){
+
+        return "";
+
+    }
+
+    let clean =
+
+        String(phone).replace(/[^\d]/g,"");
+
+    if(clean.length === 10 && clean.startsWith("0")){
+
+        clean = "225" + clean;
+
+    }
+
+    if(clean.startsWith("225") === false){
+
+        clean = "225" + clean;
+
+    }
+
+    const url =
+
+        "https://wa.me/" +
+
+        clean +
+
+        "?text=" +
+
+        encodeURIComponent(messageText || "");
+
+    return `
+
+        <a
+
+            class="btn btn-whatsapp whatsapp-link"
+
+            href="${url}"
+
+            target="_blank"
+
+            rel="noopener"
+
+        >
+
+            WhatsApp
+
+        </a>
+
+    `;
+
+}
+
+function openModal(title,content){
+
+    modalTitle.textContent = title;
+
+    modalContent.innerHTML = content;
+
+    modal.classList.add("show");
+
+}
+
+function closeModal(){
+
+    modal.classList.remove("show");
+
+}
+
+modalClose.addEventListener(
+
+    "click",
+
+    closeModal
+
+);
+
+modal.addEventListener(
+
+    "click",
+
+    function(event){
+
+        if(event.target === modal){
+
+            closeModal();
+
+        }
+
+    }
+
+);
+
+/* =========================================================
+
+   MENU
+
+========================================================= */
+
+function openMenu(){
+
+    sidebar.classList.add("open");
+
+    overlay.classList.add("show");
+
+}
+
+function closeSidebar(){
+
+    sidebar.classList.remove("open");
+
+    overlay.classList.remove("show");
+
+}
+
+menuButton.addEventListener(
+
+    "click",
+
+    openMenu
+
+);
+
+closeMenu.addEventListener(
+
+    "click",
+
+    closeSidebar
+
+);
+
+overlay.addEventListener(
+
+    "click",
+
+    closeSidebar
+
+);
+
+/* =========================================================
+
+   VÉRIFICATION ADMIN
+
+========================================================= */
+
+async function checkAdminAccess(){
+
+    try{
+
+        const {
+
+            data:sessionData,
+
+            error:sessionError
+
+        } =
+
+        await supabaseClient.auth.getSession();
+
+        if(sessionError){
+
+            throw sessionError;
+
+        }
+
+        const session =
+
+            sessionData.session;
+
+        if(!session || !session.user){
+
+            window.location.href =
+
+                "connexion.html";
+
+            return;
+
+        }
+
+        const user =
+
+            session.user;
+
+        const {
+
+            data:profile,
+
+            error:profileError
+
+        } =
+
+        await supabaseClient
+
+            .from("profiles")
+
+            .select(
+
+                "id,first_name,last_name,email,phone,role"
+
+            )
+
+            .eq("id",user.id)
+
+            .single();
+
+        if(profileError){
+
+            throw profileError;
+
+        }
+
+        if(!profile || profile.role !== "admin"){
+
+            alert(
+
+                "Accès refusé. Cette page est réservée à l'administration."
+
+            );
+
+            window.location.href =
+
+                "compte.html";
+
+            return;
+
+        }
+
+        loading.style.display =
+
+            "none";
+
+        adminContent.classList.remove(
+
+            "hidden"
+
+        );
+
+        await loadSection("dashboard");
+
+    }catch(error){
+
+        console.error(error);
+
+        loading.innerHTML =
+
+            "Impossible de charger l'espace administrateur.";
+
+    }
+
+}
+
+/* =========================================================
+
+   MENU DES SECTIONS
+
+========================================================= */
+
+document
+
+.querySelectorAll(".menu-item[data-section]")
+
+.forEach(function(item){
+
+    item.addEventListener(
+
+        "click",
+
+        async function(){
+
+            document
+
+            .querySelectorAll(".menu-item[data-section]")
+
+            .forEach(function(button){
+
+                button.classList.remove("active");
+
+            });
+
+            item.classList.add("active");
+
+            closeSidebar();
+
+            await loadSection(
+
+                item.dataset.section
+
+            );
+
+        }
+
+    );
+
+});
+
+/* =========================================================
+
+   CHARGEMENT SECTION
+
+========================================================= */
+
+async function loadSection(section){
+
+    pageContent.innerHTML =
+
+        '<div class="section"><div class="loading-small">Chargement...</div></div>';
+
+    try{
+
+        if(section === "dashboard")
+
+            await renderDashboard();
+
+        else if(section === "users")
+
+            await renderUsers();
+
+        else if(section === "seller-requests")
+
+            await renderSellerRequests();
+
+        else if(section === "products")
+
+            await renderProducts();
+
+        else if(section === "orders")
+
+            await renderOrders();
+
+        else if(section === "problems")
+
+            await renderProblems();
+
+        else if(section === "reviews")
+
+            await renderReviews();
+
+        else if(section === "categories")
+
+            await renderCategories();
+
+        else if(section === "shops")
+
+            await renderShops();
+
+        else if(section === "delivery")
+
+            await renderDelivery();
+
+        else if(section === "notifications")
+
+            await renderNotifications();
+
+        else if(section === "badges")
+
+            await renderBadges();
+
+        else if(section === "statistics")
+
+            await renderStatistics();
+
+        else if(section === "settings")
+
+            await renderSettings();
+
+    }catch(error){
+
+        console.error(error);
+
+        pageContent.innerHTML = `
+
+            <div class="section">
+
+                <div class="notice notice-warning">
+
+                    Impossible de charger cette section.
+
+                    <br><br>
+
+                    ${escapeHTML(error.message || "Erreur Supabase")}
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+/* =========================================================
+
+   TABLEAU DE BORD
+
+========================================================= */
+
+async function renderDashboard(){
+
+    const tables = [
+
+        "profiles",
+
+        "seller_requests",
+
+        "products",
+
+        "orders",
+
+        "problems",
+
+        "reviews",
+
+        "shops"
+
+    ];
+
+    const counts = {};
+
+    for(const table of tables){
+
+        const {
+
+            count,
+
+            error
+
+        } =
+
+        await supabaseClient
+
+            .from(table)
+
+            .select(
+
+                "id",
+
+                {
+
+                    count:"exact",
+
+                    head:true
+
+                }
+
+            );
+
+        counts[table] =
+
+            error ? "—" : (count || 0);
+
+    }
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">
+
+            Tableau de bord
+
+        </h1>
+
+        <p class="page-subtitle">
+
+            Vue générale de Market Bouaké.
+
+        </p>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">👥</div>
+
+                <div class="stat-label">Utilisateurs</div>
+
+                <div class="stat-value">${counts.profiles}</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">🏪</div>
+
+                <div class="stat-label">Demandes vendeurs</div>
+
+                <div class="stat-value">${counts.seller_requests}</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">📦</div>
+
+                <div class="stat-label">Produits</div>
+
+                <div class="stat-value">${counts.products}</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">🛒</div>
+
+                <div class="stat-label">Commandes</div>
+
+                <div class="stat-value">${counts.orders}</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">⚠️</div>
+
+                <div class="stat-label">Problèmes</div>
+
+                <div class="stat-value">${counts.problems}</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">⭐</div>
+
+                <div class="stat-label">Avis</div>
+
+                <div class="stat-value">${counts.reviews}</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">🏪</div>
+
+                <div class="stat-label">Boutiques</div>
+
+                <div class="stat-value">${counts.shops}</div>
+
+            </div>
+
+        </div>
+
+        <div class="section">
+
+            <h2>⚡ Actions rapides</h2>
+
+            <div class="toolbar">
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="loadSection('seller-requests')"
+
+                >
+
+                    🏪 Voir les demandes vendeurs
+
+                </button>
+
+                <button
+
+                    class="btn btn-secondary"
+
+                    onclick="loadSection('users')"
+
+                >
+
+                    👥 Voir les utilisateurs
+
+                </button>
+
+                <button
+
+                    class="btn btn-secondary"
+
+                    onclick="loadSection('orders')"
+
+                >
+
+                    🛒 Voir les commandes
+
+                </button>
+
+                <button
+
+                    class="btn btn-secondary"
+
+                    onclick="loadSection('problems')"
+
+                >
+
+                    ⚠️ Voir les problèmes
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+
+   UTILISATEURS
+
+========================================================= */
+
+async function renderUsers(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("profiles")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const rows =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">
+
+            👥 Utilisateurs
+
+        </h1>
+
+        <p class="page-subtitle">
+
+            Gestion des comptes acheteurs, vendeurs et administrateurs.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <input
+
+                    class="search"
+
+                    id="userSearch"
+
+                    placeholder="Rechercher par nom, email ou téléphone..."
+
+                >
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="renderUsers()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div id="usersTable"></div>
+
+        </div>
+
+    `;
+
+    function drawUsers(){
+
+        const search =
+
+            (
+
+                document.getElementById("userSearch").value
+
+                || ""
+
+            ).toLowerCase();
+
+        const filtered =
+
+            rows.filter(function(user){
+
+                const text =
+
+                    [
+
+                        user.first_name,
+
+                        user.last_name,
+
+                        user.email,
+
+                        user.phone,
+
+                        user.role,
+
+                        user.seller_status
+
+                    ]
+
+                    .join(" ")
+
+                    .toLowerCase();
+
+                return text.includes(search);
+
+            });
+
+        if(!filtered.length){
+
+            document.getElementById("usersTable").innerHTML =
+
+                '<div class="empty">Aucun utilisateur trouvé.</div>';
+
+            return;
+
+        }
+
+        document.getElementById("usersTable").innerHTML = `
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Utilisateur</th>
+
+                            <th>Contact</th>
+
+                            <th>Rôle</th>
+
+                            <th>Statut vendeur</th>
+
+                            <th>Création</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${filtered.map(function(user){
+
+                            const name =
+
+                                (
+
+                                    (user.first_name || "") +
+
+                                    " " +
+
+                                    (user.last_name || "")
+
+                                ).trim()
+
+                                || "Utilisateur";
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>${escapeHTML(name)}</strong>
+
+                                        ${escapeHTML(user.email || "")}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${escapeHTML(user.phone || "—")}
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge badge-active">
+
+                                            ${escapeHTML(user.role || "buyer")}
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge badge-neutral">
+
+                                            ${escapeHTML(user.seller_status || "not_seller")}
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        ${formatDate(user.created_at)}
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="actions">
+
+                                            <button
+
+                                                class="btn btn-secondary"
+
+                                                onclick='showUser(${JSON.stringify(user)})'
+
+                                            >
+
+                                                👁️ Voir
+
+                                            </button>
+
+                                            ${
+
+                                                user.phone
+
+                                                ?
+
+                                                whatsapp(
+
+                                                    user.phone,
+
+                                                    "Bonjour " + name + ", Market Bouaké vous contacte concernant votre compte."
+
+                                                )
+
+                                                :
+
+                                                ""
+
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }).join("")}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    }
+
+    document
+
+        .getElementById("userSearch")
+
+        .addEventListener(
+
+            "input",
+
+            drawUsers
+
+        );
+
+    drawUsers();
+
+}
+
+/* =========================================================
+
+   DÉTAIL UTILISATEUR
+
+========================================================= */
+
+function showUser(user){
+
+    const name =
+
+        (
+
+            (user.first_name || "") +
+
+            " " +
+
+            (user.last_name || "")
+
+        ).trim();
+
+    openModal(
+
+        "Utilisateur",
+
+        `
+
+        <div class="detail-grid">
+
+            <div class="detail">
+
+                <div class="detail-label">Prénom</div>
+
+                <div class="detail-value">${escapeHTML(user.first_name || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Nom</div>
+
+                <div class="detail-value">${escapeHTML(user.last_name || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Email</div>
+
+                <div class="detail-value">${escapeHTML(user.email || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Téléphone</div>
+
+                <div class="detail-value">${escapeHTML(user.phone || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Ville</div>
+
+                <div class="detail-value">${escapeHTML(user.city || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Quartier</div>
+
+                <div class="detail-value">${escapeHTML(user.district || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Rôle</div>
+
+                <div class="detail-value">${escapeHTML(user.role || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Statut vendeur</div>
+
+                <div class="detail-value">${escapeHTML(user.seller_status || "—")}</div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-actions">
+
+            ${
+
+                user.phone
+
+                ?
+
+                whatsapp(
+
+                    user.phone,
+
+                    "Bonjour " + name + ", Market Bouaké vous contacte concernant votre compte."
+
+                )
+
+                :
+
+                ""
+
+            }
+
+            <button
+
+                class="btn btn-secondary"
+
+                onclick="closeModal()"
+
+            >
+
+                Fermer
+
+            </button>
+
+        </div>
+
+        `
+
+    );
+
+}
+
+/* =========================================================
+
+   DEMANDES VENDEURS
+
+========================================================= */
+
+async function renderSellerRequests(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("seller_requests")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const requests =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">
+
+            🏪 Demandes vendeurs
+
+        </h1>
+
+        <p class="page-subtitle">
+
+            Examinez, acceptez ou refusez les demandes de vendeur.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <select class="select" id="requestFilter">
+
+                    <option value="all">
+
+                        Toutes
+
+                    </option>
+
+                    <option value="pending">
+
+                        En attente
+
+                    </option>
+
+                    <option value="approved">
+
+                        Acceptées
+
+                    </option>
+
+                    <option value="rejected">
+
+                        Refusées
+
+                    </option>
+
+                </select>
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="renderSellerRequests()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div id="sellerRequestsTable"></div>
+
+        </div>
+
+    `;
+
+    function draw(){
+
+        const filter =
+
+            document.getElementById("requestFilter").value;
+
+        const filtered =
+
+            requests.filter(function(request){
+
+                if(filter === "all"){
+
+                    return true;
+
+                }
+
+                return request.status === filter;
+
+            });
+
+        if(!filtered.length){
+
+            document.getElementById("sellerRequestsTable").innerHTML =
+
+                '<div class="empty">Aucune demande dans cette catégorie.</div>';
+
+            return;
+
+        }
+
+        document.getElementById("sellerRequestsTable").innerHTML = `
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Demandeur</th>
+
+                            <th>Boutique</th>
+
+                            <th>Contact</th>
+
+                            <th>Catégorie</th>
+
+                            <th>Statut</th>
+
+                            <th>Date</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${filtered.map(function(request){
+
+                            let statusClass =
+
+                                "badge-neutral";
+
+                            if(request.status === "pending")
+
+                                statusClass = "badge-pending";
+
+                            if(request.status === "approved")
+
+                                statusClass = "badge-approved";
+
+                            if(request.status === "rejected")
+
+                                statusClass = "badge-rejected";
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+
+                                            ${escapeHTML(
+
+                                                (
+
+                                                    (request.first_name || "") +
+
+                                                    " " +
+
+                                                    (request.last_name || "")
+
+                                                ).trim()
+
+                                            )}
+
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        ${escapeHTML(request.shop_name || "—")}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${escapeHTML(request.phone || "—")}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${escapeHTML(request.main_category || "—")}
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge ${statusClass}">
+
+                                            ${escapeHTML(request.status || "—")}
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        ${formatDate(request.created_at)}
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="actions">
+
+                                            <button
+
+                                                class="btn btn-secondary"
+
+                                                onclick='showSellerRequest(${JSON.stringify(request)})'
+
+                                            >
+
+                                                👁️ Voir
+
+                                            </button>
+
+                                            ${
+
+                                                request.status === "pending"
+
+                                                ?
+
+                                                `
+
+                                                <button
+
+                                                    class="btn btn-success"
+
+                                                    onclick="approveSeller('${request.id}','${request.user_id}')"
+
+                                                >
+
+                                                    ✅ Accepter
+
+                                                </button>
+
+                                                <button
+
+                                                    class="btn btn-danger"
+
+                                                    onclick="rejectSeller('${request.id}','${request.user_id}')"
+
+                                                >
+
+                                                    ❌ Refuser
+
+                                                </button>
+
+                                                `
+
+                                                :
+
+                                                ""
+
+                                            }
+
+                                            ${
+
+                                                request.phone
+
+                                                ?
+
+                                                whatsapp(
+
+                                                    request.phone,
+
+                                                    "Bonjour " +
+
+                                                    (request.first_name || "") +
+
+                                                    ", Market Bouaké vous contacte concernant votre demande vendeur."
+
+                                                )
+
+                                                :
+
+                                                ""
+
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }).join("")}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    }
+
+    document
+
+        .getElementById("requestFilter")
+
+        .addEventListener(
+
+            "change",
+
+            draw
+
+        );
+
+    draw();
+
+}
+
+/* =========================================================
+
+   DÉTAIL DEMANDE VENDEUR
+
+========================================================= */
+
+function showSellerRequest(request){
+
+    openModal(
+
+        "Demande vendeur",
+
+        `
+
+        ${
+
+            request.profile_photo_url
+
+            ?
+
+            `
+
+            <div style="text-align:center;margin-bottom:20px;">
+
+                <img
+
+                    src="${escapeHTML(request.profile_photo_url)}"
+
+                    alt="Photo vendeur"
+
+                    style="width:100px;height:100px;border-radius:50%;object-fit:cover;"
+
+                >
+
+            </div>
+
+            `
+
+            :
+
+            ""
+
+        }
+
+        <div class="detail-grid">
+
+            <div class="detail">
+
+                <div class="detail-label">Prénom</div>
+
+                <div class="detail-value">${escapeHTML(request.first_name || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Nom</div>
+
+                <div class="detail-value">${escapeHTML(request.last_name || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Téléphone</div>
+
+                <div class="detail-value">${escapeHTML(request.phone || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Boutique</div>
+
+                <div class="detail-value">${escapeHTML(request.shop_name || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Ville</div>
+
+                <div class="detail-value">${escapeHTML(request.city || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Quartier</div>
+
+                <div class="detail-value">${escapeHTML(request.district || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Catégorie</div>
+
+                <div class="detail-value">${escapeHTML(request.main_category || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Statut</div>
+
+                <div class="detail-value">${escapeHTML(request.status || "—")}</div>
+
+            </div>
+
+        </div>
+
+        <div class="detail" style="margin-top:12px;">
+
+            <div class="detail-label">Description</div>
+
+            <div class="detail-value">
+
+                ${escapeHTML(request.description || "Aucune description")}
+
+            </div>
+
+        </div>
+
+        ${
+
+            request.admin_note
+
+            ?
+
+            `
+
+            <div class="notice notice-warning" style="margin-top:15px;">
+
+                <strong>Note administrateur :</strong><br>
+
+                ${escapeHTML(request.admin_note)}
+
+            </div>
+
+            `
+
+            :
+
+            ""
+
+        }
+
+        <div class="modal-actions">
+
+            ${
+
+                request.status === "pending"
+
+                ?
+
+                `
+
+                <button
+
+                    class="btn btn-success"
+
+                    onclick="closeModal();approveSeller('${request.id}','${request.user_id}')"
+
+                >
+
+                    ✅ Accepter
+
+                </button>
+
+                <button
+
+                    class="btn btn-danger"
+
+                    onclick="closeModal();rejectSeller('${request.id}','${request.user_id}')"
+
+                >
+
+                    ❌ Refuser
+
+                </button>
+
+                `
+
+                :
+
+                ""
+
+            }
+
+            ${
+
+                request.phone
+
+                ?
+
+                whatsapp(
+
+                    request.phone,
+
+                    "Bonjour " +
+
+                    (request.first_name || "") +
+
+                    ", Market Bouaké vous contacte concernant votre demande vendeur."
+
+                )
+
+                :
+
+                ""
+
+            }
+
+        </div>
+
+        `
+
+    );
+
+}
+
+/* =========================================================
+
+   ACCEPTER VENDEUR
+
+========================================================= */
+
+async function approveSeller(requestId,userId){
+
+    if(!confirm(
+
+        "Voulez-vous accepter cette demande vendeur ?"
+
+    )){
+
+        return;
+
+    }
+
+    try{
+
+        const {
+
+            error:requestError
+
+        } =
+
+        await supabaseClient
+
+            .from("seller_requests")
+
+            .update({
+
+                status:"approved",
+
+                admin_note:null,
+
+                updated_at:new Date().toISOString()
+
+            })
+
+            .eq("id",requestId);
+
+        if(requestError){
+
+            throw requestError;
+
+        }
+
+        const {
+
+            error:profileError
+
+        } =
+
+        await supabaseClient
+
+            .from("profiles")
+
+            .update({
+
+                role:"seller",
+
+                seller_status:"approved",
+
+                updated_at:new Date().toISOString()
+
+            })
+
+            .eq("id",userId);
+
+        if(profileError){
+
+            throw profileError;
+
+        }
+
+        const {
+
+            error:shopError
+
+        } =
+
+        await supabaseClient
+
+            .from("shops")
+
+            .insert({
+
+                user_id:userId
+
+            });
+
+        if(shopError){
+
+            console.warn(
+
+                "Création boutique :",
+
+                shopError
+
+            );
+
+        }
+
+        const {
+
+            error:notificationError
+
+        } =
+
+        await supabaseClient
+
+            .from("notifications")
+
+            .insert({
+
+                user_id:userId,
+
+                title:"Demande vendeur acceptée",
+
+                message:"Félicitations ! Votre demande vendeur a été acceptée. Votre espace vendeur est maintenant disponible.",
+
+                type:"seller_approved",
+
+                related_id:requestId
+
+            });
+
+        if(notificationError){
+
+            console.warn(
+
+                "Notification :",
+
+                notificationError
+
+            );
+
+        }
+
+        showMessage(
+
+            "La demande vendeur a été acceptée."
+
+        );
+
+        await renderSellerRequests();
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+
+            "Impossible d'accepter la demande : " +
+
+            (error.message || "Erreur"),
+
+            "#c62828"
+
+        );
+
+    }
+
+}
+
+/* =========================================================
+
+   REFUSER VENDEUR
+
+========================================================= */
+
+async function rejectSeller(requestId,userId){
+
+    const note =
+
+        prompt(
+
+            "Motif du refus (facultatif) :"
+
+        );
+
+    if(note === null){
+
+        return;
+
+    }
+
+    try{
+
+        const {
+
+            error:requestError
+
+        } =
+
+        await supabaseClient
+
+            .from("seller_requests")
+
+            .update({
+
+                status:"rejected",
+
+                admin_note:note || null,
+
+                updated_at:new Date().toISOString()
+
+            })
+
+            .eq("id",requestId);
+
+        if(requestError){
+
+            throw requestError;
+
+        }
+
+        const {
+
+            error:profileError
+
+        } =
+
+        await supabaseClient
+
+            .from("profiles")
+
+            .update({
+
+                role:"buyer",
+
+                seller_status:"rejected",
+
+                updated_at:new Date().toISOString()
+
+            })
+
+            .eq("id",userId);
+
+        if(profileError){
+
+            throw profileError;
+
+        }
+
+        const {
+
+            error:notificationError
+
+        } =
+
+        await supabaseClient
+
+            .from("notifications")
+
+            .insert({
+
+                user_id:userId,
+
+                title:"Demande vendeur refusée",
+
+                message:
+
+                    "Votre demande vendeur a été refusée." +
+
+                    (note ? " Motif : " + note : ""),
+
+                type:"seller_rejected",
+
+                related_id:requestId
+
+            });
+
+        if(notificationError){
+
+            console.warn(
+
+                "Notification :",
+
+                notificationError
+
+            );
+
+        }
+
+        showMessage(
+
+            "La demande vendeur a été refusée."
+
+        );
+
+        await renderSellerRequests();
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+
+            "Impossible de refuser la demande : " +
+
+            (error.message || "Erreur"),
+
+            "#c62828"
+
+        );
+
+    }
+
+}
+
+/* =========================================================
+
+   PRODUITS
+
+========================================================= */
+
+async function renderProducts(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("products")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const products =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">📦 Produits</h1>
+
+        <p class="page-subtitle">
+
+            Contrôle des produits publiés sur Market Bouaké.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <input
+
+                    class="search"
+
+                    id="productSearch"
+
+                    placeholder="Rechercher un produit..."
+
+                >
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="renderProducts()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div id="productsTable"></div>
+
+        </div>
+
+    `;
+
+    function draw(){
+
+        const search =
+
+            (
+
+                document.getElementById("productSearch").value
+
+                || ""
+
+            ).toLowerCase();
+
+        const filtered =
+
+            products.filter(function(product){
+
+                return (
+
+                    String(product.name || "")
+
+                        .toLowerCase()
+
+                        .includes(search)
+
+                );
+
+            });
+
+        if(!filtered.length){
+
+            document.getElementById("productsTable").innerHTML =
+
+                '<div class="empty">Aucun produit trouvé.</div>';
+
+            return;
+
+        }
+
+        document.getElementById("productsTable").innerHTML = `
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Produit</th>
+
+                            <th>Prix</th>
+
+                            <th>Stock</th>
+
+                            <th>Actif</th>
+
+                            <th>Date</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${filtered.map(function(product){
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+
+                                            ${escapeHTML(product.name)}
+
+                                        </strong>
+
+                                        ${escapeHTML(
+
+                                            product.description || ""
+
+                                        ).substring(0,120)}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${money(product.price)}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${escapeHTML(product.stock)}
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge ${
+
+                                            product.is_active
+
+                                            ?
+
+                                            "badge-active"
+
+                                            :
+
+                                            "badge-danger"
+
+                                        }">
+
+                                            ${
+
+                                                product.is_active
+
+                                                ?
+
+                                                "Actif"
+
+                                                :
+
+                                                "Inactif"
+
+                                            }
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        ${formatDate(product.created_at)}
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="actions">
+
+                                            <button
+
+                                                class="btn btn-secondary"
+
+                                                onclick='showProduct(${JSON.stringify(product)})'
+
+                                            >
+
+                                                👁️ Voir
+
+                                            </button>
+
+                                            <button
+
+                                                class="btn ${
+
+                                                    product.is_active
+
+                                                    ?
+
+                                                    "btn-danger"
+
+                                                    :
+
+                                                    "btn-success"
+
+                                                }"
+
+                                                onclick="toggleProduct('${product.id}',${product.is_active})"
+
+                                            >
+
+                                                ${
+
+                                                    product.is_active
+
+                                                    ?
+
+                                                    "Désactiver"
+
+                                                    :
+
+                                                    "Activer"
+
+                                                }
+
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }).join("")}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    }
+
+    document
+
+        .getElementById("productSearch")
+
+        .addEventListener(
+
+            "input",
+
+            draw
+
+        );
+
+    draw();
+
+}
+
+/* =========================================================
+
+   DÉTAIL PRODUIT
+
+========================================================= */
+
+function showProduct(product){
+
+    openModal(
+
+        "Produit",
+
+        `
+
+        <div class="detail-grid">
+
+            <div class="detail">
+
+                <div class="detail-label">Nom</div>
+
+                <div class="detail-value">${escapeHTML(product.name)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Prix</div>
+
+                <div class="detail-value">${money(product.price)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Stock</div>
+
+                <div class="detail-value">${escapeHTML(product.stock)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Vendeur</div>
+
+                <div class="detail-value">${escapeHTML(product.seller_id)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Boutique</div>
+
+                <div class="detail-value">${escapeHTML(product.shop_id || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Catégorie</div>
+
+                <div class="detail-value">${escapeHTML(product.category_id || "—")}</div>
+
+            </div>
+
+        </div>
+
+        <div class="detail" style="margin-top:12px;">
+
+            <div class="detail-label">Description</div>
+
+            <div class="detail-value">
+
+                ${escapeHTML(product.description || "Aucune description")}
+
+            </div>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+
+                class="btn ${
+
+                    product.is_active
+
+                    ?
+
+                    "btn-danger"
+
+                    :
+
+                    "btn-success"
+
+                }"
+
+                onclick="closeModal();toggleProduct('${product.id}',${product.is_active})"
+
+            >
+
+                ${
+
+                    product.is_active
+
+                    ?
+
+                    "Désactiver le produit"
+
+                    :
+
+                    "Activer le produit"
+
+                }
+
+            </button>
+
+        </div>
+
+        `
+
+    );
+
+}
+
+/* =========================================================
+
+   ACTIVER / DÉSACTIVER PRODUIT
+
+========================================================= */
+
+async function toggleProduct(id,current){
+
+    const action =
+
+        current
+
+        ?
+
+        "désactiver"
+
+        :
+
+        "activer";
+
+    if(!confirm(
+
+        "Voulez-vous " + action + " ce produit ?"
+
+    )){
+
+        return;
+
+    }
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("products")
+
+        .update({
+
+            is_active:!current,
+
+            updated_at:new Date().toISOString()
+
+        })
+
+        .eq("id",id);
+
+    if(error){
+
+        showMessage(
+
+            "Action impossible : " + error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    showMessage(
+
+        "Produit mis à jour."
+
+    );
+
+    await renderProducts();
+
+}
+
+/* =========================================================
+
+   COMMANDES
+
+========================================================= */
+
+async function renderOrders(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("orders")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const orders =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">🛒 Commandes</h1>
+
+        <p class="page-subtitle">
+
+            Suivi et gestion des commandes.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <select class="select" id="orderStatus">
+
+                    <option value="all">Tous les statuts</option>
+
+                    <option value="pending">pending</option>
+
+                    <option value="confirmed">confirmed</option>
+
+                    <option value="preparing">preparing</option>
+
+                    <option value="shipped">shipped</option>
+
+                    <option value="delivered">delivered</option>
+
+                    <option value="received">received</option>
+
+                    <option value="completed">completed</option>
+
+                </select>
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="renderOrders()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div id="ordersTable"></div>
+
+        </div>
+
+    `;
+
+    function draw(){
+
+        const status =
+
+            document.getElementById("orderStatus").value;
+
+        const filtered =
+
+            orders.filter(function(order){
+
+                return (
+
+                    status === "all"
+
+                    ||
+
+                    order.status === status
+
+                );
+
+            });
+
+        if(!filtered.length){
+
+            document.getElementById("ordersTable").innerHTML =
+
+                '<div class="empty">Aucune commande.</div>';
+
+            return;
+
+        }
+
+        document.getElementById("ordersTable").innerHTML = `
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Commande</th>
+
+                            <th>Acheteur</th>
+
+                            <th>Vendeur</th>
+
+                            <th>Total</th>
+
+                            <th>Livraison</th>
+
+                            <th>Statut</th>
+
+                            <th>Date</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${filtered.map(function(order){
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+
+                                            ${escapeHTML(
+
+                                                order.id.substring(0,8)
+
+                                            )}
+
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+
+                                            ${escapeHTML(
+
+                                                (
+
+                                                    (order.buyer_first_name || "") +
+
+                                                    " " +
+
+                                                    (order.buyer_last_name || "")
+
+                                                ).trim()
+
+                                            )}
+
+                                        </strong>
+
+                                        ${escapeHTML(order.buyer_phone || "")}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${escapeHTML(order.seller_id || "—")}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${money(order.total_amount)}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${money(order.delivery_fee)}
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge badge-neutral">
+
+                                            ${escapeHTML(order.status)}
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        ${formatDate(order.created_at)}
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="actions">
+
+                                            <button
+
+                                                class="btn btn-secondary"
+
+                                                onclick='showOrder(${JSON.stringify(order)})'
+
+                                            >
+
+                                                👁️ Voir
+
+                                            </button>
+
+                                            ${
+
+                                                order.buyer_phone
+
+                                                ?
+
+                                                whatsapp(
+
+                                                    order.buyer_phone,
+
+                                                    "Bonjour " +
+
+                                                    (order.buyer_first_name || "") +
+
+                                                    ", Market Bouaké vous contacte concernant votre commande."
+
+                                                )
+
+                                                :
+
+                                                ""
+
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }).join("")}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    }
+
+    document
+
+        .getElementById("orderStatus")
+
+        .addEventListener(
+
+            "change",
+
+            draw
+
+        );
+
+    draw();
+
+}
+
+/* =========================================================
+
+   DÉTAIL COMMANDE
+
+========================================================= */
+
+function showOrder(order){
+
+    openModal(
+
+        "Commande",
+
+        `
+
+        <div class="detail-grid">
+
+            <div class="detail">
+
+                <div class="detail-label">ID</div>
+
+                <div class="detail-value">${escapeHTML(order.id)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Statut</div>
+
+                <div class="detail-value">${escapeHTML(order.status)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Acheteur</div>
+
+                <div class="detail-value">
+
+                    ${escapeHTML(
+
+                        (
+
+                            (order.buyer_first_name || "") +
+
+                            " " +
+
+                            (order.buyer_last_name || "")
+
+                        ).trim()
+
+                    )}
+
+                </div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Téléphone</div>
+
+                <div class="detail-value">${escapeHTML(order.buyer_phone || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Ville</div>
+
+                <div class="detail-value">${escapeHTML(order.buyer_city || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Quartier</div>
+
+                <div class="detail-value">${escapeHTML(order.buyer_district || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Total</div>
+
+                <div class="detail-value">${money(order.total_amount)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Livraison</div>
+
+                <div class="detail-value">${money(order.delivery_fee)}</div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-actions">
+
+            ${
+
+                order.buyer_phone
+
+                ?
+
+                whatsapp(
+
+                    order.buyer_phone,
+
+                    "Bonjour " +
+
+                    (order.buyer_first_name || "") +
+
+                    ", Market Bouaké vous contacte concernant votre commande."
+
+                )
+
+                :
+
+                ""
+
+            }
+
+        </div>
+
+        `
+
+    );
+
+}
+
+/* =========================================================
+
+   PROBLÈMES
+
+========================================================= */
+
+async function renderProblems(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("problems")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const problems =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">⚠️ Problèmes</h1>
+
+        <p class="page-subtitle">
+
+            Gestion des problèmes signalés par les utilisateurs.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <select class="select" id="problemStatus">
+
+                    <option value="all">Tous</option>
+
+                    <option value="open">open</option>
+
+                    <option value="resolved">resolved</option>
+
+                    <option value="closed">closed</option>
+
+                </select>
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="renderProblems()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div id="problemsTable"></div>
+
+        </div>
+
+    `;
+
+    function draw(){
+
+        const status =
+
+            document.getElementById("problemStatus").value;
+
+        const filtered =
+
+            problems.filter(function(problem){
+
+                return (
+
+                    status === "all"
+
+                    ||
+
+                    problem.status === status
+
+                );
+
+            });
+
+        if(!filtered.length){
+
+            document.getElementById("problemsTable").innerHTML =
+
+                '<div class="empty">Aucun problème.</div>';
+
+            return;
+
+        }
+
+        document.getElementById("problemsTable").innerHTML = `
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Motif</th>
+
+                            <th>Description</th>
+
+                            <th>Statut</th>
+
+                            <th>Date</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${filtered.map(function(problem){
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+
+                                            ${escapeHTML(problem.reason)}
+
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        ${escapeHTML(
+
+                                            problem.description || ""
+
+                                        ).substring(0,180)}
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge badge-neutral">
+
+                                            ${escapeHTML(problem.status)}
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        ${formatDate(problem.created_at)}
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="actions">
+
+                                            <button
+
+                                                class="btn btn-secondary"
+
+                                                onclick='showProblem(${JSON.stringify(problem)})'
+
+                                            >
+
+                                                👁️ Voir
+
+                                            </button>
+
+                                            ${
+
+                                                problem.status !== "resolved"
+
+                                                ?
+
+                                                `
+
+                                                <button
+
+                                                    class="btn btn-success"
+
+                                                    onclick="resolveProblem('${problem.id}')"
+
+                                                >
+
+                                                    ✅ Résoudre
+
+                                                </button>
+
+                                                `
+
+                                                :
+
+                                                ""
+
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }).join("")}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    }
+
+    document
+
+        .getElementById("problemStatus")
+
+        .addEventListener(
+
+            "change",
+
+            draw
+
+        );
+
+    draw();
+
+}
+
+/* =========================================================
+
+   DÉTAIL PROBLÈME
+
+========================================================= */
+
+function showProblem(problem){
+
+    openModal(
+
+        "Problème",
+
+        `
+
+        <div class="detail-grid">
+
+            <div class="detail">
+
+                <div class="detail-label">Motif</div>
+
+                <div class="detail-value">${escapeHTML(problem.reason)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Statut</div>
+
+                <div class="detail-value">${escapeHTML(problem.status)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Acheteur</div>
+
+                <div class="detail-value">${escapeHTML(problem.buyer_id || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Vendeur</div>
+
+                <div class="detail-value">${escapeHTML(problem.seller_id || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Commande</div>
+
+                <div class="detail-value">${escapeHTML(problem.order_id || "—")}</div>
+
+            </div>
+
+        </div>
+
+        <div class="detail" style="margin-top:12px;">
+
+            <div class="detail-label">
+
+                Description
+
+            </div>
+
+            <div class="detail-value">
+
+                ${escapeHTML(problem.description)}
+
+            </div>
+
+        </div>
+
+        ${
+
+            problem.seller_response
+
+            ?
+
+            `
+
+            <div class="notice notice-info" style="margin-top:15px;">
+
+                <strong>Réponse vendeur :</strong><br>
+
+                ${escapeHTML(problem.seller_response)}
+
+            </div>
+
+            `
+
+            :
+
+            ""
+
+        }
+
+        ${
+
+            problem.admin_response
+
+            ?
+
+            `
+
+            <div class="notice notice-info">
+
+                <strong>Réponse administrateur :</strong><br>
+
+                ${escapeHTML(problem.admin_response)}
+
+            </div>
+
+            `
+
+            :
+
+            ""
+
+        }
+
+        ${
+
+            problem.status !== "resolved"
+
+            ?
+
+            `
+
+            <div class="form-group" style="margin-top:15px;">
+
+                <label>
+
+                    Réponse administrateur
+
+                </label>
+
+                <textarea
+
+                    class="form-control"
+
+                    id="adminResponse"
+
+                    placeholder="Écrire une réponse..."
+
+                ></textarea>
+
+            </div>
+
+            <button
+
+                class="btn btn-success"
+
+                onclick="respondProblem('${problem.id}')"
+
+            >
+
+                ✅ Enregistrer et résoudre
+
+            </button>
+
+            `
+
+            :
+
+            ""
+
+        }
+
+        `
+
+    );
+
+}
+
+/* =========================================================
+
+   RÉSOUDRE PROBLÈME
+
+========================================================= */
+
+async function resolveProblem(id){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("problems")
+
+        .update({
+
+            status:"resolved",
+
+            updated_at:new Date().toISOString()
+
+        })
+
+        .eq("id",id);
+
+    if(error){
+
+        showMessage(
+
+            "Impossible de résoudre le problème : " + error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    showMessage(
+
+        "Problème marqué comme résolu."
+
+    );
+
+    await renderProblems();
+
+}
+
+/* =========================================================
+
+   RÉPONSE PROBLÈME
+
+========================================================= */
+
+async function respondProblem(id){
+
+    const response =
+
+        document.getElementById("adminResponse").value.trim();
+
+    if(!response){
+
+        alert(
+
+            "Veuillez écrire une réponse."
+
+        );
+
+        return;
+
+    }
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("problems")
+
+        .update({
+
+            admin_response:response,
+
+            status:"resolved",
+
+            updated_at:new Date().toISOString()
+
+        })
+
+        .eq("id",id);
+
+    if(error){
+
+        showMessage(
+
+            "Impossible d'enregistrer la réponse : " + error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    closeModal();
+
+    showMessage(
+
+        "Réponse enregistrée et problème résolu."
+
+    );
+
+    await renderProblems();
+
+}
+
+/* =========================================================
+
+   AVIS
+
+========================================================= */
+
+async function renderReviews(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("reviews")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const reviews =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">⭐ Avis</h1>
+
+        <p class="page-subtitle">
+
+            Modération des avis publiés sur les produits.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="renderReviews()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Note</th>
+
+                            <th>Commentaire</th>
+
+                            <th>Produit</th>
+
+                            <th>Visible</th>
+
+                            <th>Date</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${
+
+                            reviews.length
+
+                            ?
+
+                            reviews.map(function(review){
+
+                                return `
+
+                                    <tr>
+
+                                        <td>
+
+                                            ⭐ ${escapeHTML(review.rating)}/5
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(review.comment || "Aucun commentaire")}
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(review.product_id)}
+
+                                        </td>
+
+                                        <td>
+
+                                            <span class="badge ${
+
+                                                review.is_visible
+
+                                                ?
+
+                                                "badge-active"
+
+                                                :
+
+                                                "badge-danger"
+
+                                            }">
+
+                                                ${
+
+                                                    review.is_visible
+
+                                                    ?
+
+                                                    "Visible"
+
+                                                    :
+
+                                                    "Masqué"
+
+                                                }
+
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            ${formatDate(review.created_at)}
+
+                                        </td>
+
+                                        <td>
+
+                                            <button
+
+                                                class="btn ${
+
+                                                    review.is_visible
+
+                                                    ?
+
+                                                    "btn-danger"
+
+                                                    :
+
+                                                    "btn-success"
+
+                                                }"
+
+                                                onclick="toggleReview('${review.id}',${review.is_visible})"
+
+                                            >
+
+                                                ${
+
+                                                    review.is_visible
+
+                                                    ?
+
+                                                    "Masquer"
+
+                                                    :
+
+                                                    "Afficher"
+
+                                                }
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                `;
+
+                            }).join("")
+
+                            :
+
+                            `
+
+                            <tr>
+
+                                <td colspan="6">
+
+                                    <div class="empty">
+
+                                        Aucun avis.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            `
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+
+   MODÉRATION AVIS
+
+========================================================= */
+
+async function toggleReview(id,current){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("reviews")
+
+        .update({
+
+            is_visible:!current,
+
+            updated_at:new Date().toISOString()
+
+        })
+
+        .eq("id",id);
+
+    if(error){
+
+        showMessage(
+
+            "Impossible de modifier l'avis : " + error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    await renderReviews();
+
+}
+
+/* =========================================================
+
+   CATÉGORIES
+
+========================================================= */
+
+async function renderCategories(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("categories")
+
+        .select("*")
+
+        .order("name");
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const categories =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">🏷️ Catégories</h1>
+
+        <p class="page-subtitle">
+
+            Créer, modifier et activer les catégories.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="openCategoryForm()"
+
+                >
+
+                    ➕ Ajouter une catégorie
+
+                </button>
+
+                <button
+
+                    class="btn btn-secondary"
+
+                    onclick="renderCategories()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Nom</th>
+
+                            <th>Description</th>
+
+                            <th>Active</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${
+
+                            categories.length
+
+                            ?
+
+                            categories.map(function(category){
+
+                                return `
+
+                                    <tr>
+
+                                        <td>
+
+                                            <strong>
+
+                                                ${escapeHTML(category.name)}
+
+                                            </strong>
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(category.description || "—")}
+
+                                        </td>
+
+                                        <td>
+
+                                            <span class="badge ${
+
+                                                category.is_active
+
+                                                ?
+
+                                                "badge-active"
+
+                                                :
+
+                                                "badge-danger"
+
+                                            }">
+
+                                                ${
+
+                                                    category.is_active
+
+                                                    ?
+
+                                                    "Active"
+
+                                                    :
+
+                                                    "Inactive"
+
+                                                }
+
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <div class="actions">
+
+                                                <button
+
+                                                    class="btn btn-secondary"
+
+                                                    onclick='openCategoryForm(${JSON.stringify(category)})'
+
+                                                >
+
+                                                    ✏️ Modifier
+
+                                                </button>
+
+                                                <button
+
+                                                    class="btn ${
+
+                                                        category.is_active
+
+                                                        ?
+
+                                                        "btn-danger"
+
+                                                        :
+
+                                                        "btn-success"
+
+                                                    }"
+
+                                                    onclick="toggleCategory('${category.id}',${category.is_active})"
+
+                                                >
+
+                                                    ${
+
+                                                        category.is_active
+
+                                                        ?
+
+                                                        "Désactiver"
+
+                                                        :
+
+                                                        "Activer"
+
+                                                    }
+
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                `;
+
+                            }).join("")
+
+                            :
+
+                            `
+
+                            <tr>
+
+                                <td colspan="4">
+
+                                    <div class="empty">
+
+                                        Aucune catégorie.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            `
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+
+   FORMULAIRE CATÉGORIE
+
+========================================================= */
+
+function openCategoryForm(category=null){
+
+    openModal(
+
+        category
+
+        ?
+
+        "Modifier la catégorie"
+
+        :
+
+        "Nouvelle catégorie",
+
+        `
+
+        <div class="form-group">
+
+            <label>Nom</label>
+
+            <input
+
+                class="form-control"
+
+                id="categoryName"
+
+                value="${escapeHTML(category ? category.name : "")}"
+
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Description</label>
+
+            <textarea
+
+                class="form-control"
+
+                id="categoryDescription"
+
+            >${escapeHTML(category ? category.description || "" : "")}</textarea>
+
+        </div>
+
+        <button
+
+            class="btn btn-primary"
+
+            onclick="saveCategory('${category ? category.id : ""}')"
+
+        >
+
+            💾 Enregistrer
+
+        </button>
+
+        `
+
+    );
+
+}
+
+async function saveCategory(id){
+
+    const name =
+
+        document.getElementById("categoryName")
+
+            .value.trim();
+
+    const description =
+
+        document.getElementById("categoryDescription")
+
+            .value.trim();
+
+    if(!name){
+
+        alert("Le nom est obligatoire.");
+
+        return;
+
+    }
+
+    let result;
+
+    if(id){
+
+        result =
+
+            await supabaseClient
+
+                .from("categories")
+
+                .update({
+
+                    name:name,
+
+                    description:description || null,
+
+                    updated_at:new Date().toISOString()
+
+                })
+
+                .eq("id",id);
+
+    }else{
+
+        result =
+
+            await supabaseClient
+
+                .from("categories")
+
+                .insert({
+
+                    name:name,
+
+                    description:description || null
+
+                });
+
+    }
+
+    if(result.error){
+
+        showMessage(
+
+            result.error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    closeModal();
+
+    showMessage(
+
+        "Catégorie enregistrée."
+
+    );
+
+    await renderCategories();
+
+}
+
+async function toggleCategory(id,current){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("categories")
+
+        .update({
+
+            is_active:!current,
+
+            updated_at:new Date().toISOString()
+
+        })
+
+        .eq("id",id);
+
+    if(error){
+
+        showMessage(
+
+            error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    await renderCategories();
+
+}
+
+/* =========================================================
+
+   BOUTIQUES
+
+========================================================= */
+
+async function renderShops(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("shops")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const shops =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">🏪 Boutiques</h1>
+
+        <p class="page-subtitle">
+
+            Gestion des boutiques vendeurs.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="renderShops()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Boutique</th>
+
+                            <th>Ville</th>
+
+                            <th>Quartier</th>
+
+                            <th>Statut</th>
+
+                            <th>Réseaux</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${
+
+                            shops.length
+
+                            ?
+
+                            shops.map(function(shop){
+
+                                return `
+
+                                    <tr>
+
+                                        <td>
+
+                                            <strong>
+
+                                                ${escapeHTML(shop.shop_name)}
+
+                                            </strong>
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(shop.city)}
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(shop.district || "—")}
+
+                                        </td>
+
+                                        <td>
+
+                                            <span class="badge badge-active">
+
+                                                ${escapeHTML(shop.status)}
+
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            ${
+
+                                                shop.facebook_url
+
+                                                ?
+
+                                                `<a href="${escapeHTML(shop.facebook_url)}" target="_blank">Facebook</a>`
+
+                                                :
+
+                                                ""
+
+                                            }
+
+                                            ${
+
+                                                shop.tiktok_url
+
+                                                ?
+
+                                                `<br><a href="${escapeHTML(shop.tiktok_url)}" target="_blank">TikTok</a>`
+
+                                                :
+
+                                                ""
+
+                                            }
+
+                                        </td>
+
+                                        <td>
+
+                                            <button
+
+                                                class="btn btn-secondary"
+
+                                                onclick='showShop(${JSON.stringify(shop)})'
+
+                                            >
+
+                                                👁️ Voir
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                `;
+
+                            }).join("")
+
+                            :
+
+                            `
+
+                            <tr>
+
+                                <td colspan="6">
+
+                                    <div class="empty">
+
+                                        Aucune boutique.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            `
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+function showShop(shop){
+
+    openModal(
+
+        "Boutique",
+
+        `
+
+        <div class="detail-grid">
+
+            <div class="detail">
+
+                <div class="detail-label">Nom</div>
+
+                <div class="detail-value">${escapeHTML(shop.shop_name)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Ville</div>
+
+                <div class="detail-value">${escapeHTML(shop.city)}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Quartier</div>
+
+                <div class="detail-value">${escapeHTML(shop.district || "—")}</div>
+
+            </div>
+
+            <div class="detail">
+
+                <div class="detail-label">Statut</div>
+
+                <div class="detail-value">${escapeHTML(shop.status)}</div>
+
+            </div>
+
+        </div>
+
+        <div class="detail" style="margin-top:12px;">
+
+            <div class="detail-label">Description</div>
+
+            <div class="detail-value">
+
+                ${escapeHTML(shop.description || "—")}
+
+            </div>
+
+        </div>
+
+        `
+
+    );
+
+}
+
+/* =========================================================
+
+   LIVRAISONS
+
+========================================================= */
+
+async function renderDelivery(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("delivery_rates")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const rates =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">🚚 Livraison</h1>
+
+        <p class="page-subtitle">
+
+            Consultation et contrôle des tarifs de livraison.
+
+        </p>
+
+        <div class="section">
+
+            <button
+
+                class="btn btn-primary"
+
+                onclick="renderDelivery()"
+
+            >
+
+                🔄 Actualiser
+
+            </button>
+
+            <div class="table-wrapper" style="margin-top:18px;">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Vendeur</th>
+
+                            <th>Quartier</th>
+
+                            <th>Tarif</th>
+
+                            <th>Actif</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${
+
+                            rates.length
+
+                            ?
+
+                            rates.map(function(rate){
+
+                                return `
+
+                                    <tr>
+
+                                        <td>
+
+                                            ${escapeHTML(rate.seller_id)}
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(rate.district)}
+
+                                        </td>
+
+                                        <td>
+
+                                            ${money(rate.price)}
+
+                                        </td>
+
+                                        <td>
+
+                                            <span class="badge ${
+
+                                                rate.is_active
+
+                                                ?
+
+                                                "badge-active"
+
+                                                :
+
+                                                "badge-danger"
+
+                                            }">
+
+                                                ${
+
+                                                    rate.is_active
+
+                                                    ?
+
+                                                    "Actif"
+
+                                                    :
+
+                                                    "Inactif"
+
+                                                }
+
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <button
+
+                                                class="btn ${
+
+                                                    rate.is_active
+
+                                                    ?
+
+                                                    "btn-danger"
+
+                                                    :
+
+                                                    "btn-success"
+
+                                                }"
+
+                                                onclick="toggleDelivery('${rate.id}',${rate.is_active})"
+
+                                            >
+
+                                                ${
+
+                                                    rate.is_active
+
+                                                    ?
+
+                                                    "Désactiver"
+
+                                                    :
+
+                                                    "Activer"
+
+                                                }
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                `;
+
+                            }).join("")
+
+                            :
+
+                            `
+
+                            <tr>
+
+                                <td colspan="5">
+
+                                    <div class="empty">
+
+                                        Aucun tarif de livraison.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            `
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+async function toggleDelivery(id,current){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("delivery_rates")
+
+        .update({
+
+            is_active:!current,
+
+            updated_at:new Date().toISOString()
+
+        })
+
+        .eq("id",id);
+
+    if(error){
+
+        showMessage(
+
+            error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    await renderDelivery();
+
+}
+
+/* =========================================================
+
+   NOTIFICATIONS
+
+========================================================= */
+
+async function renderNotifications(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("notifications")
+
+        .select("*")
+
+        .order("created_at",{ascending:false})
+
+        .limit(100);
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const notifications =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">🔔 Notifications</h1>
+
+        <p class="page-subtitle">
+
+            Notifications enregistrées dans le système.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="openNotificationForm()"
+
+                >
+
+                    ➕ Nouvelle notification
+
+                </button>
+
+                <button
+
+                    class="btn btn-secondary"
+
+                    onclick="renderNotifications()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Utilisateur</th>
+
+                            <th>Titre</th>
+
+                            <th>Message</th>
+
+                            <th>Type</th>
+
+                            <th>Lue</th>
+
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${
+
+                            notifications.length
+
+                            ?
+
+                            notifications.map(function(notification){
+
+                                return `
+
+                                    <tr>
+
+                                        <td>
+
+                                            ${escapeHTML(notification.user_id)}
+
+                                        </td>
+
+                                        <td>
+
+                                            <strong>
+
+                                                ${escapeHTML(notification.title)}
+
+                                            </strong>
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(notification.message)}
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(notification.type)}
+
+                                        </td>
+
+                                        <td>
+
+                                            ${
+
+                                                notification.is_read
+
+                                                ?
+
+                                                "Oui"
+
+                                                :
+
+                                                "Non"
+
+                                            }
+
+                                        </td>
+
+                                        <td>
+
+                                            ${formatDate(notification.created_at)}
+
+                                        </td>
+
+                                    </tr>
+
+                                `;
+
+                            }).join("")
+
+                            :
+
+                            `
+
+                            <tr>
+
+                                <td colspan="6">
+
+                                    <div class="empty">
+
+                                        Aucune notification.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            `
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+
+   FORMULAIRE NOTIFICATION
+
+========================================================= */
+
+function openNotificationForm(){
+
+    openModal(
+
+        "Envoyer une notification",
+
+        `
+
+        <div class="notice notice-info">
+
+            La notification sera enregistrée pour l'utilisateur indiqué.
+
+        </div>
+
+        <div class="form-group">
+
+            <label>ID utilisateur</label>
+
+            <input
+
+                class="form-control"
+
+                id="notificationUser"
+
+                placeholder="UUID de l'utilisateur"
+
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Titre</label>
+
+            <input
+
+                class="form-control"
+
+                id="notificationTitle"
+
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Message</label>
+
+            <textarea
+
+                class="form-control"
+
+                id="notificationMessage"
+
+            ></textarea>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Type</label>
+
+            <input
+
+                class="form-control"
+
+                id="notificationType"
+
+                value="general"
+
+            >
+
+        </div>
+
+        <button
+
+            class="btn btn-primary"
+
+            onclick="sendNotification()"
+
+        >
+
+            🔔 Envoyer
+
+        </button>
+
+        `
+
+    );
+
+}
+
+async function sendNotification(){
+
+    const userId =
+
+        document.getElementById("notificationUser")
+
+            .value.trim();
+
+    const title =
+
+        document.getElementById("notificationTitle")
+
+            .value.trim();
+
+    const msg =
+
+        document.getElementById("notificationMessage")
+
+            .value.trim();
+
+    const type =
+
+        document.getElementById("notificationType")
+
+            .value.trim() || "general";
+
+    if(!userId || !title || !msg){
+
+        alert(
+
+            "Veuillez remplir les champs obligatoires."
+
+        );
+
+        return;
+
+    }
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("notifications")
+
+        .insert({
+
+            user_id:userId,
+
+            title:title,
+
+            message:msg,
+
+            type:type
+
+        });
+
+    if(error){
+
+        showMessage(
+
+            error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    closeModal();
+
+    showMessage(
+
+        "Notification envoyée."
+
+    );
+
+    await renderNotifications();
+
+}
+
+/* =========================================================
+
+   BADGES
+
+========================================================= */
+
+async function renderBadges(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("badges")
+
+        .select("*")
+
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+        throw error;
+
+    }
+
+    const badges =
+
+        data || [];
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">🏅 Badges</h1>
+
+        <p class="page-subtitle">
+
+            Gestion des badges de Market Bouaké.
+
+        </p>
+
+        <div class="section">
+
+            <div class="toolbar">
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="openBadgeForm()"
+
+                >
+
+                    ➕ Ajouter un badge
+
+                </button>
+
+                <button
+
+                    class="btn btn-secondary"
+
+                    onclick="renderBadges()"
+
+                >
+
+                    🔄 Actualiser
+
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Nom</th>
+
+                            <th>Description</th>
+
+                            <th>Actif</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${
+
+                            badges.length
+
+                            ?
+
+                            badges.map(function(badge){
+
+                                return `
+
+                                    <tr>
+
+                                        <td>
+
+                                            <strong>
+
+                                                ${escapeHTML(badge.name)}
+
+                                            </strong>
+
+                                        </td>
+
+                                        <td>
+
+                                            ${escapeHTML(badge.description || "—")}
+
+                                        </td>
+
+                                        <td>
+
+                                            <span class="badge ${
+
+                                                badge.is_active
+
+                                                ?
+
+                                                "badge-active"
+
+                                                :
+
+                                                "badge-danger"
+
+                                            }">
+
+                                                ${
+
+                                                    badge.is_active
+
+                                                    ?
+
+                                                    "Actif"
+
+                                                    :
+
+                                                    "Inactif"
+
+                                                }
+
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <div class="actions">
+
+                                                <button
+
+                                                    class="btn btn-secondary"
+
+                                                    onclick='openBadgeForm(${JSON.stringify(badge)})'
+
+                                                >
+
+                                                    ✏️ Modifier
+
+                                                </button>
+
+                                                <button
+
+                                                    class="btn ${
+
+                                                        badge.is_active
+
+                                                        ?
+
+                                                        "btn-danger"
+
+                                                        :
+
+                                                        "btn-success"
+
+                                                    }"
+
+                                                    onclick="toggleBadge('${badge.id}',${badge.is_active})"
+
+                                                >
+
+                                                    ${
+
+                                                        badge.is_active
+
+                                                        ?
+
+                                                        "Désactiver"
+
+                                                        :
+
+                                                        "Activer"
+
+                                                    }
+
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                `;
+
+                            }).join("")
+
+                            :
+
+                            `
+
+                            <tr>
+
+                                <td colspan="4">
+
+                                    <div class="empty">
+
+                                        Aucun badge.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            `
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+
+   FORMULAIRE BADGE
+
+========================================================= */
+
+function openBadgeForm(badge=null){
+
+    openModal(
+
+        badge
+
+        ?
+
+        "Modifier le badge"
+
+        :
+
+        "Nouveau badge",
+
+        `
+
+        <div class="form-group">
+
+            <label>Nom</label>
+
+            <input
+
+                class="form-control"
+
+                id="badgeName"
+
+                value="${escapeHTML(badge ? badge.name : "")}"
+
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Description</label>
+
+            <textarea
+
+                class="form-control"
+
+                id="badgeDescription"
+
+            >${escapeHTML(badge ? badge.description || "" : "")}</textarea>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>URL de l'icône</label>
+
+            <input
+
+                class="form-control"
+
+                id="badgeIcon"
+
+                value="${escapeHTML(badge ? badge.icon_url || "" : "")}"
+
+                placeholder="https://..."
+
+            >
+
+        </div>
+
+        <button
+
+            class="btn btn-primary"
+
+            onclick="saveBadge('${badge ? badge.id : ""}')"
+
+        >
+
+            💾 Enregistrer
+
+        </button>
+
+        `
+
+    );
+
+}
+
+async function saveBadge(id){
+
+    const name =
+
+        document.getElementById("badgeName")
+
+            .value.trim();
+
+    const description =
+
+        document.getElementById("badgeDescription")
+
+            .value.trim();
+
+    const icon =
+
+        document.getElementById("badgeIcon")
+
+            .value.trim();
+
+    if(!name){
+
+        alert(
+
+            "Le nom est obligatoire."
+
+        );
+
+        return;
+
+    }
+
+    let result;
+
+    if(id){
+
+        result =
+
+            await supabaseClient
+
+                .from("badges")
+
+                .update({
+
+                    name:name,
+
+                    description:description || null,
+
+                    icon_url:icon || null
+
+                })
+
+                .eq("id",id);
+
+    }else{
+
+        result =
+
+            await supabaseClient
+
+                .from("badges")
+
+                .insert({
+
+                    name:name,
+
+                    description:description || null,
+
+                    icon_url:icon || null
+
+                });
+
+    }
+
+    if(result.error){
+
+        showMessage(
+
+            result.error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    closeModal();
+
+    showMessage(
+
+        "Badge enregistré."
+
+    );
+
+    await renderBadges();
+
+}
+
+async function toggleBadge(id,current){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("badges")
+
+        .update({
+
+            is_active:!current
+
+        })
+
+        .eq("id",id);
+
+    if(error){
+
+        showMessage(
+
+            error.message,
+
+            "#c62828"
+
+        );
+
+        return;
+
+    }
+
+    await renderBadges();
+
+}
+
+/* =========================================================
+
+   STATISTIQUES
+
+========================================================= */
+
+async function renderStatistics(){
+
+    const tables = [
+
+        "profiles",
+
+        "seller_requests",
+
+        "products",
+
+        "orders",
+
+        "order_items",
+
+        "reviews",
+
+        "problems",
+
+        "shops",
+
+        "favorites",
+
+        "notifications",
+
+        "user_badges"
+
+    ];
+
+    const results = {};
+
+    for(const table of tables){
+
+        const {
+
+            count,
+
+            error
+
+        } =
+
+        await supabaseClient
+
+            .from(table)
+
+            .select(
+
+                "id",
+
+                {
+
+                    count:"exact",
+
+                    head:true
+
+                }
+
+            );
+
+        results[table] =
+
+            error ? 0 : (count || 0);
+
+    }
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">📊 Statistiques</h1>
+
+        <p class="page-subtitle">
+
+            Indicateurs réels enregistrés dans Supabase.
+
+        </p>
+
+        <div class="stats-grid">
+
+            ${Object.entries(results).map(function(item){
+
+                const labels = {
+
+                    profiles:"Utilisateurs",
+
+                    seller_requests:"Demandes vendeurs",
+
+                    products:"Produits",
+
+                    orders:"Commandes",
+
+                    order_items:"Articles commandés",
+
+                    reviews:"Avis",
+
+                    problems:"Problèmes",
+
+                    shops:"Boutiques",
+
+                    favorites:"Favoris",
+
+                    notifications:"Notifications",
+
+                    user_badges:"Badges attribués"
+
+                };
+
+                return `
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+
+                            📊
+
+                        </div>
+
+                        <div class="stat-label">
+
+                            ${labels[item[0]] || item[0]}
+
+                        </div>
+
+                        <div class="stat-value">
+
+                            ${item[1]}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("")}
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+
+   PARAMÈTRES
+
+========================================================= */
+
+async function renderSettings(){
+
+    pageContent.innerHTML = `
+
+        <h1 class="page-title">⚙️ Paramètres</h1>
+
+        <p class="page-subtitle">
+
+            Informations et sécurité de l'administration.
+
+        </p>
+
+        <div class="section">
+
+            <div class="notice notice-info">
+
+                <strong>Compte administrateur</strong>
+
+                <br><br>
+
+                L'accès à cet espace est contrôlé par le champ
+
+                <strong>profiles.role</strong>.
+
+                <br><br>
+
+                Seul un utilisateur dont le rôle est
+
+                <strong>admin</strong>
+
+                peut accéder à cette page.
+
+            </div>
+
+            <div class="toolbar">
+
+                <button
+
+                    class="btn btn-primary"
+
+                    onclick="checkAdminAccess()"
+
+                >
+
+                    🔐 Vérifier mon accès
+
+                </button>
+
+                <button
+
+                    class="btn btn-secondary"
+
+                    onclick="loadSection('dashboard')"
+
+                >
+
+                    🏠 Retour au tableau de bord
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+
+   DÉCONNEXION
+
+========================================================= */
+
+document
+
+    .getElementById("logoutMenu")
+
+    .addEventListener(
+
+        "click",
+
+        async function(){
+
+            const button =
+
+                document.getElementById(
+
+                    "logoutMenu"
+
+                );
+
+            button.disabled = true;
+
+            button.innerHTML =
+
+                "⏳ Déconnexion...";
+
+            const {
+
+                error
+
+            } =
+
+            await supabaseClient
+
+                .auth
+
+                .signOut();
+
+            if(error){
+
+                console.error(error);
+
+                button.disabled = false;
+
+                button.innerHTML =
+
+                    "🚪 Déconnexion";
+
+                showMessage(
+
+                    "Impossible de vous déconnecter.",
+
+                    "#c62828"
+
+                );
+
+                return;
+
+            }
+
+            window.location.href =
+
+                "connexion.html";
+
+        }
+
+    );
+
+/* =========================================================
+
+   LANCEMENT
+
+========================================================= */
+
+checkAdminAccess();
+
+</script>
+
+</body>
+
+</html>
