@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Commande | Market Bouaké</title>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7f6;
+
+            color: #17221d;
+
+        }
+
+        header {
+
+            background: #075c3a;
+
+            color: white;
+
+            padding: 16px 20px;
+
+        }
+
+        .header-content {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+        }
+
+        .logo {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+        }
+
+        .back-button {
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+        }
+
+        main {
+
+            max-width: 1100px;
+
+            margin: 25px auto;
+
+            padding: 0 15px 40px;
+
+        }
+
+        h1 {
+
+            margin-bottom: 20px;
+
+            font-size: 27px;
+
+        }
+
+        .layout {
+
+            display: grid;
+
+            grid-template-columns: 1.5fr 1fr;
+
+            gap: 20px;
+
+        }
+
+        .card {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            margin-bottom: 20px;
+
+            box-shadow: 0 2px 10px rgba(0,0,0,.06);
+
+        }
+
+        .card h2 {
+
+            font-size: 19px;
+
+            margin-bottom: 18px;
+
+        }
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+
+        }
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+
+        }
+
+        .full {
+
+            grid-column: 1 / -1;
+
+        }
+
+        label {
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+        }
+
+        input,
+
+        select,
+
+        textarea {
+
+            width: 100%;
+
+            border: 1px solid #d5ddd9;
+
+            border-radius: 8px;
+
+            padding: 12px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            background: white;
+
+        }
+
+        input:focus,
+
+        select:focus,
+
+        textarea:focus {
+
+            border-color: #075c3a;
+
+        }
+
+        textarea {
+
+            min-height: 85px;
+
+            resize: vertical;
+
+        }
+
+        .seller-block {
+
+            border: 1px solid #e1e7e4;
+
+            border-radius: 10px;
+
+            padding: 15px;
+
+            margin-bottom: 15px;
+
+        }
+
+        .seller-title {
+
+            color: #075c3a;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+
+            font-size: 17px;
+
+        }
+
+        .product-line {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 10px 0;
+
+            border-bottom: 1px solid #edf0ef;
+
+            font-size: 14px;
+
+        }
+
+        .product-line:last-child {
+
+            border-bottom: none;
+
+        }
+
+        .product-name {
+
+            font-weight: 600;
+
+        }
+
+        .product-details {
+
+            color: #69746f;
+
+            margin-top: 4px;
+
+            font-size: 13px;
+
+        }
+
+        .seller-total {
+
+            margin-top: 12px;
+
+            padding-top: 12px;
+
+            border-top: 1px solid #e1e7e4;
+
+        }
+
+        .delivery-row,
+
+        .total-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 8px 0;
+
+        }
+
+        .total-row {
+
+            margin-top: 10px;
+
+            padding-top: 15px;
+
+            border-top: 2px solid #075c3a;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .delivery-info {
+
+            background: #f1f8f4;
+
+            border-radius: 8px;
+
+            padding: 10px;
+
+            margin-top: 10px;
+
+            font-size: 13px;
+
+            color: #345247;
+
+        }
+
+        .summary-empty {
+
+            color: #777;
+
+            text-align: center;
+
+            padding: 20px 5px;
+
+        }
+
+        .submit-button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 9px;
+
+            padding: 15px;
+
+            background: #075c3a;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 15px;
+
+        }
+
+        .submit-button:hover {
+
+            background: #064b30;
+
+        }
+
+        .submit-button:disabled {
+
+            background: #9aa9a2;
+
+            cursor: not-allowed;
+
+        }
+
+        .notice {
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 15px;
+
+            font-size: 14px;
+
+            display: none;
+
+        }
+
+        .notice.error {
+
+            display: block;
+
+            background: #fff0f0;
+
+            color: #a52626;
+
+            border: 1px solid #f0caca;
+
+        }
+
+        .notice.success {
+
+            display: block;
+
+            background: #eef9f2;
+
+            color: #17633d;
+
+            border: 1px solid #c8e8d3;
+
+        }
+
+        .loading {
+
+            text-align: center;
+
+            padding: 35px;
+
+            color: #65716b;
+
+        }
+
+        .login-message {
+
+            text-align: center;
+
+            padding: 35px 15px;
+
+        }
+
+        .login-message a {
+
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 11px 18px;
+
+            background: #075c3a;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+        }
+
+        .whatsapp-note {
+
+            background: #fff8e8;
+
+            border: 1px solid #f0dfad;
+
+            color: #70591c;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-top: 15px;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+        }
+
+        @media (max-width: 800px) {
+
+            .layout {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .full {
+
+                grid-column: auto;
+
+            }
+
+            h1 {
+
+                font-size: 23px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-content">
+
+        <div class="logo">🛒 Market Bouaké</div>
+
+        <a href="panier.html" class="back-button">
+
+            ← Retour au panier
+
+        </a>
+
+    </div>
+
+</header>
+
+<main>
+
+    <h1>Finaliser ma commande</h1>
+
+    <div id="notice" class="notice"></div>
+
+    <div id="page-loading" class="loading">
+
+        Chargement de votre commande...
+
+    </div>
+
+    <div id="login-required" class="card login-message" style="display:none;">
+
+        <h2>Connexion nécessaire</h2>
+
+        <p>
+
+            Vous devez être connecté pour finaliser votre commande.
+
+        </p>
+
+        <a href="connexion.html">
+
+            Se connecter
+
+        </a>
+
+    </div>
+
+    <form id="order-form" style="display:none;">
+
+        <div class="layout">
+
+            <section>
+
+                <div class="card">
+
+                    <h2>📍 Informations de livraison</h2>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="first-name">
+
+                                Prénom *
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                id="first-name"
+
+                                required
+
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="last-name">
+
+                                Nom *
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                id="last-name"
+
+                                required
+
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="phone">
+
+                                Téléphone WhatsApp *
+
+                            </label>
+
+                            <input
+
+                                type="tel"
+
+                                id="phone"
+
+                                placeholder="+225..."
+
+                                required
+
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="city">
+
+                                Ville *
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                id="city"
+
+                                value="Bouaké"
+
+                                required
+
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="district">
+
+                                Quartier *
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                id="district"
+
+                                placeholder="Ex : Air France"
+
+                                required
+
+                            >
+
+                        </div>
+
+                        <div class="form-group full">
+
+                            <label for="address">
+
+                                Adresse / lieu de livraison *
+
+                            </label>
+
+                            <textarea
+
+                                id="address"
+
+                                placeholder="Indiquez précisément le lieu de livraison..."
+
+                                required
+
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h2>🛍️ Votre commande</h2>
+
+                    <div id="order-products">
+
+                        <div class="loading">
+
+                            Chargement...
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <aside>
+
+                <div class="card">
+
+                    <h2>📋 Résumé</h2>
+
+                    <div id="order-summary">
+
+                        <div class="loading">
+
+                            Calcul...
+
+                        </div>
+
+                    </div>
+
+                    <div class="whatsapp-note">
+
+                        Après validation, la commande sera enregistrée
+
+                        sur Market Bouaké et un message WhatsApp préparé
+
+                        sera utilisé pour contacter le vendeur.
+
+                    </div>
+
+                    <button
+
+                        type="submit"
+
+                        id="submit-order"
+
+                        class="submit-button"
+
+                    >
+
+                        Je lance la commande
+
+                    </button>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </form>
+
+</main>
+
+<!--
+
+    IMPORTANT :
+
+    Ce fichier suppose que ton projet possède déjà un fichier
+
+    contenant l'initialisation Supabase.
+
+    Si ton fichier s'appelle autrement, modifie simplement
+
+    la ligne correspondante ci-dessous.
+
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- À adapter au nom réel de ton fichier de configuration Supabase -->
+
+<script src="js/supabase.js"></script>
+
+<script src="js/commande.js"></script>
+
+</body>
+
+</html>
