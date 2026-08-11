@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bien immobilier | Market Bouaké</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7f6;
+
+            color: #17211b;
+
+        }
+
+        header {
+
+            background: #0b6b43;
+
+            color: white;
+
+            padding: 13px 16px;
+
+        }
+
+        .header-inner {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .logo {
+
+            width: 40px;
+
+            height: 40px;
+
+            border-radius: 11px;
+
+            background: white;
+
+            color: #0b6b43;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+        }
+
+        .back {
+
+            background: white;
+
+            color: #0b6b43;
+
+            text-decoration: none;
+
+            padding: 10px 14px;
+
+            border-radius: 9px;
+
+            font-weight: bold;
+
+        }
+
+        main {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding: 20px 15px 45px;
+
+        }
+
+        .loading,
+
+        .error {
+
+            background: white;
+
+            padding: 30px 20px;
+
+            border-radius: 16px;
+
+            text-align: center;
+
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+
+        }
+
+        .error {
+
+            color: #b42318;
+
+        }
+
+        .property {
+
+            display: none;
+
+        }
+
+        .property-card {
+
+            background: white;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+
+        }
+
+        .gallery {
+
+            background: #e9eeeb;
+
+            position: relative;
+
+        }
+
+        .main-image {
+
+            width: 100%;
+
+            height: 480px;
+
+            object-fit: cover;
+
+            display: block;
+
+        }
+
+        .gallery-empty {
+
+            height: 480px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 70px;
+
+        }
+
+        .content {
+
+            padding: 24px;
+
+        }
+
+        .badge {
+
+            display: inline-block;
+
+            background: #eaf6f0;
+
+            color: #0b6b43;
+
+            padding: 7px 11px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+
+        }
+
+        h1 {
+
+            margin: 0 0 12px;
+
+            font-size: 31px;
+
+            line-height: 1.2;
+
+        }
+
+        .price {
+
+            font-size: 24px;
+
+            font-weight: bold;
+
+            color: #0b6b43;
+
+            margin-bottom: 18px;
+
+        }
+
+        .location {
+
+            background: #f5f7f6;
+
+            border-radius: 12px;
+
+            padding: 13px 15px;
+
+            margin-bottom: 20px;
+
+        }
+
+        .location strong {
+
+            display: block;
+
+            font-size: 13px;
+
+            color: #68756f;
+
+            margin-bottom: 4px;
+
+        }
+
+        .description {
+
+            color: #59665f;
+
+            line-height: 1.7;
+
+            white-space: pre-line;
+
+            margin-bottom: 25px;
+
+        }
+
+        .details {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 10px;
+
+            margin-bottom: 25px;
+
+        }
+
+        .detail {
+
+            background: #f5f7f6;
+
+            border-radius: 12px;
+
+            padding: 13px;
+
+        }
+
+        .detail strong {
+
+            display: block;
+
+            font-size: 12px;
+
+            color: #68756f;
+
+            margin-bottom: 5px;
+
+        }
+
+        .seller {
+
+            border-top: 1px solid #e5e9e7;
+
+            padding-top: 20px;
+
+            margin-top: 10px;
+
+            margin-bottom: 22px;
+
+        }
+
+        .seller-title {
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+
+        }
+
+        .seller-box {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            background: #f5f7f6;
+
+            padding: 13px;
+
+            border-radius: 13px;
+
+        }
+
+        .seller-photo {
+
+            width: 55px;
+
+            height: 55px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            background: #dfe7e3;
+
+        }
+
+        .seller-name {
+
+            font-weight: bold;
+
+            margin-bottom: 4px;
+
+        }
+
+        .seller-location {
+
+            color: #68756f;
+
+            font-size: 13px;
+
+        }
+
+        .actions {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+
+        }
+
+        .action {
+
+            border: none;
+
+            border-radius: 11px;
+
+            padding: 14px 16px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            text-align: center;
+
+            text-decoration: none;
+
+        }
+
+        .whatsapp {
+
+            background: #168c4a;
+
+            color: white;
+
+        }
+
+        .interest {
+
+            background: #f0a500;
+
+            color: white;
+
+        }
+
+        .home-button {
+
+            display: block;
+
+            margin-top: 12px;
+
+            background: #e9eeeb;
+
+            color: #17211b;
+
+        }
+
+        .message {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            background: #eaf6f0;
+
+            color: #0b6b43;
+
+            text-align: center;
+
+            font-weight: bold;
+
+        }
+
+        footer {
+
+            text-align: center;
+
+            padding: 25px 15px;
+
+            color: #69756f;
+
+            font-size: 14px;
+
+        }
+
+        @media (max-width: 700px) {
+
+            .brand {
+
+                font-size: 17px;
+
+            }
+
+            .logo {
+
+                width: 36px;
+
+                height: 36px;
+
+                font-size: 20px;
+
+            }
+
+            .back {
+
+                padding: 9px 11px;
+
+                font-size: 13px;
+
+            }
+
+            main {
+
+                padding: 12px 10px 30px;
+
+            }
+
+            .property-card {
+
+                border-radius: 16px;
+
+            }
+
+            .main-image {
+
+                height: 260px;
+
+            }
+
+            .gallery-empty {
+
+                height: 260px;
+
+            }
+
+            .content {
+
+                padding: 18px;
+
+            }
+
+            h1 {
+
+                font-size: 25px;
+
+            }
+
+            .price {
+
+                font-size: 21px;
+
+            }
+
+            .details {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .actions {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-inner">
+
+        <div class="brand">
+
+            <div class="logo">🛒</div>
+
+            <span>Market Bouaké</span>
+
+        </div>
+
+        <a href="index.html" class="back">
+
+            ← Accueil
+
+        </a>
+
+    </div>
+
+</header>
+
+<main>
+
+    <div id="loading" class="loading">
+
+        🏠 Chargement du bien immobilier...
+
+    </div>
+
+    <div id="error" class="error" style="display:none;">
+
+        <strong>Bien immobilier introuvable</strong>
+
+        <p id="error-message">
+
+            Ce bien n'existe pas ou n'est plus disponible.
+
+        </p>
+
+        <a
+
+            href="index.html"
+
+            class="action home-button"
+
+        >
+
+            Retour à l'accueil
+
+        </a>
+
+    </div>
+
+    <section id="property" class="property">
+
+        <article class="property-card">
+
+            <div class="gallery">
+
+                <img
+
+                    id="main-image"
+
+                    class="main-image"
+
+                    src=""
+
+                    alt="Bien immobilier"
+
+                >
+
+                <div
+
+                    id="gallery-empty"
+
+                    class="gallery-empty"
+
+                    style="display:none;"
+
+                >
+
+                    🏠
+
+                </div>
+
+            </div>
+
+            <div class="content">
+
+                <span
+
+                    id="category"
+
+                    class="badge"
+
+                >
+
+                    🏠 Immobilier
+
+                </span>
+
+                <h1 id="title">
+
+                    Bien immobilier
+
+                </h1>
+
+                <div
+
+                    id="price"
+
+                    class="price"
+
+                >
+
+                    Prix sur demande
+
+                </div>
+
+                <div class="location">
+
+                    <strong>
+
+                        📍 Localisation
+
+                    </strong>
+
+                    <span id="location">
+
+                        Bouaké
+
+                    </span>
+
+                </div>
+
+                <div
+
+                    id="description"
+
+                    class="description"
+
+                ></div>
+
+                <div
+
+                    id="details"
+
+                    class="details"
+
+                ></div>
+
+                <section class="seller">
+
+                    <div class="seller-title">
+
+                        👤 Vendeur
+
+                    </div>
+
+                    <div class="seller-box">
+
+                        <img
+
+                            id="seller-photo"
+
+                            class="seller-photo"
+
+                            src=""
+
+                            alt="Vendeur"
+
+                        >
+
+                        <div>
+
+                            <div
+
+                                id="seller-name"
+
+                                class="seller-name"
+
+                            >
+
+                                Vendeur Market Bouaké
+
+                            </div>
+
+                            <div
+
+                                id="seller-location"
+
+                                class="seller-location"
+
+                            >
+
+                                Bouaké
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <div class="actions">
+
+                    <button
+
+                        id="whatsapp-button"
+
+                        class="action whatsapp"
+
+                        type="button"
+
+                    >
+
+                        📱 Contacter sur WhatsApp
+
+                    </button>
+
+                    <button
+
+                        id="interest-button"
+
+                        class="action interest"
+
+                        type="button"
+
+                    >
+
+                        🟠 Je suis intéressé
+
+                    </button>
+
+                </div>
+
+                <div
+
+                    id="success-message"
+
+                    class="message"
+
+                >
+
+                    Votre demande a été envoyée au vendeur.
+
+                </div>
+
+                <a
+
+                    href="index.html"
+
+                    class="action home-button"
+
+                >
+
+                    ← Retour aux annonces
+
+                </a>
+
+            </div>
+
+        </article>
+
+    </section>
+
+</main>
+
+<footer>
+
+    Market Bouaké — Marketplace locale de Bouaké
+
+</footer>
+
+<script>
+
+    /* =====================================================
+
+       SUPABASE
+
+       ===================================================== */
+
+    const SUPABASE_URL =
+
+        "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+
+        "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+    const supabaseClient =
+
+        window.supabase.createClient(
+
+            SUPABASE_URL,
+
+            SUPABASE_PUBLISHABLE_KEY
+
+        );
+
+    /* =====================================================
+
+       ÉLÉMENTS
+
+       ===================================================== */
+
+    const loading =
+
+        document.getElementById("loading");
+
+    const errorBox =
+
+        document.getElementById("error");
+
+    const errorMessage =
+
+        document.getElementById("error-message");
+
+    const property =
+
+        document.getElementById("property");
+
+    const mainImage =
+
+        document.getElementById("main-image");
+
+    const galleryEmpty =
+
+        document.getElementById("gallery-empty");
+
+    const category =
+
+        document.getElementById("category");
+
+    const title =
+
+        document.getElementById("title");
+
+    const price =
+
+        document.getElementById("price");
+
+    const locationElement =
+
+        document.getElementById("location");
+
+    const description =
+
+        document.getElementById("description");
+
+    const details =
+
+        document.getElementById("details");
+
+    const sellerPhoto =
+
+        document.getElementById("seller-photo");
+
+    const sellerName =
+
+        document.getElementById("seller-name");
+
+    const sellerLocation =
+
+        document.getElementById("seller-location");
+
+    const whatsappButton =
+
+        document.getElementById("whatsapp-button");
+
+    const interestButton =
+
+        document.getElementById("interest-button");
+
+    const successMessage =
+
+        document.getElementById("success-message");
+
+    /* =====================================================
+
+       UTILITAIRES
+
+       ===================================================== */
+
+    function formatPrice(value) {
+
+        if (
+
+            value === null ||
+
+            value === undefined ||
+
+            value === ""
+
+        ) {
+
+            return "Prix sur demande";
+
+        }
+
+        const number =
+
+            Number(value);
+
+        if (Number.isNaN(number)) {
+
+            return value + " FCFA";
+
+        }
+
+        return new Intl.NumberFormat(
+
+            "fr-FR"
+
+        ).format(number) + " FCFA";
+
+    }
+
+    function showError(message) {
+
+        loading.style.display =
+
+            "none";
+
+        property.style.display =
+
+            "none";
+
+        errorBox.style.display =
+
+            "block";
+
+        errorMessage.textContent =
+
+            message ||
+
+            "Ce bien n'est plus disponible.";
+
+    }
+
+    function addDetail(
+
+        label,
+
+        value,
+
+        icon
+
+    ) {
+
+        if (
+
+            value === null ||
+
+            value === undefined ||
+
+            value === ""
+
+        ) {
+
+            return;
+
+        }
+
+        const element =
+
+            document.createElement("div");
+
+        element.className =
+
+            "detail";
+
+        element.innerHTML = `
+
+            <strong>
+
+                ${icon} ${label}
+
+            </strong>
+
+            <span>
+
+                ${String(value)}
+
+            </span>
+
+        `;
+
+        details.appendChild(
+
+            element
+
+        );
+
+    }
+
+    function normalizePhone(phone) {
+
+        if (!phone) {
+
+            return null;
+
+        }
+
+        let value =
+
+            String(phone)
+
+                .replace(/[^\d+]/g, "");
+
+        if (
+
+            value.startsWith("0") &&
+
+            !value.startsWith("+")
+
+        ) {
+
+            value =
+
+                "+225" +
+
+                value.substring(1);
+
+        }
+
+        return value.replace(
+
+            "+",
+
+            ""
+
+        );
+
+    }
+
+    /* =====================================================
+
+       CHARGEMENT DU BIEN
+
+       ===================================================== */
+
+    async function loadProperty() {
+
+        const params =
+
+            new URLSearchParams(
+
+                window.location.search
+
+            );
+
+        const productId =
+
+            params.get("id");
+
+        if (!productId) {
+
+            showError(
+
+                "Aucun bien immobilier n'a été sélectionné."
+
+            );
+
+            return;
+
+        }
+
+        try {
+
+            const {
+
+                data: product,
+
+                error
+
+            } =
+
+                await supabaseClient
+
+                    .from("products")
+
+                    .select("*")
+
+                    .eq("id", productId)
+
+                    .eq("is_active", true)
+
+                    .maybeSingle();
+
+            if (error) {
+
+                console.error(
+
+                    "Erreur Supabase :",
+
+                    error
+
+                );
+
+                showError(
+
+                    "Impossible de charger ce bien pour le moment."
+
+                );
+
+                return;
+
+            }
+
+            if (!product) {
+
+                showError(
+
+                    "Ce bien immobilier n'existe pas ou n'est plus disponible."
+
+                );
+
+                return;
+
+            }
+
+            /*
+
+             * Vérification catégorie.
+
+             */
+
+            const categoryText =
+
+                (
+
+                    product.categorie_principale ||
+
+                    product.category_name ||
+
+                    product.category ||
+
+                    ""
+
+                ).toLowerCase();
+
+            const subcategoryText =
+
+                (
+
+                    product.subcategory_name ||
+
+                    product.sous_categorie ||
+
+                    product.subcategory ||
+
+                    ""
+
+                ).toLowerCase();
+
+            const isProperty =
+
+                categoryText.includes(
+
+                    "immobilier"
+
+                ) ||
+
+                subcategoryText.includes(
+
+                    "maison"
+
+                ) ||
+
+                subcategoryText.includes(
+
+                    "appartement"
+
+                ) ||
+
+                subcategoryText.includes(
+
+                    "résidence"
+
+                ) ||
+
+                subcategoryText.includes(
+
+                    "studio"
+
+                );
+
+            if (!isProperty) {
+
+                showError(
+
+                    "Ce contenu n'est pas un bien immobilier."
+
+                );
+
+                return;
+
+            }
+
+            /* =================================================
+
+               INFORMATIONS PRINCIPALES
+
+               ================================================= */
+
+            const productName =
+
+                product.name ||
+
+                product.product_name ||
+
+                product.title ||
+
+                "Bien immobilier";
+
+            title.textContent =
+
+                productName;
+
+            price.textContent =
+
+                formatPrice(
+
+                    product.price
+
+                );
+
+            category.textContent =
+
+                "🏠 " +
+
+                (
+
+                    product.subcategory_name ||
+
+                    product.sous_categorie ||
+
+                    product.category_name ||
+
+                    "Immobilier & Résidence"
+
+                );
+
+            locationElement.textContent =
+
+                product.location ||
+
+                product.district ||
+
+                product.city ||
+
+                "Bouaké";
+
+            description.textContent =
+
+                product.description ||
+
+                "Aucune description disponible pour ce bien.";
+
+            /* =================================================
+
+               DÉTAILS
+
+               ================================================= */
+
+            details.innerHTML = "";
+
+            addDetail(
+
+                "Type de bien",
+
+                product.subcategory_name ||
+
+                product.sous_categorie ||
+
+                product.category_name,
+
+                "🏠"
+
+            );
+
+            addDetail(
+
+                "Ville",
+
+                product.city ||
+
+                "Bouaké",
+
+                "📍"
+
+            );
+
+            addDetail(
+
+                "Quartier",
+
+                product.district ||
+
+                product.neighborhood,
+
+                "📌"
+
+            );
+
+            addDetail(
+
+                "Nombre de pièces",
+
+                product.rooms ||
+
+                product.number_of_rooms ||
+
+                product.pieces,
+
+                "🚪"
+
+            );
+
+            addDetail(
+
+                "Chambres",
+
+                product.bedrooms ||
+
+                product.number_of_bedrooms,
+
+                "🛏️"
+
+            );
+
+            addDetail(
+
+                "Salles de bain",
+
+                product.bathrooms ||
+
+                product.number_of_bathrooms,
+
+                "🚿"
+
+            );
+
+            addDetail(
+
+                "Surface",
+
+                product.surface
+
+                    ? product.surface + " m²"
+
+                    : null,
+
+                "📐"
+
+            );
+
+            /* =================================================
+
+               IMAGE
+
+               ================================================= */
+
+            const imageUrl =
+
+                product.image_url ||
+
+                product.main_image_url ||
+
+                product.photo_url ||
+
+                (
+
+                    Array.isArray(product.images) &&
+
+                    product.images.length
+
+                        ? product.images[0]
+
+                        : null
+
+                );
+
+            if (imageUrl) {
+
+                mainImage.src =
+
+                    imageUrl;
+
+                mainImage.alt =
+
+                    productName;
+
+                mainImage.style.display =
+
+                    "block";
+
+                galleryEmpty.style.display =
+
+                    "none";
+
+            } else {
+
+                mainImage.style.display =
+
+                    "none";
+
+                galleryEmpty.style.display =
+
+                    "flex";
+
+            }
+
+            /* =================================================
+
+               VENDEUR
+
+               ================================================= */
+
+            sellerName.textContent =
+
+                product.shop_name ||
+
+                product.seller_name ||
+
+                "Vendeur Market Bouaké";
+
+            sellerLocation.textContent =
+
+                product.seller_city ||
+
+                product.city ||
+
+                "Bouaké";
+
+            if (
+
+                product.profile_photo_url ||
+
+                product.seller_photo_url
+
+            ) {
+
+                sellerPhoto.src =
+
+                    product.profile_photo_url ||
+
+                    product.seller_photo_url;
+
+            } else {
+
+                sellerPhoto.style.display =
+
+                    "none";
+
+            }
+
+            /* =================================================
+
+               WHATSAPP
+
+               ================================================= */
+
+            const phone =
+
+                normalizePhone(
+
+                    product.seller_phone ||
+
+                    product.whatsapp_phone ||
+
+                    product.contact_phone ||
+
+                    product.phone
+
+                );
+
+            if (phone) {
+
+                const message =
+
+                    "Bonjour, je viens de voir votre bien sur Market Bouaké. Je suis intéressé par : " +
+
+                    productName +
+
+                    ". Je souhaite avoir plus d'informations.";
+
+                whatsappButton.onclick =
+
+                    function () {
+
+                        const url =
+
+                            "https://wa.me/" +
+
+                            phone +
+
+                            "?text=" +
+
+                            encodeURIComponent(
+
+                                message
+
+                            );
+
+                        window.open(
+
+                            url,
+
+                            "_blank",
+
+                            "noopener,noreferrer"
+
+                        );
+
+                    };
+
+            } else {
+
+                whatsappButton.onclick =
+
+                    function () {
+
+                        alert(
+
+                            "Le numéro WhatsApp du vendeur n'est pas encore disponible."
+
+                        );
+
+                    };
+
+            }
+
+            /* =================================================
+
+               JE SUIS INTÉRESSÉ
+
+               ================================================= */
+
+            interestButton.onclick =
+
+                async function () {
+
+                    interestButton.disabled =
+
+                        true;
+
+                    interestButton.textContent =
+
+                        "Envoi en cours...";
+
+                    try {
+
+                        const {
+
+                            data: {
+
+                                user
+
+                            } = {}
+
+                        } =
+
+                            await supabaseClient
+
+                                .auth
+
+                                .getUser();
+
+                        if (!user) {
+
+                            const redirect =
+
+                                window.location.href;
+
+                            window.location.href =
+
+                                "connexion.html?redirect=" +
+
+                                encodeURIComponent(
+
+                                    redirect
+
+                                );
+
+                            return;
+
+                        }
+
+                        const sellerId =
+
+                            product.seller_id ||
+
+                            product.sellerId ||
+
+                            product.vendor_id;
+
+                        if (!sellerId) {
+
+                            alert(
+
+                                "Le vendeur de ce bien n'est pas correctement associé."
+
+                            );
+
+                            return;
+
+                        }
+
+                        const {
+
+                            error: insertError
+
+                        } =
+
+                            await supabaseClient
+
+                                .from(
+
+                                    "property_interest_requests"
+
+                                )
+
+                                .insert({
+
+                                    buyer_id:
+
+                                        user.id,
+
+                                    seller_id:
+
+                                        sellerId,
+
+                                    product_id:
+
+                                        product.id,
+
+                                    message:
+
+                                        "Bonjour, je suis intéressé par ce bien immobilier : " +
+
+                                        productName,
+
+                                    status:
+
+                                        "pending"
+
+                                });
+
+                        if (insertError) {
+
+                            console.error(
+
+                                "Erreur demande :",
+
+                                insertError
+
+                            );
+
+                            alert(
+
+                                "Impossible d'envoyer la demande pour le moment."
+
+                            );
+
+                            return;
+
+                        }
+
+                        successMessage.style.display =
+
+                            "block";
+
+                        interestButton.textContent =
+
+                            "✓ Demande envoyée";
+
+                        /*
+
+                         * WhatsApp après enregistrement.
+
+                         */
+
+                        if (phone) {
+
+                            const message =
+
+                                "Bonjour, je viens de vous contacter via Market Bouaké. Je suis intéressé par votre bien : " +
+
+                                productName +
+
+                                ". Ma demande a été envoyée sur Market Bouaké.";
+
+                            const whatsappUrl =
+
+                                "https://wa.me/" +
+
+                                phone +
+
+                                "?text=" +
+
+                                encodeURIComponent(
+
+                                    message
+
+                                );
+
+                            window.open(
+
+                                whatsappUrl,
+
+                                "_blank",
+
+                                "noopener,noreferrer"
+
+                            );
+
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+
+                            "Erreur inattendue :",
+
+                            error
+
+                        );
+
+                        alert(
+
+                            "Une erreur est survenue."
+
+                        );
+
+                    } finally {
+
+                        if (
+
+                            interestButton.textContent ===
+
+                            "Envoi en cours..."
+
+                        ) {
+
+                            interestButton.disabled =
+
+                                false;
+
+                            interestButton.textContent =
+
+                                "🟠 Je suis intéressé";
+
+                        }
+
+                    }
+
+                };
+
+            /* =================================================
+
+               AFFICHAGE
+
+               ================================================= */
+
+            loading.style.display =
+
+                "none";
+
+            errorBox.style.display =
+
+                "none";
+
+            property.style.display =
+
+                "block";
+
+        } catch (error) {
+
+            console.error(
+
+                "Erreur inattendue :",
+
+                error
+
+            );
+
+            showError(
+
+                "Une erreur est survenue lors du chargement."
+
+            );
+
+        }
+
+    }
+
+    /* =====================================================
+
+       DÉMARRAGE
+
+       ===================================================== */
+
+    loadProperty();
+
+</script>
+
+</body>
+
+</html>
