@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Publicité | Market Bouaké</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7f6;
+
+            color: #17211b;
+
+        }
+
+        header {
+
+            background: #0b6b43;
+
+            color: white;
+
+            padding: 14px 18px;
+
+        }
+
+        .header-content {
+
+            max-width: 900px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .logo {
+
+            width: 40px;
+
+            height: 40px;
+
+            border-radius: 11px;
+
+            background: white;
+
+            color: #0b6b43;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+        }
+
+        .back-button {
+
+            background: white;
+
+            color: #0b6b43;
+
+            text-decoration: none;
+
+            padding: 10px 14px;
+
+            border-radius: 9px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+
+        }
+
+        main {
+
+            max-width: 900px;
+
+            margin: auto;
+
+            padding: 22px 15px 40px;
+
+        }
+
+        .loading,
+
+        .error-box {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 30px 20px;
+
+            text-align: center;
+
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+
+        }
+
+        .error-box {
+
+            color: #b42318;
+
+        }
+
+        .advertisement {
+
+            display: none;
+
+        }
+
+        .advertisement-card {
+
+            background: white;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+
+        }
+
+        .advertisement-image {
+
+            width: 100%;
+
+            display: block;
+
+            max-height: 520px;
+
+            object-fit: cover;
+
+            background: #e9eeeb;
+
+        }
+
+        .content {
+
+            padding: 22px;
+
+        }
+
+        .type-badge {
+
+            display: inline-block;
+
+            background: #eaf6f0;
+
+            color: #0b6b43;
+
+            padding: 7px 11px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+
+        }
+
+        h1 {
+
+            margin: 0 0 15px;
+
+            font-size: 30px;
+
+            line-height: 1.2;
+
+        }
+
+        .description {
+
+            color: #59665f;
+
+            line-height: 1.6;
+
+            white-space: pre-line;
+
+            margin-bottom: 22px;
+
+        }
+
+        .information {
+
+            display: grid;
+
+            gap: 10px;
+
+            margin-bottom: 22px;
+
+        }
+
+        .info {
+
+            background: #f5f7f6;
+
+            border-radius: 12px;
+
+            padding: 13px 14px;
+
+        }
+
+        .info strong {
+
+            display: block;
+
+            margin-bottom: 4px;
+
+            font-size: 13px;
+
+            color: #68756f;
+
+        }
+
+        .actions {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+        }
+
+        .action {
+
+            flex: 1 1 180px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 13px 16px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+        }
+
+        .primary {
+
+            background: #0b6b43;
+
+            color: white;
+
+        }
+
+        .secondary {
+
+            background: #f0a500;
+
+            color: white;
+
+        }
+
+        .neutral {
+
+            background: #e9eeeb;
+
+            color: #17211b;
+
+        }
+
+        .contact-section {
+
+            margin-top: 25px;
+
+            background: #fff;
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+
+            text-align: center;
+
+        }
+
+        .contact-section h2 {
+
+            margin-top: 0;
+
+            font-size: 20px;
+
+        }
+
+        .contact-section p {
+
+            color: #68756f;
+
+            line-height: 1.5;
+
+        }
+
+        footer {
+
+            text-align: center;
+
+            padding: 25px 15px;
+
+            color: #69756f;
+
+            font-size: 14px;
+
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+
+                padding: 12px 14px;
+
+            }
+
+            .brand {
+
+                font-size: 17px;
+
+            }
+
+            .logo {
+
+                width: 36px;
+
+                height: 36px;
+
+                font-size: 20px;
+
+            }
+
+            .back-button {
+
+                padding: 9px 11px;
+
+                font-size: 13px;
+
+            }
+
+            main {
+
+                padding: 15px 10px 30px;
+
+            }
+
+            .advertisement-card {
+
+                border-radius: 16px;
+
+            }
+
+            .advertisement-image {
+
+                max-height: 400px;
+
+            }
+
+            .content {
+
+                padding: 18px;
+
+            }
+
+            h1 {
+
+                font-size: 25px;
+
+            }
+
+            .action {
+
+                flex-basis: 100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-content">
+
+        <div class="brand">
+
+            <div class="logo">🛒</div>
+
+            <span>Market Bouaké</span>
+
+        </div>
+
+        <a href="index.html" class="back-button">
+
+            ← Accueil
+
+        </a>
+
+    </div>
+
+</header>
+
+<main>
+
+    <div id="loading" class="loading">
+
+        Chargement de la publicité...
+
+    </div>
+
+    <div id="error" class="error-box" style="display:none;">
+
+        <strong>Publicité introuvable</strong>
+
+        <p>
+
+            Cette publicité n'existe pas, n'est plus disponible
+
+            ou sa période d'affichage est terminée.
+
+        </p>
+
+        <a href="index.html" class="action primary">
+
+            Retour à l'accueil
+
+        </a>
+
+    </div>
+
+    <section id="advertisement" class="advertisement">
+
+        <article class="advertisement-card">
+
+            <img
+
+                id="advertisement-image"
+
+                class="advertisement-image"
+
+                src=""
+
+                alt="Publicité Market Bouaké"
+
+            >
+
+            <div class="content">
+
+                <span id="advertisement-type" class="type-badge">
+
+                    📢 Publicité
+
+                </span>
+
+                <h1 id="advertisement-title"></h1>
+
+                <div
+
+                    id="advertisement-description"
+
+                    class="description"
+
+                ></div>
+
+                <div
+
+                    id="information"
+
+                    class="information"
+
+                ></div>
+
+                <div
+
+                    id="actions"
+
+                    class="actions"
+
+                ></div>
+
+            </div>
+
+        </article>
+
+        <section class="contact-section">
+
+            <h2>
+
+                📢 Vous souhaitez faire de la publicité ?
+
+            </h2>
+
+            <p>
+
+                Vous souhaitez promouvoir votre événement,
+
+                entreprise, activité ou annonce sur
+
+                Market Bouaké ?
+
+            </p>
+
+            <a
+
+                id="market-contact"
+
+                class="action primary"
+
+                href="#"
+
+                target="_blank"
+
+                rel="noopener noreferrer"
+
+            >
+
+                📱 Nous contacter pour une publicité
+
+            </a>
+
+        </section>
+
+    </section>
+
+</main>
+
+<footer>
+
+    Market Bouaké — Marketplace locale de Bouaké
+
+</footer>
+
+<script>
+
+    const SUPABASE_URL =
+
+        "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+
+        "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+    const supabaseClient =
+
+        window.supabase.createClient(
+
+            SUPABASE_URL,
+
+            SUPABASE_PUBLISHABLE_KEY
+
+        );
+
+    const MARKET_BOUAKE_WHATSAPP = "";
+
+    const loading =
+
+        document.getElementById("loading");
+
+    const errorBox =
+
+        document.getElementById("error");
+
+    const advertisement =
+
+        document.getElementById("advertisement");
+
+    const image =
+
+        document.getElementById("advertisement-image");
+
+    const typeElement =
+
+        document.getElementById("advertisement-type");
+
+    const titleElement =
+
+        document.getElementById("advertisement-title");
+
+    const descriptionElement =
+
+        document.getElementById("advertisement-description");
+
+    const informationElement =
+
+        document.getElementById("information");
+
+    const actionsElement =
+
+        document.getElementById("actions");
+
+    const marketContact =
+
+        document.getElementById("market-contact");
+
+    function escapeHtml(value) {
+
+        if (value === null || value === undefined) {
+
+            return "";
+
+        }
+
+        return String(value)
+
+            .replace(/&/g, "&amp;")
+
+            .replace(/</g, "&lt;")
+
+            .replace(/>/g, "&gt;")
+
+            .replace(/"/g, "&quot;")
+
+            .replace(/'/g, "&#039;");
+
+    }
+
+    function formatDate(dateValue) {
+
+        if (!dateValue) {
+
+            return null;
+
+        }
+
+        const date =
+
+            new Date(dateValue + "T00:00:00");
+
+        if (Number.isNaN(date.getTime())) {
+
+            return dateValue;
+
+        }
+
+        return new Intl.DateTimeFormat(
+
+            "fr-FR",
+
+            {
+
+                day: "numeric",
+
+                month: "long",
+
+                year: "numeric"
+
+            }
+
+        ).format(date);
+
+    }
+
+    function formatTime(timeValue) {
+
+        if (!timeValue) {
+
+            return null;
+
+        }
+
+        const parts =
+
+            String(timeValue).split(":");
+
+        if (parts.length < 2) {
+
+            return timeValue;
+
+        }
+
+        return parts[0] + ":" + parts[1];
+
+    }
+
+    function showError(message) {
+
+        loading.style.display = "none";
+
+        advertisement.style.display = "none";
+
+        errorBox.style.display = "block";
+
+        const paragraph =
+
+            errorBox.querySelector("p");
+
+        if (paragraph && message) {
+
+            paragraph.textContent = message;
+
+        }
+
+    }
+
+    function addInformation(label, value, icon) {
+
+        if (!value) {
+
+            return;
+
+        }
+
+        const item =
+
+            document.createElement("div");
+
+        item.className = "info";
+
+        item.innerHTML = `
+
+            <strong>${escapeHtml(icon)} ${escapeHtml(label)}</strong>
+
+            <span>${escapeHtml(value)}</span>
+
+        `;
+
+        informationElement.appendChild(item);
+
+    }
+
+    function addAction(
+
+        label,
+
+        url,
+
+        className,
+
+        clickFunction
+
+    ) {
+
+        if (!url && !clickFunction) {
+
+            return;
+
+        }
+
+        const element =
+
+            document.createElement(
+
+                clickFunction ? "button" : "a"
+
+            );
+
+        element.className =
+
+            "action " + className;
+
+        element.textContent = label;
+
+        if (url) {
+
+            element.href = url;
+
+            element.target = "_blank";
+
+            element.rel =
+
+                "noopener noreferrer";
+
+        }
+
+        if (clickFunction) {
+
+            element.type = "button";
+
+            element.addEventListener(
+
+                "click",
+
+                clickFunction
+
+            );
+
+        }
+
+        actionsElement.appendChild(element);
+
+    }
+
+    async function registerClick(advertisementId) {
+
+        try {
+
+            const { error } =
+
+                await supabaseClient.rpc(
+
+                    "increment_advertisement_click",
+
+                    {
+
+                        advertisement_id:
+
+                            advertisementId
+
+                    }
+
+                );
+
+            if (error) {
+
+                console.warn(
+
+                    "Statistique de clic non enregistrée :",
+
+                    error.message
+
+                );
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+
+                "Erreur statistique :",
+
+                error
+
+            );
+
+        }
+
+    }
+
+    async function registerView(advertisementId) {
+
+        try {
+
+            const { error } =
+
+                await supabaseClient.rpc(
+
+                    "increment_advertisement_view",
+
+                    {
+
+                        advertisement_id:
+
+                            advertisementId
+
+                    }
+
+                );
+
+            if (error) {
+
+                console.warn(
+
+                    "Statistique de vue non enregistrée :",
+
+                    error.message
+
+                );
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+
+                "Erreur statistique :",
+
+                error
+
+            );
+
+        }
+
+    }
+
+    async function loadAdvertisement() {
+
+        const params =
+
+            new URLSearchParams(
+
+                window.location.search
+
+            );
+
+        const advertisementId =
+
+            params.get("id");
+
+        if (!advertisementId) {
+
+            showError(
+
+                "Aucune publicité n'a été sélectionnée."
+
+            );
+
+            return;
+
+        }
+
+        try {
+
+            const { data, error } =
+
+                await supabaseClient
+
+                    .from("advertisements")
+
+                    .select("*")
+
+                    .eq("id", advertisementId)
+
+                    .eq("is_active", true)
+
+                    .eq("show_on_home", true)
+
+                    .or(
+
+                        "start_at.is.null,start_at.lte." +
+
+                        new Date().toISOString()
+
+                    )
+
+                    .or(
+
+                        "end_at.is.null,end_at.gte." +
+
+                        new Date().toISOString()
+
+                    )
+
+                    .maybeSingle();
+
+            if (error) {
+
+                console.error(
+
+                    "Erreur Supabase :",
+
+                    error
+
+                );
+
+                showError(
+
+                    "Impossible de charger cette publicité pour le moment."
+
+                );
+
+                return;
+
+            }
+
+            if (!data) {
+
+                showError(
+
+                    "Cette publicité n'est plus disponible."
+
+                );
+
+                return;
+
+            }
+
+            image.src = data.image_url;
+
+            image.alt =
+
+                data.title ||
+
+                "Publicité Market Bouaké";
+
+            image.addEventListener(
+
+                "error",
+
+                function () {
+
+                    image.style.display = "none";
+
+                },
+
+                {
+
+                    once: true
+
+                }
+
+            );
+
+            titleElement.textContent =
+
+                data.title || "Publicité";
+
+            descriptionElement.textContent =
+
+                data.description || "";
+
+            const type =
+
+                data.advertisement_type;
+
+            if (type === "event") {
+
+                typeElement.textContent =
+
+                    "📅 Événement";
+
+            } else {
+
+                typeElement.textContent =
+
+                    "📢 Publicité";
+
+            }
+
+            addInformation(
+
+                "Date",
+
+                formatDate(data.event_date),
+
+                "📅"
+
+            );
+
+            addInformation(
+
+                "Heure",
+
+                formatTime(data.event_time),
+
+                "⏰"
+
+            );
+
+            addInformation(
+
+                "Lieu",
+
+                data.location,
+
+                "📍"
+
+            );
+
+            addInformation(
+
+                "Contact",
+
+                data.contact_phone,
+
+                "📞"
+
+            );
+
+            if (data.contact_phone) {
+
+                let phone =
+
+                    String(data.contact_phone)
+
+                        .replace(/[^\d+]/g, "");
+
+                if (
+
+                    phone.startsWith("0") &&
+
+                    !phone.startsWith("+")
+
+                ) {
+
+                    phone =
+
+                        "+225" +
+
+                        phone.substring(1);
+
+                }
+
+                const whatsappUrl =
+
+                    "https://wa.me/" +
+
+                    phone.replace("+", "") +
+
+                    "?text=" +
+
+                    encodeURIComponent(
+
+                        "Bonjour, je viens de voir votre publicité sur Market Bouaké et je souhaite avoir plus d'informations concernant : " +
+
+                        data.title
+
+                    );
+
+                addAction(
+
+                    "📱 Contacter",
+
+                    whatsappUrl,
+
+                    "primary",
+
+                    async function () {
+
+                        await registerClick(
+
+                            data.id
+
+                        );
+
+                        try {
+
+                            await supabaseClient.rpc(
+
+                                "increment_advertisement_contact",
+
+                                {
+
+                                    advertisement_id:
+
+                                        data.id
+
+                                }
+
+                            );
+
+                        } catch (error) {
+
+                            console.warn(
+
+                                "Statistique contact :",
+
+                                error
+
+                            );
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+            if (data.ticket_url) {
+
+                addAction(
+
+                    "🎟️ Acheter un ticket",
+
+                    data.ticket_url,
+
+                    "secondary",
+
+                    async function () {
+
+                        await registerClick(
+
+                            data.id
+
+                        );
+
+                        try {
+
+                            await supabaseClient.rpc(
+
+                                "increment_advertisement_ticket",
+
+                                {
+
+                                    advertisement_id:
+
+                                        data.id
+
+                                }
+
+                            );
+
+                        } catch (error) {
+
+                            console.warn(
+
+                                "Statistique ticket :",
+
+                                error
+
+                            );
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+            if (data.external_url) {
+
+                addAction(
+
+                    "🔗 " +
+
+                    (
+
+                        data.button_label ||
+
+                        "En savoir plus"
+
+                    ),
+
+                    data.external_url,
+
+                    "neutral",
+
+                    async function () {
+
+                        await registerClick(
+
+                            data.id
+
+                        );
+
+                        try {
+
+                            await supabaseClient.rpc(
+
+                                "increment_advertisement_external",
+
+                                {
+
+                                    advertisement_id:
+
+                                        data.id
+
+                                }
+
+                            );
+
+                        } catch (error) {
+
+                            console.warn(
+
+                                "Statistique lien externe :",
+
+                                error
+
+                            );
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+            if (MARKET_BOUAKE_WHATSAPP) {
+
+                const marketMessage =
+
+                    encodeURIComponent(
+
+                        "Bonjour Market Bouaké, je souhaite avoir des informations pour publier une publicité sur votre marketplace."
+
+                    );
+
+                marketContact.href =
+
+                    "https://wa.me/" +
+
+                    MARKET_BOUAKE_WHATSAPP +
+
+                    "?text=" +
+
+                    marketMessage;
+
+            } else {
+
+                marketContact.href =
+
+                    "https://wa.me/?text=" +
+
+                    encodeURIComponent(
+
+                        "Bonjour Market Bouaké, je souhaite avoir des informations pour publier une publicité sur votre marketplace."
+
+                    );
+
+            }
+
+            loading.style.display = "none";
+
+            errorBox.style.display = "none";
+
+            advertisement.style.display = "block";
+
+            await registerView(data.id);
+
+        } catch (error) {
+
+            console.error(
+
+                "Erreur inattendue :",
+
+                error
+
+            );
+
+            showError(
+
+                "Une erreur est survenue lors du chargement de la publicité."
+
+            );
+
+        }
+
+    }
+
+    loadAdvertisement();
+
+</script>
+
+</body>
+
+</html>
