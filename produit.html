@@ -1,0 +1,2977 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Produit | Market Bouaké</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7f6;
+
+            color: #17211b;
+
+        }
+
+        header {
+
+            background: #0b6b43;
+
+            color: white;
+
+            padding: 15px 20px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+        }
+
+        .header-container {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+        }
+
+        .logo {
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+        }
+
+        .header-actions {
+
+            display: flex;
+
+            gap: 10px;
+
+        }
+
+        .header-button {
+
+            border: none;
+
+            background: white;
+
+            color: #0b6b43;
+
+            padding: 9px 14px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+        }
+
+        main {
+
+            max-width: 1200px;
+
+            margin: 30px auto;
+
+            padding: 0 18px;
+
+        }
+
+        .back-button {
+
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+            color: #0b6b43;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+        }
+
+        .product-detail {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 20px;
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 30px;
+
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+
+        }
+
+        .gallery {
+
+            width: 100%;
+
+        }
+
+        .main-image-wrapper {
+
+            width: 100%;
+
+            aspect-ratio: 1 / 1;
+
+            background: #eef3f0;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+        }
+
+        .main-image {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+        }
+
+        .thumbnails {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 12px;
+
+            overflow-x: auto;
+
+        }
+
+        .thumbnail {
+
+            width: 75px;
+
+            height: 75px;
+
+            object-fit: cover;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            border: 2px solid transparent;
+
+        }
+
+        .thumbnail.active {
+
+            border-color: #0b6b43;
+
+        }
+
+        .product-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 14px;
+
+        }
+
+        .category {
+
+            color: #0b6b43;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+        }
+
+        .product-title {
+
+            font-size: 30px;
+
+            line-height: 1.2;
+
+        }
+
+        .product-price {
+
+            font-size: 26px;
+
+            font-weight: bold;
+
+            color: #0b6b43;
+
+        }
+
+        .product-description {
+
+            color: #58655f;
+
+            line-height: 1.6;
+
+            white-space: pre-line;
+
+        }
+
+        .product-meta {
+
+            background: #f5f7f6;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+        }
+
+        .meta-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 7px 0;
+
+            border-bottom: 1px solid #e0e6e2;
+
+        }
+
+        .meta-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+        .meta-label {
+
+            color: #68756f;
+
+        }
+
+        .meta-value {
+
+            font-weight: bold;
+
+            text-align: right;
+
+        }
+
+        .sizes-section {
+
+            display: none;
+
+        }
+
+        .sizes-section.visible {
+
+            display: block;
+
+        }
+
+        .sizes-title {
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+        }
+
+        .sizes {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+        }
+
+        .size-button {
+
+            background: white;
+
+            border: 1px solid #cbd5d0;
+
+            border-radius: 8px;
+
+            padding: 9px 13px;
+
+            cursor: pointer;
+
+        }
+
+        .size-button.selected {
+
+            background: #0b6b43;
+
+            color: white;
+
+            border-color: #0b6b43;
+
+        }
+
+        .quantity-section {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+        }
+
+        .quantity-button {
+
+            width: 38px;
+
+            height: 38px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #e9efec;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .quantity-value {
+
+            min-width: 30px;
+
+            text-align: center;
+
+            font-weight: bold;
+
+        }
+
+        .actions {
+
+            display: grid;
+
+            gap: 10px;
+
+            margin-top: 5px;
+
+        }
+
+        .action-button {
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 13px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+        }
+
+        .cart-button {
+
+            background: #0b6b43;
+
+            color: white;
+
+        }
+
+        .order-button {
+
+            background: #f0a500;
+
+            color: white;
+
+        }
+
+        .favorite-button {
+
+            background: #f1f3f2;
+
+            color: #17211b;
+
+        }
+
+        .contact-button {
+
+            background: #25d366;
+
+            color: white;
+
+        }
+
+        .seller-card {
+
+            background: #f5f7f6;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+        }
+
+        .seller-title {
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+        }
+
+        .seller-name {
+
+            color: #0b6b43;
+
+            font-weight: bold;
+
+        }
+
+        .property-section {
+
+            display: none;
+
+            background: #f5f7f6;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+        }
+
+        .property-section.visible {
+
+            display: block;
+
+        }
+
+        .property-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 10px;
+
+            margin-top: 10px;
+
+        }
+
+        .property-item {
+
+            background: white;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+        }
+
+        .loading,
+
+        .error {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 35px;
+
+            text-align: center;
+
+        }
+
+        .error {
+
+            color: #b42318;
+
+        }
+
+        .reviews-section {
+
+            margin-top: 25px;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 20px;
+
+        }
+
+        .reviews-title {
+
+            font-size: 22px;
+
+            margin-bottom: 15px;
+
+        }
+
+        .review {
+
+            border-bottom: 1px solid #e3e8e5;
+
+            padding: 12px 0;
+
+        }
+
+        .review:last-child {
+
+            border-bottom: none;
+
+        }
+
+        .review-name {
+
+            font-weight: bold;
+
+        }
+
+        .review-text {
+
+            margin-top: 5px;
+
+            color: #58655f;
+
+        }
+
+        @media (max-width: 750px) {
+
+            .product-detail {
+
+                grid-template-columns: 1fr;
+
+                padding: 13px;
+
+            }
+
+            .product-title {
+
+                font-size: 23px;
+
+            }
+
+            .product-price {
+
+                font-size: 22px;
+
+            }
+
+            .header-container {
+
+                flex-wrap: wrap;
+
+            }
+
+            main {
+
+                margin-top: 20px;
+
+                padding: 0 10px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-container">
+
+        <a href="index.html" class="logo">
+
+            🛒 Market Bouaké
+
+        </a>
+
+        <div class="header-actions">
+
+            <button
+
+                class="header-button"
+
+                onclick="window.location.href='panier.html'"
+
+            >
+
+                🛒 Panier
+
+            </button>
+
+            <button
+
+                class="header-button"
+
+                onclick="window.location.href='connexion.html'"
+
+            >
+
+                👤 Compte
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main>
+
+    <a href="javascript:history.back()" class="back-button">
+
+        ← Retour
+
+    </a>
+
+    <div id="loading" class="loading">
+
+        Chargement du produit...
+
+    </div>
+
+    <div id="error" class="error" style="display:none;">
+
+        Impossible de charger ce produit.
+
+    </div>
+
+    <section
+
+        id="product-detail"
+
+        class="product-detail"
+
+        style="display:none;"
+
+    >
+
+        <!-- GALERIE -->
+
+        <div class="gallery">
+
+            <div class="main-image-wrapper">
+
+                <img
+
+                    id="main-image"
+
+                    class="main-image"
+
+                    src=""
+
+                    alt="Produit"
+
+                >
+
+            </div>
+
+            <div
+
+                id="thumbnails"
+
+                class="thumbnails"
+
+            ></div>
+
+        </div>
+
+        <!-- INFORMATIONS -->
+
+        <div class="product-info">
+
+            <div
+
+                id="product-category"
+
+                class="category"
+
+            ></div>
+
+            <h1
+
+                id="product-name"
+
+                class="product-title"
+
+            ></h1>
+
+            <div
+
+                id="product-price"
+
+                class="product-price"
+
+            ></div>
+
+            <p
+
+                id="product-description"
+
+                class="product-description"
+
+            ></p>
+
+            <!-- INFORMATIONS STANDARD -->
+
+            <div class="product-meta">
+
+                <div class="meta-row">
+
+                    <span class="meta-label">
+
+                        Stock
+
+                    </span>
+
+                    <span
+
+                        id="product-stock"
+
+                        class="meta-value"
+
+                    >
+
+                    </span>
+
+                </div>
+
+                <div
+
+                    id="location-row"
+
+                    class="meta-row"
+
+                >
+
+                    <span class="meta-label">
+
+                        Localisation
+
+                    </span>
+
+                    <span
+
+                        id="product-location"
+
+                        class="meta-value"
+
+                    >
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- IMMOBILIER -->
+
+            <div
+
+                id="property-section"
+
+                class="property-section"
+
+            >
+
+                <strong>
+
+                    🏠 Informations immobilières
+
+                </strong>
+
+                <div
+
+                    id="property-grid"
+
+                    class="property-grid"
+
+                ></div>
+
+            </div>
+
+            <!-- TAILLES -->
+
+            <div
+
+                id="sizes-section"
+
+                class="sizes-section"
+
+            >
+
+                <div class="sizes-title">
+
+                    Taille
+
+                </div>
+
+                <div
+
+                    id="sizes"
+
+                    class="sizes"
+
+                ></div>
+
+            </div>
+
+            <!-- QUANTITÉ -->
+
+            <div
+
+                id="quantity-section"
+
+            >
+
+                <strong>
+
+                    Quantité
+
+                </strong>
+
+                <div class="quantity-section">
+
+                    <button
+
+                        type="button"
+
+                        class="quantity-button"
+
+                        id="quantity-minus"
+
+                    >
+
+                        −
+
+                    </button>
+
+                    <span
+
+                        id="quantity"
+
+                        class="quantity-value"
+
+                    >
+
+                        1
+
+                    </span>
+
+                    <button
+
+                        type="button"
+
+                        class="quantity-button"
+
+                        id="quantity-plus"
+
+                    >
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- VENDEUR -->
+
+            <div class="seller-card">
+
+                <div class="seller-title">
+
+                    Vendeur
+
+                </div>
+
+                <div
+
+                    id="seller-name"
+
+                    class="seller-name"
+
+                >
+
+                    Vendeur Market Bouaké
+
+                </div>
+
+            </div>
+
+            <!-- ACTIONS -->
+
+            <div class="actions">
+
+                <button
+
+                    type="button"
+
+                    id="add-cart-button"
+
+                    class="action-button cart-button"
+
+                >
+
+                    🛒 Ajouter au panier
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="order-button"
+
+                    class="action-button order-button"
+
+                >
+
+                    Commander maintenant
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="favorite-button"
+
+                    class="action-button favorite-button"
+
+                >
+
+                    ♡ Ajouter aux favoris
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="contact-button"
+
+                    class="action-button contact-button"
+
+                >
+
+                    Contacter le vendeur
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- AVIS -->
+
+    <section
+
+        id="reviews-section"
+
+        class="reviews-section"
+
+        style="display:none;"
+
+    >
+
+        <h2 class="reviews-title">
+
+            Avis sur ce produit
+
+        </h2>
+
+        <div id="reviews-container"></div>
+
+    </section>
+
+</main>
+
+<script>
+
+    /* =========================================================
+
+       CONFIGURATION SUPABASE
+
+       ========================================================= */
+
+    const SUPABASE_URL =
+
+        "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+
+        "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+    const supabase =
+
+        window.supabase.createClient(
+
+            SUPABASE_URL,
+
+            SUPABASE_PUBLISHABLE_KEY
+
+        );
+
+    /* =========================================================
+
+       VARIABLES
+
+       ========================================================= */
+
+    const params =
+
+        new URLSearchParams(
+
+            window.location.search
+
+        );
+
+    const productId =
+
+        params.get("id");
+
+    let currentProduct = null;
+
+    let selectedSize = null;
+
+    let quantity = 1;
+
+    /* =========================================================
+
+       ÉLÉMENTS
+
+       ========================================================= */
+
+    const loading =
+
+        document.getElementById("loading");
+
+    const errorBox =
+
+        document.getElementById("error");
+
+    const detail =
+
+        document.getElementById("product-detail");
+
+    const mainImage =
+
+        document.getElementById("main-image");
+
+    const thumbnails =
+
+        document.getElementById("thumbnails");
+
+    const productName =
+
+        document.getElementById("product-name");
+
+    const productPrice =
+
+        document.getElementById("product-price");
+
+    const productDescription =
+
+        document.getElementById("product-description");
+
+    const productCategory =
+
+        document.getElementById("product-category");
+
+    const productStock =
+
+        document.getElementById("product-stock");
+
+    const productLocation =
+
+        document.getElementById("product-location");
+
+    const sellerName =
+
+        document.getElementById("seller-name");
+
+    const quantityElement =
+
+        document.getElementById("quantity");
+
+    /* =========================================================
+
+       ÉCHAPPEMENT HTML
+
+       ========================================================= */
+
+    function escapeHtml(value) {
+
+        if (
+
+            value === null ||
+
+            value === undefined
+
+        ) {
+
+            return "";
+
+        }
+
+        return String(value)
+
+            .replace(/&/g, "&amp;")
+
+            .replace(/</g, "&lt;")
+
+            .replace(/>/g, "&gt;")
+
+            .replace(/"/g, "&quot;")
+
+            .replace(/'/g, "&#039;");
+
+    }
+
+    /* =========================================================
+
+       FORMAT PRIX
+
+       ========================================================= */
+
+    function formatPrice(value) {
+
+        if (
+
+            value === null ||
+
+            value === undefined ||
+
+            value === ""
+
+        ) {
+
+            return "Prix sur demande";
+
+        }
+
+        return Number(value)
+
+            .toLocaleString("fr-FR") +
+
+            " FCFA";
+
+    }
+
+    /* =========================================================
+
+       DÉTECTER IMMOBILIER
+
+       ========================================================= */
+
+    function isProperty(product) {
+
+        const category =
+
+            product.categories;
+
+        if (!category) {
+
+            return false;
+
+        }
+
+        const name =
+
+            String(category.name || "")
+
+                .toLowerCase();
+
+        return (
+
+            name.includes("immobilier") ||
+
+            name.includes("résidence") ||
+
+            name.includes("residence") ||
+
+            name.includes("maison") ||
+
+            name.includes("appartement") ||
+
+            name.includes("studio")
+
+        );
+
+    }
+
+    /* =========================================================
+
+       CHARGER PRODUIT
+
+       ========================================================= */
+
+    async function loadProduct() {
+
+        if (!productId) {
+
+            showError(
+
+                "Produit introuvable."
+
+            );
+
+            return;
+
+        }
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await supabase
+
+                .from("products")
+
+                .select(`
+
+                    *,
+
+                    categories (
+
+                        id,
+
+                        name,
+
+                        parent_id
+
+                    ),
+
+                    profiles:seller_id (
+
+                        id,
+
+                        first_name,
+
+                        last_name,
+
+                        phone,
+
+                        profile_photo_url
+
+                    )
+
+                `)
+
+                .eq("id", productId)
+
+                .eq("is_active", true)
+
+                .single();
+
+        if (error) {
+
+            console.error(
+
+                "Erreur produit :",
+
+                error
+
+            );
+
+            showError(
+
+                "Impossible de charger ce produit."
+
+            );
+
+            return;
+
+        }
+
+        currentProduct = data;
+
+        displayProduct(data);
+
+        await loadReviews();
+
+        await checkFavorite();
+
+    }
+
+    /* =========================================================
+
+       AFFICHER PRODUIT
+
+       ========================================================= */
+
+    function displayProduct(product) {
+
+        loading.style.display =
+
+            "none";
+
+        detail.style.display =
+
+            "grid";
+
+        productName.textContent =
+
+            product.name ||
+
+            "Produit";
+
+        productDescription.textContent =
+
+            product.description ||
+
+            "Aucune description disponible.";
+
+        productPrice.textContent =
+
+            isProperty(product)
+
+                ? (
+
+                    product.monthly_price !== null
+
+                        ? formatPrice(product.monthly_price) +
+
+                          " / mois"
+
+                        : formatPrice(product.price)
+
+                )
+
+                : formatPrice(product.price);
+
+        productCategory.textContent =
+
+            product.categories?.name ||
+
+            "Catégorie";
+
+        productStock.textContent =
+
+            isProperty(product)
+
+                ? "Disponible"
+
+                : String(
+
+                    product.stock ?? 0
+
+                );
+
+        productLocation.textContent =
+
+            product.location ||
+
+            "Bouaké";
+
+        const seller =
+
+            product.profiles;
+
+        if (seller) {
+
+            sellerName.textContent =
+
+                (
+
+                    seller.first_name ||
+
+                    ""
+
+                ) +
+
+                " " +
+
+                (
+
+                    seller.last_name ||
+
+                    ""
+
+                );
+
+        }
+
+        createGallery(product);
+
+        if (isProperty(product)) {
+
+            displayProperty(product);
+
+        } else {
+
+            displayNormalProduct(product);
+
+        }
+
+    }
+
+    /* =========================================================
+
+       GALERIE
+
+       ========================================================= */
+
+    function createGallery(product) {
+
+        const images = [
+
+            product.image_url_1,
+
+            product.image_url_2,
+
+            product.image_url_3
+
+        ].filter(Boolean);
+
+        if (images.length === 0) {
+
+            images.push(
+
+                "https://placehold.co/600x600/png?text=Market+Bouake"
+
+            );
+
+        }
+
+        mainImage.src =
+
+            images[0];
+
+        thumbnails.innerHTML = "";
+
+        images.forEach(
+
+            (
+
+                image,
+
+                index
+
+            ) => {
+
+                const img =
+
+                    document.createElement("img");
+
+                img.src =
+
+                    image;
+
+                img.className =
+
+                    "thumbnail" +
+
+                    (
+
+                        index === 0
+
+                            ? " active"
+
+                            : ""
+
+                    );
+
+                img.alt =
+
+                    product.name ||
+
+                    "Produit";
+
+                img.addEventListener(
+
+                    "click",
+
+                    () => {
+
+                        mainImage.src =
+
+                            image;
+
+                        document
+
+                            .querySelectorAll(
+
+                                ".thumbnail"
+
+                            )
+
+                            .forEach(
+
+                                item =>
+
+                                    item.classList
+
+                                        .remove(
+
+                                            "active"
+
+                                        )
+
+                            );
+
+                        img.classList.add(
+
+                            "active"
+
+                        );
+
+                    }
+
+                );
+
+                thumbnails.appendChild(
+
+                    img
+
+                );
+
+            }
+
+        );
+
+    }
+
+    /* =========================================================
+
+       PRODUIT NORMAL
+
+       ========================================================= */
+
+    function displayNormalProduct(product) {
+
+        const sizes =
+
+            Array.isArray(
+
+                product.sizes
+
+            )
+
+                ? product.sizes
+
+                : [];
+
+        const sizesSection =
+
+            document.getElementById(
+
+                "sizes-section"
+
+            );
+
+        const quantitySection =
+
+            document.getElementById(
+
+                "quantity-section"
+
+            );
+
+        if (sizes.length > 0) {
+
+            sizesSection.classList.add(
+
+                "visible"
+
+            );
+
+            const sizesContainer =
+
+                document.getElementById(
+
+                    "sizes"
+
+                );
+
+            sizesContainer.innerHTML =
+
+                "";
+
+            sizes.forEach(
+
+                size => {
+
+                    const button =
+
+                        document.createElement(
+
+                            "button"
+
+                        );
+
+                    button.type =
+
+                        "button";
+
+                    button.className =
+
+                        "size-button";
+
+                    button.textContent =
+
+                        size;
+
+                    button.addEventListener(
+
+                        "click",
+
+                        () => {
+
+                            selectedSize =
+
+                                size;
+
+                            document
+
+                                .querySelectorAll(
+
+                                    ".size-button"
+
+                                )
+
+                                .forEach(
+
+                                    item =>
+
+                                        item.classList
+
+                                            .remove(
+
+                                                "selected"
+
+                                            )
+
+                                );
+
+                            button.classList.add(
+
+                                "selected"
+
+                            );
+
+                        }
+
+                    );
+
+                    sizesContainer.appendChild(
+
+                        button
+
+                    );
+
+                }
+
+            );
+
+        } else {
+
+            sizesSection.classList.remove(
+
+                "visible"
+
+            );
+
+        }
+
+        quantitySection.style.display =
+
+            "block";
+
+    }
+
+    /* =========================================================
+
+       IMMOBILIER
+
+       ========================================================= */
+
+    function displayProperty(product) {
+
+        document
+
+            .getElementById(
+
+                "quantity-section"
+
+            )
+
+            .style.display =
+
+                "none";
+
+        document
+
+            .getElementById(
+
+                "sizes-section"
+
+            )
+
+            .style.display =
+
+                "none";
+
+        const section =
+
+            document.getElementById(
+
+                "property-section"
+
+            );
+
+        const grid =
+
+            document.getElementById(
+
+                "property-grid"
+
+            );
+
+        section.classList.add(
+
+            "visible"
+
+        );
+
+        const items = [
+
+            [
+
+                "Type",
+
+                product.property_type
+
+            ],
+
+            [
+
+                "Loyer mensuel",
+
+                product.monthly_price !== null
+
+                    ? formatPrice(
+
+                        product.monthly_price
+
+                    )
+
+                    : null
+
+            ],
+
+            [
+
+                "Caution",
+
+                product.deposit_amount !== null
+
+                    ? formatPrice(
+
+                        product.deposit_amount
+
+                    )
+
+                    : null
+
+            ],
+
+            [
+
+                "Pièces",
+
+                product.rooms_count
+
+            ],
+
+            [
+
+                "Chambres",
+
+                product.bedrooms_count
+
+            ],
+
+            [
+
+                "Disponibilité",
+
+                product.availability
+
+            ],
+
+            [
+
+                "Conditions",
+
+                product.conditions
+
+            ],
+
+            [
+
+                "Capacité",
+
+                product.capacity
+
+            ],
+
+            [
+
+                "Équipements",
+
+                product.amenities
+
+            ],
+
+            [
+
+                "Type de tarification",
+
+                product.pricing_type
+
+            ]
+
+        ];
+
+        grid.innerHTML = "";
+
+        items.forEach(
+
+            ([label, value]) => {
+
+                if (
+
+                    value === null ||
+
+                    value === undefined ||
+
+                    value === ""
+
+                ) {
+
+                    return;
+
+                }
+
+                const item =
+
+                    document.createElement(
+
+                        "div"
+
+                    );
+
+                item.className =
+
+                    "property-item";
+
+                item.innerHTML = `
+
+                    <strong>
+
+                        ${escapeHtml(label)}
+
+                    </strong>
+
+                    <br>
+
+                    ${escapeHtml(value)}
+
+                `;
+
+                grid.appendChild(
+
+                    item
+
+                );
+
+            }
+
+        );
+
+    }
+
+    /* =========================================================
+
+       QUANTITÉ
+
+       ========================================================= */
+
+    document
+
+        .getElementById(
+
+            "quantity-minus"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            () => {
+
+                if (quantity > 1) {
+
+                    quantity--;
+
+                    quantityElement.textContent =
+
+                        quantity;
+
+                }
+
+            }
+
+        );
+
+    document
+
+        .getElementById(
+
+            "quantity-plus"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            () => {
+
+                const stock =
+
+                    Number(
+
+                        currentProduct?.stock || 0
+
+                    );
+
+                if (
+
+                    stock > 0 &&
+
+                    quantity < stock
+
+                ) {
+
+                    quantity++;
+
+                    quantityElement.textContent =
+
+                        quantity;
+
+                }
+
+            }
+
+        );
+
+    /* =========================================================
+
+       PANIER
+
+       ========================================================= */
+
+    function getCart() {
+
+        try {
+
+            const cart =
+
+                localStorage.getItem(
+
+                    "market_bouake_cart"
+
+                );
+
+            return cart
+
+                ? JSON.parse(cart)
+
+                : [];
+
+        } catch (error) {
+
+            console.error(
+
+                "Erreur panier :",
+
+                error
+
+            );
+
+            return [];
+
+        }
+
+    }
+
+    function saveCart(cart) {
+
+        localStorage.setItem(
+
+            "market_bouake_cart",
+
+            JSON.stringify(cart)
+
+        );
+
+    }
+
+    function addToCart() {
+
+        if (!currentProduct) {
+
+            return;
+
+        }
+
+        if (isProperty(currentProduct)) {
+
+            alert(
+
+                "Pour un bien immobilier, utilisez « Je suis intéressé »."
+
+            );
+
+            return;
+
+        }
+
+        if (
+
+            Number(currentProduct.stock) <= 0
+
+        ) {
+
+            alert(
+
+                "Ce produit est actuellement en rupture de stock."
+
+            );
+
+            return;
+
+        }
+
+        const cart =
+
+            getCart();
+
+        const existing =
+
+            cart.find(
+
+                item =>
+
+                    item.product_id ===
+
+                        currentProduct.id &&
+
+                    item.size ===
+
+                        selectedSize
+
+            );
+
+        if (existing) {
+
+            const newQuantity =
+
+                existing.quantity +
+
+                quantity;
+
+            if (
+
+                newQuantity >
+
+                Number(currentProduct.stock)
+
+            ) {
+
+                alert(
+
+                    "La quantité demandée dépasse le stock disponible."
+
+                );
+
+                return;
+
+            }
+
+            existing.quantity =
+
+                newQuantity;
+
+        } else {
+
+            cart.push({
+
+                product_id:
+
+                    currentProduct.id,
+
+                seller_id:
+
+                    currentProduct.seller_id,
+
+                name:
+
+                    currentProduct.name,
+
+                price:
+
+                    Number(
+
+                        currentProduct.price || 0
+
+                    ),
+
+                quantity:
+
+                    quantity,
+
+                size:
+
+                    selectedSize,
+
+                image_url:
+
+                    currentProduct.image_url_1 ||
+
+                    "",
+
+                whatsapp_phone:
+
+                    currentProduct.whatsapp_phone ||
+
+                    null
+
+            });
+
+        }
+
+        saveCart(cart);
+
+        alert(
+
+            "Produit ajouté au panier."
+
+        );
+
+    }
+
+    document
+
+        .getElementById(
+
+            "add-cart-button"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            addToCart
+
+        );
+
+    /* =========================================================
+
+       COMMANDER MAINTENANT
+
+       ========================================================= */
+
+    document
+
+        .getElementById(
+
+            "order-button"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            () => {
+
+                if (!currentProduct) {
+
+                    return;
+
+                }
+
+                if (
+
+                    isProperty(
+
+                        currentProduct
+
+                    )
+
+                ) {
+
+                    createPropertyInterest();
+
+                    return;
+
+                }
+
+                addToCart();
+
+                setTimeout(
+
+                    () => {
+
+                        window.location.href =
+
+                            "panier.html";
+
+                    },
+
+                    300
+
+                );
+
+            }
+
+        );
+
+    /* =========================================================
+
+       INTÉRÊT IMMOBILIER
+
+       ========================================================= */
+
+    async function createPropertyInterest() {
+
+        const {
+
+            data: {
+
+                user
+
+            } = {}
+
+        } =
+
+            await supabase.auth.getUser();
+
+        if (!user) {
+
+            const redirect =
+
+                window.location.href;
+
+            window.location.href =
+
+                "connexion.html?redirect=" +
+
+                encodeURIComponent(
+
+                    redirect
+
+                );
+
+            return;
+
+        }
+
+        const {
+
+            error
+
+        } =
+
+            await supabase
+
+                .from(
+
+                    "property_interest_requests"
+
+                )
+
+                .insert({
+
+                    buyer_id:
+
+                        user.id,
+
+                    seller_id:
+
+                        currentProduct.seller_id,
+
+                    product_id:
+
+                        currentProduct.id,
+
+                    message:
+
+                        "Bonjour, je suis intéressé par ce bien immobilier.",
+
+                    status:
+
+                        "pending",
+
+                    request_type:
+
+                        "interest"
+
+                });
+
+        if (error) {
+
+            console.error(
+
+                error
+
+            );
+
+            alert(
+
+                "Impossible d'envoyer votre demande."
+
+            );
+
+            return;
+
+        }
+
+        alert(
+
+            "Votre demande a été envoyée au vendeur."
+
+        );
+
+    }
+
+    /* =========================================================
+
+       FAVORIS
+
+       ========================================================= */
+
+    async function checkFavorite() {
+
+        const {
+
+            data: {
+
+                user
+
+            } = {}
+
+        } =
+
+            await supabase.auth.getUser();
+
+        if (!user) {
+
+            return;
+
+        }
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await supabase
+
+                .from("favorites")
+
+                .select("id")
+
+                .eq(
+
+                    "user_id",
+
+                    user.id
+
+                )
+
+                .eq(
+
+                    "product_id",
+
+                    productId
+
+                )
+
+                .maybeSingle();
+
+        if (
+
+            !error &&
+
+            data
+
+        ) {
+
+            document
+
+                .getElementById(
+
+                    "favorite-button"
+
+                )
+
+                .textContent =
+
+                    "♥ Retirer des favoris";
+
+        }
+
+    }
+
+    async function toggleFavorite() {
+
+        const {
+
+            data: {
+
+                user
+
+            } = {}
+
+        } =
+
+            await supabase.auth.getUser();
+
+        if (!user) {
+
+            window.location.href =
+
+                "connexion.html?redirect=" +
+
+                encodeURIComponent(
+
+                    window.location.href
+
+                );
+
+            return;
+
+        }
+
+        const {
+
+            data
+
+        } =
+
+            await supabase
+
+                .from("favorites")
+
+                .select("id")
+
+                .eq(
+
+                    "user_id",
+
+                    user.id
+
+                )
+
+                .eq(
+
+                    "product_id",
+
+                    productId
+
+                )
+
+                .maybeSingle();
+
+        if (data) {
+
+            await supabase
+
+                .from("favorites")
+
+                .delete()
+
+                .eq(
+
+                    "id",
+
+                    data.id
+
+                );
+
+            document
+
+                .getElementById(
+
+                    "favorite-button"
+
+                )
+
+                .textContent =
+
+                    "♡ Ajouter aux favoris";
+
+        } else {
+
+            const {
+
+                error
+
+            } =
+
+                await supabase
+
+                    .from("favorites")
+
+                    .insert({
+
+                        user_id:
+
+                            user.id,
+
+                        product_id:
+
+                            productId
+
+                    });
+
+            if (error) {
+
+                console.error(
+
+                    error
+
+                );
+
+                alert(
+
+                    "Impossible d'ajouter aux favoris."
+
+                );
+
+                return;
+
+            }
+
+            document
+
+                .getElementById(
+
+                    "favorite-button"
+
+                )
+
+                .textContent =
+
+                    "♥ Retirer des favoris";
+
+        }
+
+    }
+
+    document
+
+        .getElementById(
+
+            "favorite-button"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            toggleFavorite
+
+        );
+
+    /* =========================================================
+
+       CONTACT VENDEUR
+
+       ========================================================= */
+
+    document
+
+        .getElementById(
+
+            "contact-button"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            async () => {
+
+                if (!currentProduct) {
+
+                    return;
+
+                }
+
+                const phone =
+
+                    currentProduct.whatsapp_phone ||
+
+                    currentProduct.profiles?.phone;
+
+                if (!phone) {
+
+                    alert(
+
+                        "Le vendeur n'a pas renseigné de numéro WhatsApp."
+
+                    );
+
+                    return;
+
+                }
+
+                let cleanPhone =
+
+                    String(phone)
+
+                        .replace(
+
+                            /[^\d+]/g,
+
+                            ""
+
+                        );
+
+                if (
+
+                    cleanPhone.startsWith("0")
+
+                ) {
+
+                    cleanPhone =
+
+                        "+225" +
+
+                        cleanPhone.substring(1);
+
+                }
+
+                const message =
+
+                    "Bonjour, je viens de voir votre produit sur Market Bouaké : " +
+
+                    currentProduct.name +
+
+                    ". Je souhaite avoir plus d'informations.";
+
+                const url =
+
+                    "https://wa.me/" +
+
+                    cleanPhone.replace(
+
+                        "+",
+
+                        ""
+
+                    ) +
+
+                    "?text=" +
+
+                    encodeURIComponent(
+
+                        message
+
+                    );
+
+                window.open(
+
+                    url,
+
+                    "_blank"
+
+                );
+
+            }
+
+        );
+
+    /* =========================================================
+
+       AVIS
+
+       ========================================================= */
+
+    async function loadReviews() {
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await supabase
+
+                .from("reviews")
+
+                .select("*")
+
+                .eq(
+
+                    "product_id",
+
+                    productId
+
+                )
+
+                .order(
+
+                    "created_at",
+
+                    {
+
+                        ascending: false
+
+                    }
+
+                );
+
+        if (
+
+            error ||
+
+            !data ||
+
+            data.length === 0
+
+        ) {
+
+            return;
+
+        }
+
+        const section =
+
+            document.getElementById(
+
+                "reviews-section"
+
+            );
+
+        const container =
+
+            document.getElementById(
+
+                "reviews-container"
+
+            );
+
+        section.style.display =
+
+            "block";
+
+        container.innerHTML =
+
+            "";
+
+        data.forEach(
+
+            review => {
+
+                const div =
+
+                    document.createElement(
+
+                        "div"
+
+                    );
+
+                div.className =
+
+                    "review";
+
+                div.innerHTML = `
+
+                    <div class="review-name">
+
+                        ${escapeHtml(
+
+                            review.rating
+
+                                ? "⭐ ".repeat(
+
+                                    Math.min(
+
+                                        5,
+
+                                        Number(
+
+                                            review.rating
+
+                                        )
+
+                                    )
+
+                                )
+
+                                : "Avis"
+
+                        )}
+
+                    </div>
+
+                    <div class="review-text">
+
+                        ${escapeHtml(
+
+                            review.comment ||
+
+                            review.review ||
+
+                            ""
+
+                        )}
+
+                    </div>
+
+                `;
+
+                container.appendChild(
+
+                    div
+
+                );
+
+            }
+
+        );
+
+    }
+
+    /* =========================================================
+
+       ERREUR
+
+       ========================================================= */
+
+    function showError(message) {
+
+        loading.style.display =
+
+            "none";
+
+        detail.style.display =
+
+            "none";
+
+        errorBox.style.display =
+
+            "block";
+
+        errorBox.textContent =
+
+            message;
+
+    }
+
+    /* =========================================================
+
+       DÉMARRAGE
+
+       ========================================================= */
+
+    document.addEventListener(
+
+        "DOMContentLoaded",
+
+        () => {
+
+            loadProduct();
+
+        }
+
+    );
+
+</script>
+
+</body>
+
+</html>
