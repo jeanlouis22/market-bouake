@@ -1,0 +1,7203 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Market Bouaké | Marketplace locale</title>
+
+    <meta
+
+        name="description"
+
+        content="Market Bouaké, marketplace locale pour acheter, vendre et découvrir les produits et services des vendeurs de Bouaké."
+
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        :root {
+
+            --green: #087443;
+
+            --green-dark: #055a34;
+
+            --green-light: #eaf7f0;
+
+            --orange: #f59e0b;
+
+            --orange-dark: #d97706;
+
+            --text: #17211b;
+
+            --muted: #6b756f;
+
+            --bg: #f5f7f6;
+
+            --white: #ffffff;
+
+            --border: #e5e9e7;
+
+            --danger: #c62828;
+
+        }
+
+        html {
+
+            scroll-behavior: smooth;
+
+        }
+
+        body {
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            background: var(--bg);
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+        }
+
+        button,
+
+        input {
+
+            font-family: inherit;
+
+        }
+
+        button,
+
+        a {
+
+            -webkit-tap-highlight-color: transparent;
+
+        }
+
+        a {
+
+            color: inherit;
+
+        }
+
+        /* =========================
+
+           HEADER
+
+        ========================= */
+
+        .top-header {
+
+            background: var(--white);
+
+            border-bottom: 1px solid var(--border);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+        }
+
+        .header-inner {
+
+            width: min(1200px, calc(100% - 24px));
+
+            min-height: 66px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            text-decoration: none;
+
+            min-width: 0;
+
+            flex: 1;
+
+        }
+
+        .brand-logo {
+
+            width: 40px;
+
+            height: 40px;
+
+            border-radius: 11px;
+
+            background: var(--green);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            flex-shrink: 0;
+
+        }
+
+        .brand-name {
+
+            color: var(--green);
+
+            font-weight: 800;
+
+            font-size: 20px;
+
+            white-space: nowrap;
+
+        }
+
+        .header-action {
+
+            width: 44px;
+
+            height: 44px;
+
+            border: none;
+
+            background: transparent;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 1px;
+
+            cursor: pointer;
+
+            color: var(--text);
+
+            flex-shrink: 0;
+
+            position: relative;
+
+        }
+
+        .header-action:hover {
+
+            background: var(--green-light);
+
+            color: var(--green);
+
+        }
+
+        .header-icon {
+
+            font-size: 20px;
+
+            line-height: 20px;
+
+        }
+
+        .header-label {
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+        }
+
+        .cart-count {
+
+            position: absolute;
+
+            top: 2px;
+
+            right: 3px;
+
+            min-width: 18px;
+
+            height: 18px;
+
+            padding: 0 4px;
+
+            border-radius: 20px;
+
+            background: var(--orange);
+
+            color: white;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+        .menu-button {
+
+            width: 44px;
+
+            height: 44px;
+
+            border: none;
+
+            background: transparent;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 5px;
+
+            flex-shrink: 0;
+
+        }
+
+        .menu-button span {
+
+            display: block;
+
+            width: 23px;
+
+            height: 2.5px;
+
+            background: var(--text);
+
+            border-radius: 5px;
+
+        }
+
+        .menu-button:hover {
+
+            background: var(--green-light);
+
+        }
+
+        /* =========================
+
+           SIDE MENU
+
+        ========================= */
+
+        .menu-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0, 0, 0, .42);
+
+            z-index: 2000;
+
+            display: none;
+
+        }
+
+        .menu-overlay.open {
+
+            display: block;
+
+        }
+
+        .side-menu {
+
+            position: fixed;
+
+            top: 0;
+
+            right: -370px;
+
+            width: min(370px, 90vw);
+
+            height: 100vh;
+
+            background: white;
+
+            z-index: 2001;
+
+            box-shadow: -8px 0 30px rgba(0, 0, 0, .15);
+
+            transition: right .25s ease;
+
+            overflow-y: auto;
+
+        }
+
+        .side-menu.open {
+
+            right: 0;
+
+        }
+
+        .menu-head {
+
+            background: var(--green);
+
+            color: white;
+
+            padding: 20px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+        }
+
+        .menu-head strong {
+
+            font-size: 20px;
+
+        }
+
+        .close-menu {
+
+            border: none;
+
+            background: rgba(255,255,255,.15);
+
+            color: white;
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 9px;
+
+            font-size: 22px;
+
+            cursor: pointer;
+
+        }
+
+        .menu-user {
+
+            padding: 15px;
+
+            background: var(--green-light);
+
+            border-bottom: 1px solid var(--border);
+
+        }
+
+        .menu-user strong {
+
+            display: block;
+
+            color: var(--green-dark);
+
+            margin-bottom: 4px;
+
+        }
+
+        .menu-user span {
+
+            font-size: 13px;
+
+            color: var(--muted);
+
+        }
+
+        .menu-section-title {
+
+            padding: 15px 17px 7px;
+
+            font-size: 12px;
+
+            color: var(--muted);
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+        }
+
+        .menu-link {
+
+            width: 100%;
+
+            border: none;
+
+            background: white;
+
+            text-decoration: none;
+
+            padding: 13px 17px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            color: var(--text);
+
+        }
+
+        .menu-link:hover {
+
+            background: var(--green-light);
+
+            color: var(--green);
+
+        }
+
+        .menu-link .menu-emoji {
+
+            width: 25px;
+
+            text-align: center;
+
+            font-size: 18px;
+
+        }
+
+        .menu-divider {
+
+            height: 1px;
+
+            background: var(--border);
+
+            margin: 8px 15px;
+
+        }
+
+        .menu-link.logout {
+
+            color: var(--danger);
+
+        }
+
+        /* =========================
+
+           MAIN
+
+        ========================= */
+
+        main {
+
+            width: min(1200px, calc(100% - 24px));
+
+            margin: auto;
+
+        }
+
+        /* =========================
+
+           SEARCH
+
+        ========================= */
+
+        .search-area {
+
+            padding: 12px 0 5px;
+
+        }
+
+        .search-box {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 13px;
+
+            min-height: 46px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 13px;
+
+            gap: 8px;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,.03);
+
+        }
+
+        .search-box span {
+
+            font-size: 19px;
+
+        }
+
+        .search-box input {
+
+            border: none;
+
+            outline: none;
+
+            flex: 1;
+
+            font-size: 14px;
+
+            min-width: 0;
+
+        }
+
+        .search-box button {
+
+            border: none;
+
+            background: var(--green);
+
+            color: white;
+
+            width: 35px;
+
+            height: 35px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+        }
+
+        /* =========================
+
+           CATEGORY STRIP
+
+        ========================= */
+
+        .category-area {
+
+            padding: 8px 0 10px;
+
+        }
+
+        .section-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 9px;
+
+        }
+
+        .section-heading h2 {
+
+            font-size: 17px;
+
+        }
+
+        .section-link {
+
+            border: none;
+
+            background: transparent;
+
+            color: var(--green);
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+        }
+
+        .category-scroll {
+
+            display: flex;
+
+            gap: 8px;
+
+            overflow-x: auto;
+
+            padding-bottom: 4px;
+
+            scrollbar-width: none;
+
+        }
+
+        .category-scroll::-webkit-scrollbar {
+
+            display: none;
+
+        }
+
+        .category-chip {
+
+            flex: 0 0 auto;
+
+            border: 1px solid var(--border);
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 9px 13px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+
+            color: var(--text);
+
+        }
+
+        .category-chip:hover,
+
+        .category-chip.active {
+
+            background: var(--green);
+
+            color: white;
+
+            border-color: var(--green);
+
+        }
+
+        /* =========================
+
+           ADVERTISEMENTS
+
+        ========================= */
+
+        .advertising-section {
+
+            margin: 7px 0 16px;
+
+        }
+
+        .advertising-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+
+        }
+
+        .advertising-header h2 {
+
+            font-size: 17px;
+
+        }
+
+        .advertising-header a {
+
+            color: var(--green);
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+        }
+
+        .advertisement-slider {
+
+            width: 100%;
+
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 14px;
+
+            background: #dfe8e3;
+
+        }
+
+        .advertisement-track {
+
+            display: flex;
+
+            transition: transform .45s ease;
+
+            width: 100%;
+
+        }
+
+        .advertisement-slide {
+
+            min-width: 100%;
+
+            position: relative;
+
+            height: 250px;
+
+            cursor: pointer;
+
+            overflow: hidden;
+
+            background: #e5ebe8;
+
+        }
+
+        .advertisement-slide img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+        }
+
+        .advertisement-overlay {
+
+            position: absolute;
+
+            inset: auto 0 0;
+
+            padding: 28px 18px 15px;
+
+            color: white;
+
+            background: linear-gradient(
+
+                transparent,
+
+                rgba(0,0,0,.72)
+
+            );
+
+        }
+
+        .advertisement-overlay strong {
+
+            display: block;
+
+            font-size: 19px;
+
+            margin-bottom: 4px;
+
+        }
+
+        .advertisement-overlay span {
+
+            font-size: 12px;
+
+        }
+
+        .ad-arrow {
+
+            position: absolute;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 34px;
+
+            height: 34px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: rgba(255,255,255,.92);
+
+            color: var(--green);
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            z-index: 5;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,.16);
+
+        }
+
+        .ad-arrow.prev {
+
+            left: 9px;
+
+        }
+
+        .ad-arrow.next {
+
+            right: 9px;
+
+        }
+
+        .ad-dots {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 6px;
+
+            padding: 8px 0 0;
+
+        }
+
+        .ad-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: #c5cfca;
+
+            cursor: pointer;
+
+            padding: 0;
+
+        }
+
+        .ad-dot.active {
+
+            width: 18px;
+
+            border-radius: 10px;
+
+            background: var(--green);
+
+        }
+
+        .ad-empty {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+        }
+
+        /* =========================
+
+           HERO
+
+        ========================= */
+
+        .hero {
+
+            margin: 8px 0 17px;
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 22px 18px;
+
+            border: 1px solid var(--border);
+
+        }
+
+        .hero h1 {
+
+            font-size: clamp(23px, 5vw, 35px);
+
+            line-height: 1.12;
+
+            color: var(--green-dark);
+
+            margin-bottom: 9px;
+
+        }
+
+        .hero p {
+
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            max-width: 700px;
+
+            margin-bottom: 16px;
+
+        }
+
+        .hero-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 9px;
+
+        }
+
+        .hero-button {
+
+            text-decoration: none;
+
+            border-radius: 9px;
+
+            padding: 11px 14px;
+
+            font-weight: 700;
+
+            font-size: 13px;
+
+            border: none;
+
+            cursor: pointer;
+
+        }
+
+        .hero-primary {
+
+            background: var(--green);
+
+            color: white;
+
+        }
+
+        .hero-secondary {
+
+            background: var(--green-light);
+
+            color: var(--green-dark);
+
+        }
+
+        .hero-orange {
+
+            background: var(--orange);
+
+            color: white;
+
+        }
+
+        /* =========================
+
+           PRODUCT SECTIONS
+
+        ========================= */
+
+        .content-section {
+
+            margin: 20px 0;
+
+            scroll-margin-top: 80px;
+
+        }
+
+        .product-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+            gap: 11px;
+
+        }
+
+        .product-card {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            overflow: hidden;
+
+            cursor: pointer;
+
+            transition: transform .15s ease, box-shadow .15s ease;
+
+        }
+
+        .product-card:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 5px 18px rgba(0,0,0,.08);
+
+        }
+
+        .product-image {
+
+            width: 100%;
+
+            height: 175px;
+
+            background: #edf1ef;
+
+            object-fit: cover;
+
+            display: block;
+
+        }
+
+        .product-info {
+
+            padding: 10px;
+
+        }
+
+        .product-name {
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            margin-bottom: 6px;
+
+        }
+
+        .product-price {
+
+            color: var(--green);
+
+            font-weight: 800;
+
+            font-size: 14px;
+
+        }
+
+        .product-stock {
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-top: 4px;
+
+        }
+
+        .product-empty {
+
+            grid-column: 1 / -1;
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            padding: 22px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+        }
+
+        /* =========================
+
+           FEATURED PRODUCTS
+
+        ========================= */
+
+        .featured-card {
+
+            position: relative;
+
+        }
+
+        .featured-badge {
+
+            position: absolute;
+
+            left: 7px;
+
+            top: 7px;
+
+            background: var(--orange);
+
+            color: white;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            padding: 5px 7px;
+
+            border-radius: 7px;
+
+            z-index: 2;
+
+        }
+
+        /* =========================
+
+           SHOPS
+
+        ========================= */
+
+        .shop-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+            gap: 11px;
+
+        }
+
+        .shop-card {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            padding: 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            min-width: 0;
+
+        }
+
+        .shop-photo {
+
+            width: 55px;
+
+            height: 55px;
+
+            border-radius: 12px;
+
+            object-fit: cover;
+
+            background: var(--green-light);
+
+            flex-shrink: 0;
+
+        }
+
+        .shop-name {
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            margin-bottom: 4px;
+
+        }
+
+        .shop-location {
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+        }
+
+        /* =========================
+
+           LOCAL FEATURES
+
+        ========================= */
+
+        .features {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 10px;
+
+            margin: 22px 0;
+
+        }
+
+        .feature {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+        }
+
+        .feature-icon {
+
+            font-size: 22px;
+
+            margin-bottom: 8px;
+
+        }
+
+        .feature strong {
+
+            display: block;
+
+            font-size: 13px;
+
+            margin-bottom: 5px;
+
+        }
+
+        .feature p {
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            line-height: 1.45;
+
+        }
+
+        /* =========================
+
+           FOOTER
+
+        ========================= */
+
+        footer {
+
+            margin-top: 35px;
+
+            background: #12251c;
+
+            color: white;
+
+        }
+
+        .footer-main {
+
+            width: min(1200px, calc(100% - 24px));
+
+            margin: auto;
+
+            padding: 30px 0;
+
+        }
+
+        .footer-grid {
+
+            display: grid;
+
+            grid-template-columns: 1.2fr 1fr 1fr 1fr;
+
+            gap: 28px;
+
+        }
+
+        .footer-column h3 {
+
+            font-size: 14px;
+
+            margin-bottom: 13px;
+
+            color: white;
+
+        }
+
+        .footer-column p,
+
+        .footer-column a {
+
+            display: block;
+
+            color: #c9d4ce;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+
+            text-decoration: none;
+
+            margin-bottom: 5px;
+
+        }
+
+        .footer-column a:hover {
+
+            color: white;
+
+            text-decoration: underline;
+
+        }
+
+        .footer-brand {
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            margin-bottom: 10px;
+
+        }
+
+        .footer-description {
+
+            color: #c9d4ce;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+        }
+
+        .footer-contact {
+
+            background: rgba(255,255,255,.06);
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            margin-top: 15px;
+
+        }
+
+        .footer-contact strong {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 13px;
+
+        }
+
+        .footer-contact p {
+
+            margin-bottom: 4px;
+
+        }
+
+        .footer-bottom {
+
+            border-top: 1px solid rgba(255,255,255,.1);
+
+            padding: 15px;
+
+            text-align: center;
+
+            color: #aebbb4;
+
+            font-size: 11px;
+
+        }
+
+        /* =========================
+
+           CART DRAWER
+
+        ========================= */
+
+        .cart-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,.4);
+
+            z-index: 3000;
+
+            display: none;
+
+        }
+
+        .cart-overlay.open {
+
+            display: block;
+
+        }
+
+        .cart-panel {
+
+            position: fixed;
+
+            top: 0;
+
+            right: -420px;
+
+            width: min(420px, 92vw);
+
+            height: 100vh;
+
+            background: white;
+
+            z-index: 3001;
+
+            transition: right .25s ease;
+
+            box-shadow: -8px 0 30px rgba(0,0,0,.15);
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+        .cart-panel.open {
+
+            right: 0;
+
+        }
+
+        .cart-head {
+
+            background: var(--green);
+
+            color: white;
+
+            padding: 17px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+        }
+
+        .cart-head strong {
+
+            font-size: 18px;
+
+        }
+
+        .cart-close {
+
+            width: 36px;
+
+            height: 36px;
+
+            border: none;
+
+            background: rgba(255,255,255,.15);
+
+            color: white;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+        }
+
+        .cart-content {
+
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding: 15px;
+
+        }
+
+        .cart-empty {
+
+            text-align: center;
+
+            color: var(--muted);
+
+            padding: 45px 20px;
+
+            font-size: 14px;
+
+        }
+
+        .cart-item {
+
+            display: flex;
+
+            gap: 10px;
+
+            padding: 11px 0;
+
+            border-bottom: 1px solid var(--border);
+
+        }
+
+        .cart-item img {
+
+            width: 60px;
+
+            height: 60px;
+
+            object-fit: cover;
+
+            border-radius: 9px;
+
+            background: #edf1ef;
+
+        }
+
+        .cart-item-info {
+
+            flex: 1;
+
+            min-width: 0;
+
+        }
+
+        .cart-item-name {
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+
+        }
+
+        .cart-item-price {
+
+            color: var(--green);
+
+            font-weight: 800;
+
+            font-size: 12px;
+
+        }
+
+        .cart-footer {
+
+            padding: 15px;
+
+            border-top: 1px solid var(--border);
+
+        }
+
+        .cart-total {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            font-weight: 800;
+
+            margin-bottom: 10px;
+
+        }
+
+        .cart-footer button {
+
+            width: 100%;
+
+            border: none;
+
+            background: var(--green);
+
+            color: white;
+
+            padding: 13px;
+
+            border-radius: 9px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+        }
+
+        /* =========================
+
+           BOTTOM NAV
+
+        ========================= */
+
+        .bottom-nav {
+
+            display: none;
+
+        }
+
+        /* =========================
+
+           STATUS
+
+        ========================= */
+
+        .toast {
+
+            position: fixed;
+
+            left: 50%;
+
+            bottom: 25px;
+
+            transform: translateX(-50%) translateY(20px);
+
+            background: #17211b;
+
+            color: white;
+
+            padding: 11px 15px;
+
+            border-radius: 9px;
+
+            font-size: 12px;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: all .2s ease;
+
+            z-index: 5000;
+
+        }
+
+        .toast.show {
+
+            opacity: 1;
+
+            transform: translateX(-50%) translateY(0);
+
+        }
+
+        /* =========================
+
+           MOBILE
+
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .header-inner {
+
+                min-height: 61px;
+
+                gap: 5px;
+
+            }
+
+            .brand {
+
+                gap: 6px;
+
+            }
+
+            .brand-logo {
+
+                width: 36px;
+
+                height: 36px;
+
+                font-size: 19px;
+
+            }
+
+            .brand-name {
+
+                font-size: 17px;
+
+            }
+
+            .header-action,
+
+            .menu-button {
+
+                width: 41px;
+
+                height: 41px;
+
+            }
+
+            .header-icon {
+
+                font-size: 19px;
+
+            }
+
+            .header-label {
+
+                display: none;
+
+            }
+
+            .advertisement-slide {
+
+                height: 175px;
+
+            }
+
+            .advertisement-overlay {
+
+                padding: 25px 13px 12px;
+
+            }
+
+            .advertisement-overlay strong {
+
+                font-size: 16px;
+
+            }
+
+            .advertisement-overlay span {
+
+                font-size: 10px;
+
+            }
+
+            .product-grid {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+
+                gap: 8px;
+
+            }
+
+            .product-image {
+
+                height: 135px;
+
+            }
+
+            .shop-grid {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            }
+
+            .features {
+
+                grid-template-columns: repeat(2, 1fr);
+
+            }
+
+            .footer-grid {
+
+                grid-template-columns: repeat(2, 1fr);
+
+                gap: 22px;
+
+            }
+
+            .bottom-nav {
+
+                position: fixed;
+
+                display: grid;
+
+                grid-template-columns: repeat(4, 1fr);
+
+                left: 0;
+
+                right: 0;
+
+                bottom: 0;
+
+                height: 65px;
+
+                background: white;
+
+                border-top: 1px solid var(--border);
+
+                z-index: 1500;
+
+                box-shadow: 0 -3px 15px rgba(0,0,0,.07);
+
+            }
+
+            .bottom-nav button {
+
+                border: none;
+
+                background: white;
+
+                color: var(--muted);
+
+                display: flex;
+
+                flex-direction: column;
+
+                align-items: center;
+
+                justify-content: center;
+
+                gap: 2px;
+
+                cursor: pointer;
+
+                font-size: 10px;
+
+                font-weight: 700;
+
+            }
+
+            .bottom-nav button span:first-child {
+
+                font-size: 20px;
+
+                line-height: 23px;
+
+            }
+
+            .bottom-nav button.active {
+
+                color: var(--green);
+
+            }
+
+            body {
+
+                padding-bottom: 65px;
+
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            main {
+
+                width: min(100% - 16px, 1200px);
+
+            }
+
+            .hero {
+
+                padding: 18px 14px;
+
+                border-radius: 13px;
+
+            }
+
+            .hero h1 {
+
+                font-size: 24px;
+
+            }
+
+            .hero p {
+
+                font-size: 12px;
+
+            }
+
+            .hero-button {
+
+                padding: 10px 11px;
+
+                font-size: 12px;
+
+            }
+
+            .advertisement-slide {
+
+                height: 165px;
+
+            }
+
+            .section-heading h2,
+
+            .advertising-header h2 {
+
+                font-size: 15px;
+
+            }
+
+            .product-image {
+
+                height: 125px;
+
+            }
+
+            .product-info {
+
+                padding: 8px;
+
+            }
+
+            .shop-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .footer-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .footer-main {
+
+                padding-bottom: 25px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- =========================================================
+
+     HEADER
+
+========================================================= -->
+
+<header class="top-header">
+
+    <div class="header-inner">
+
+        <a href="index.html" class="brand">
+
+            <div class="brand-logo">🛒</div>
+
+            <div class="brand-name">
+
+                Market Bouaké
+
+            </div>
+
+        </a>
+
+        <button
+
+            class="header-action"
+
+            type="button"
+
+            id="headerCartButton"
+
+            aria-label="Panier"
+
+        >
+
+            <span class="header-icon">🛒</span>
+
+            <span class="header-label">Panier</span>
+
+            <span
+
+                class="cart-count"
+
+                id="headerCartCount"
+
+            >0</span>
+
+        </button>
+
+        <button
+
+            class="header-action"
+
+            type="button"
+
+            id="headerAccountButton"
+
+            aria-label="Compte"
+
+        >
+
+            <span class="header-icon">👤</span>
+
+            <span class="header-label">Compte</span>
+
+        </button>
+
+        <button
+
+            class="menu-button"
+
+            type="button"
+
+            id="menuButton"
+
+            aria-label="Menu"
+
+            aria-expanded="false"
+
+        >
+
+            <span></span>
+
+            <span></span>
+
+            <span></span>
+
+        </button>
+
+    </div>
+
+</header>
+
+<!-- =========================================================
+
+     SIDE MENU
+
+========================================================= -->
+
+<div
+
+    class="menu-overlay"
+
+    id="menuOverlay"
+
+></div>
+
+<aside
+
+    class="side-menu"
+
+    id="sideMenu"
+
+>
+
+    <div class="menu-head">
+
+        <strong>Menu</strong>
+
+        <button
+
+            class="close-menu"
+
+            type="button"
+
+            id="closeMenu"
+
+        >
+
+            ×
+
+        </button>
+
+    </div>
+
+    <div
+
+        class="menu-user"
+
+        id="menuUser"
+
+    >
+
+        <strong>👤 Visiteur</strong>
+
+        <span>Connectez-vous pour accéder à votre espace.</span>
+
+    </div>
+
+    <div class="menu-section-title">
+
+        Navigation
+
+    </div>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="home"
+
+    >
+
+        <span class="menu-emoji">🏠</span>
+
+        <span>Accueil</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="cart"
+
+    >
+
+        <span class="menu-emoji">🛒</span>
+
+        <span>Panier</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="categories"
+
+    >
+
+        <span class="menu-emoji">🗂️</span>
+
+        <span>Catégories</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="new-products"
+
+    >
+
+        <span class="menu-emoji">🆕</span>
+
+        <span>Nouveautés</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="promotion"
+
+    >
+
+        <span class="menu-emoji">🏷️</span>
+
+        <span>Promotion</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="popular"
+
+    >
+
+        <span class="menu-emoji">⭐</span>
+
+        <span>Produits populaires</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="shops"
+
+    >
+
+        <span class="menu-emoji">🏪</span>
+
+        <span>Boutiques</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="advertisements"
+
+    >
+
+        <span class="menu-emoji">📢</span>
+
+        <span>Publicités</span>
+
+    </button>
+
+    <div class="menu-divider"></div>
+
+    <div class="menu-section-title">
+
+        Mon espace
+
+    </div>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="orders"
+
+    >
+
+        <span class="menu-emoji">📦</span>
+
+        <span>Mes commandes</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="delivery"
+
+    >
+
+        <span class="menu-emoji">🚚</span>
+
+        <span>Mes informations de livraison</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="notifications"
+
+    >
+
+        <span class="menu-emoji">🔔</span>
+
+        <span>Notifications</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="reviews"
+
+    >
+
+        <span class="menu-emoji">⭐</span>
+
+        <span>Mes avis</span>
+
+    </button>
+
+    <div class="menu-divider"></div>
+
+    <div class="menu-section-title">
+
+        Aide
+
+    </div>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="help"
+
+    >
+
+        <span class="menu-emoji">❓</span>
+
+        <span>Aide</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="problem"
+
+    >
+
+        <span class="menu-emoji">⚠️</span>
+
+        <span>Signaler un problème</span>
+
+    </button>
+
+    <div class="menu-divider"></div>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="login"
+
+        id="menuLogin"
+
+    >
+
+        <span class="menu-emoji">🔐</span>
+
+        <span>Se connecter</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="signup"
+
+        id="menuSignup"
+
+    >
+
+        <span class="menu-emoji">📝</span>
+
+        <span>S'inscrire</span>
+
+    </button>
+
+    <button
+
+        class="menu-link"
+
+        type="button"
+
+        data-action="seller"
+
+    >
+
+        <span class="menu-emoji">🏪</span>
+
+        <span>Devenir vendeur</span>
+
+    </button>
+
+    <button
+
+        class="menu-link logout"
+
+        type="button"
+
+        data-action="logout"
+
+        id="menuLogout"
+
+        style="display:none;"
+
+    >
+
+        <span class="menu-emoji">🚪</span>
+
+        <span>Déconnexion</span>
+
+    </button>
+
+</aside>
+
+<!-- =========================================================
+
+     MAIN
+
+========================================================= -->
+
+<main id="home">
+
+    <!-- SEARCH -->
+
+    <section class="search-area">
+
+        <div class="search-box">
+
+            <span>🔎</span>
+
+            <input
+
+                type="search"
+
+                id="searchInput"
+
+                placeholder="Rechercher un produit, une catégorie..."
+
+                autocomplete="off"
+
+            >
+
+            <button
+
+                type="button"
+
+                id="searchButton"
+
+            >
+
+                🔎
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- CATEGORIES -->
+
+    <section
+
+        class="category-area"
+
+        id="categories"
+
+    >
+
+        <div class="section-heading">
+
+            <h2>🗂️ Catégories</h2>
+
+            <button
+
+                class="section-link"
+
+                type="button"
+
+                id="allCategoriesButton"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="category-scroll"
+
+            id="categoryScroll"
+
+        >
+
+            <div class="category-chip">
+
+                Chargement...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+
+         PUBLICITÉS
+
+    ====================================================== -->
+
+    <section
+
+        class="advertising-section"
+
+        id="publicites"
+
+    >
+
+        <div class="advertising-header">
+
+            <h2>📢 À la une</h2>
+
+            <a href="#publicites">
+
+                Publicités →
+
+            </a>
+
+        </div>
+
+        <div
+
+            class="advertisement-slider"
+
+            id="advertisementSlider"
+
+        >
+
+            <div
+
+                class="advertisement-track"
+
+                id="advertisementTrack"
+
+            ></div>
+
+            <button
+
+                class="ad-arrow prev"
+
+                type="button"
+
+                id="adPrev"
+
+                aria-label="Publicité précédente"
+
+            >
+
+                ‹
+
+            </button>
+
+            <button
+
+                class="ad-arrow next"
+
+                type="button"
+
+                id="adNext"
+
+                aria-label="Publicité suivante"
+
+            >
+
+                ›
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="ad-dots"
+
+            id="adDots"
+
+        ></div>
+
+    </section>
+
+    <!-- =====================================================
+
+         HERO
+
+    ====================================================== -->
+
+    <section class="hero">
+
+        <h1>
+
+            Tout ce dont vous avez besoin, près de chez vous.
+
+        </h1>
+
+        <p>
+
+            Découvrez les produits des vendeurs de Bouaké,
+
+            trouvez ce dont vous avez besoin et échangez
+
+            directement avec les vendeurs.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+
+                href="#new-products"
+
+                class="hero-button hero-primary"
+
+            >
+
+                🛍️ Acheter maintenant
+
+            </a>
+
+            <a
+
+                href="inscription.html"
+
+                class="hero-button hero-secondary"
+
+                id="heroSignup"
+
+            >
+
+                📝 S'inscrire
+
+            </a>
+
+            <a
+
+                href="inscription-vendeur.html"
+
+                class="hero-button hero-orange"
+
+            >
+
+                🏪 Devenir vendeur
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+
+         PRODUITS MIS EN AVANT
+
+    ====================================================== -->
+
+    <section
+
+        class="content-section"
+
+        id="featured-products"
+
+    >
+
+        <div class="section-heading">
+
+            <h2>🔥 Produits mis en avant</h2>
+
+        </div>
+
+        <div
+
+            class="product-grid"
+
+            id="featuredProductGrid"
+
+        >
+
+            <div class="product-empty">
+
+                Chargement des produits mis en avant...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+
+         NOUVEAUTÉS
+
+    ====================================================== -->
+
+    <section
+
+        class="content-section"
+
+        id="new-products"
+
+    >
+
+        <div class="section-heading">
+
+            <h2>🆕 Nouveautés</h2>
+
+            <button
+
+                class="section-link"
+
+                type="button"
+
+                data-show-all="products"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="product-grid"
+
+            id="newProductGrid"
+
+        >
+
+            <div class="product-empty">
+
+                Chargement des produits...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+
+         POPULAIRES
+
+    ====================================================== -->
+
+    <section
+
+        class="content-section"
+
+        id="popular-products"
+
+    >
+
+        <div class="section-heading">
+
+            <h2>⭐ Les produits populaires</h2>
+
+            <button
+
+                class="section-link"
+
+                type="button"
+
+                data-show-all="popular"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="product-grid"
+
+            id="popularProductGrid"
+
+        >
+
+            <div class="product-empty">
+
+                Chargement des produits...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+
+         BOUTIQUES
+
+    ====================================================== -->
+
+    <section
+
+        class="content-section"
+
+        id="shops"
+
+    >
+
+        <div class="section-heading">
+
+            <h2>🏪 Découvrez nos boutiques</h2>
+
+            <button
+
+                class="section-link"
+
+                type="button"
+
+                id="allShopsButton"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="shop-grid"
+
+            id="shopGrid"
+
+        >
+
+            <div class="product-empty">
+
+                Chargement des boutiques...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+
+         INFORMATIONS
+
+    ====================================================== -->
+
+    <section class="features">
+
+        <div class="feature">
+
+            <div class="feature-icon">🏪</div>
+
+            <strong>Vendeurs locaux</strong>
+
+            <p>
+
+                Découvrez les boutiques présentes sur
+
+                Market Bouaké.
+
+            </p>
+
+        </div>
+
+        <div class="feature">
+
+            <div class="feature-icon">🚚</div>
+
+            <strong>Livraison</strong>
+
+            <p>
+
+                Les vendeurs peuvent proposer leurs propres
+
+                tarifs de livraison.
+
+            </p>
+
+        </div>
+
+        <div class="feature">
+
+            <div class="feature-icon">💬</div>
+
+            <strong>WhatsApp</strong>
+
+            <p>
+
+                Contactez directement les vendeurs pour
+
+                vos commandes et votre livraison.
+
+            </p>
+
+        </div>
+
+        <div class="feature">
+
+            <div class="feature-icon">🔐</div>
+
+            <strong>Compte sécurisé</strong>
+
+            <p>
+
+                Les comptes et les données sont protégés
+
+                par Supabase.
+
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- =========================================================
+
+     CART
+
+========================================================= -->
+
+<div
+
+    class="cart-overlay"
+
+    id="cartOverlay"
+
+></div>
+
+<aside
+
+    class="cart-panel"
+
+    id="cartPanel"
+
+>
+
+    <div class="cart-head">
+
+        <strong>🛒 Mon panier</strong>
+
+        <button
+
+            class="cart-close"
+
+            type="button"
+
+            id="cartClose"
+
+        >
+
+            ×
+
+        </button>
+
+    </div>
+
+    <div
+
+        class="cart-content"
+
+        id="cartContent"
+
+    ></div>
+
+    <div class="cart-footer">
+
+        <div class="cart-total">
+
+            <span>Total</span>
+
+            <span id="cartTotal">
+
+                0 FCFA
+
+            </span>
+
+        </div>
+
+        <button
+
+            type="button"
+
+            id="cartContinue"
+
+        >
+
+            Continuer
+
+        </button>
+
+    </div>
+
+</aside>
+
+<!-- =========================================================
+
+     BOTTOM NAVIGATION
+
+========================================================= -->
+
+<nav class="bottom-nav">
+
+    <button
+
+        type="button"
+
+        class="active"
+
+        data-bottom="home"
+
+    >
+
+        <span>🏠</span>
+
+        <span>Accueil</span>
+
+    </button>
+
+    <button
+
+        type="button"
+
+        data-bottom="cart"
+
+    >
+
+        <span>🛒</span>
+
+        <span>Panier</span>
+
+    </button>
+
+    <button
+
+        type="button"
+
+        data-bottom="advertisements"
+
+    >
+
+        <span>📢</span>
+
+        <span>Publicités</span>
+
+    </button>
+
+    <button
+
+        type="button"
+
+        data-bottom="account"
+
+    >
+
+        <span>👤</span>
+
+        <span>Compte</span>
+
+    </button>
+
+</nav>
+
+<!-- =========================================================
+
+     FOOTER
+
+========================================================= -->
+
+<footer>
+
+    <div class="footer-main">
+
+        <div class="footer-grid">
+
+            <div class="footer-column">
+
+                <div class="footer-brand">
+
+                    🛒 Market Bouaké
+
+                </div>
+
+                <p class="footer-description">
+
+                    La marketplace locale de Bouaké pour
+
+                    découvrir des produits, des boutiques,
+
+                    des services et des offres proposées
+
+                    par des vendeurs locaux.
+
+                </p>
+
+                <div class="footer-contact">
+
+                    <strong>
+
+                        📞 CONTACTEZ-NOUS
+
+                    </strong>
+
+                    <p>
+
+                        Market Bouaké
+
+                    </p>
+
+                    <p>
+
+                        Bouaké, Côte d'Ivoire
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>DISCUTER AVEC NOUS</h3>
+
+                <a href="tel:+2252520006161">
+
+                    📞 Commandez par téléphone :
+
+                    25 20 00 61 61
+
+                </a>
+
+                <a href="https://wa.me/2252520006161" target="_blank" rel="noopener noreferrer">
+
+                    💬 Écrivez-nous sur WhatsApp
+
+                </a>
+
+                <a href="#publicites">
+
+                    📢 Faire de la publicité
+
+                </a>
+
+                <a href="mailto:contact@marketbouake.com">
+
+                    ✉️ Écrivez-nous
+
+                </a>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>MARKET BOUAKÉ</h3>
+
+                <a href="inscription-vendeur.html">
+
+                    🏪 Vendez sur Market Bouaké
+
+                </a>
+
+                <a href="#shops">
+
+                    🏪 Nos boutiques
+
+                </a>
+
+                <a href="#categories">
+
+                    🗂️ Nos catégories
+
+                </a>
+
+                <a href="#new-products">
+
+                    🆕 Nouveautés
+
+                </a>
+
+                <a href="#popular-products">
+
+                    ⭐ Produits populaires
+
+                </a>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>AIDE & INFORMATIONS</h3>
+
+                <a href="compte.html#help">
+
+                    ❓ Aide & FAQ
+
+                </a>
+
+                <a href="compte.html#terms">
+
+                    📄 Conditions générales d'utilisation
+
+                </a>
+
+                <a href="compte.html#problem">
+
+                    ⚠️ Signaler un produit
+
+                </a>
+
+                <a href="compte.html#returns">
+
+                    🔄 Politique de retour
+
+                </a>
+
+                <a href="compte.html#privacy">
+
+                    🔐 Termes & confidentialités
+
+                </a>
+
+                <a href="compte.html#cookies">
+
+                    🍪 Cookies
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="footer-contact">
+
+            <strong>
+
+                📍 INFORMATIONS DE CONTACT
+
+            </strong>
+
+            <p>
+
+                Nom de l'entreprise : Market Bouaké
+
+            </p>
+
+            <p>
+
+                Adresse : Bouaké, Côte d'Ivoire
+
+            </p>
+
+            <p>
+
+                Numéro de téléphone :
+
+                <a href="tel:+2252520006161">
+
+                    25 20 00 61 61
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 Market Bouaké — Tous droits réservés.
+
+    </div>
+
+</footer>
+
+<div
+
+    class="toast"
+
+    id="toast"
+
+></div>
+
+<script>
+
+/* ============================================================
+
+   SUPABASE
+
+============================================================ */
+
+const SUPABASE_URL =
+
+    "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+
+    "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+const supabaseClient =
+
+    window.supabase.createClient(
+
+        SUPABASE_URL,
+
+        SUPABASE_PUBLISHABLE_KEY
+
+    );
+
+/* ============================================================
+
+   ÉLÉMENTS
+
+============================================================ */
+
+const menuButton =
+
+    document.getElementById("menuButton");
+
+const closeMenu =
+
+    document.getElementById("closeMenu");
+
+const menuOverlay =
+
+    document.getElementById("menuOverlay");
+
+const sideMenu =
+
+    document.getElementById("sideMenu");
+
+const headerAccountButton =
+
+    document.getElementById("headerAccountButton");
+
+const headerCartButton =
+
+    document.getElementById("headerCartButton");
+
+const heroSignup =
+
+    document.getElementById("heroSignup");
+
+const menuLogin =
+
+    document.getElementById("menuLogin");
+
+const menuSignup =
+
+    document.getElementById("menuSignup");
+
+const menuLogout =
+
+    document.getElementById("menuLogout");
+
+const menuUser =
+
+    document.getElementById("menuUser");
+
+const headerCartCount =
+
+    document.getElementById("headerCartCount");
+
+const categoryScroll =
+
+    document.getElementById("categoryScroll");
+
+const newProductGrid =
+
+    document.getElementById("newProductGrid");
+
+const popularProductGrid =
+
+    document.getElementById("popularProductGrid");
+
+const featuredProductGrid =
+
+    document.getElementById("featuredProductGrid");
+
+const shopGrid =
+
+    document.getElementById("shopGrid");
+
+const searchInput =
+
+    document.getElementById("searchInput");
+
+const searchButton =
+
+    document.getElementById("searchButton");
+
+const advertisementTrack =
+
+    document.getElementById("advertisementTrack");
+
+const advertisementSlider =
+
+    document.getElementById("advertisementSlider");
+
+const advertisementDots =
+
+    document.getElementById("adDots");
+
+const adPrev =
+
+    document.getElementById("adPrev");
+
+const adNext =
+
+    document.getElementById("adNext");
+
+const cartOverlay =
+
+    document.getElementById("cartOverlay");
+
+const cartPanel =
+
+    document.getElementById("cartPanel");
+
+const cartClose =
+
+    document.getElementById("cartClose");
+
+const cartContent =
+
+    document.getElementById("cartContent");
+
+const cartTotal =
+
+    document.getElementById("cartTotal");
+
+const cartContinue =
+
+    document.getElementById("cartContinue");
+
+const toast =
+
+    document.getElementById("toast");
+
+/* ============================================================
+
+   ÉTAT
+
+============================================================ */
+
+let currentUser = null;
+
+let categories = [];
+
+let products = [];
+
+let shops = [];
+
+let advertisements = [];
+
+let featuredProducts = [];
+
+let currentAdIndex = 0;
+
+let adTimer = null;
+
+let currentCategoryId = null;
+
+/* ============================================================
+
+   UTILITAIRES
+
+============================================================ */
+
+function escapeHtml(value) {
+
+    if (
+
+        value === null ||
+
+        value === undefined
+
+    ) {
+
+        return "";
+
+    }
+
+    return String(value)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+function formatPrice(value) {
+
+    const number =
+
+        Number(value || 0);
+
+    return new Intl.NumberFormat(
+
+        "fr-FR"
+
+    ).format(number) + " FCFA";
+
+}
+
+function formatDate(value) {
+
+    if (!value) {
+
+        return "";
+
+    }
+
+    const date =
+
+        new Date(value + "T00:00:00");
+
+    if (
+
+        Number.isNaN(
+
+            date.getTime()
+
+        )
+
+    ) {
+
+        return value;
+
+    }
+
+    return new Intl.DateTimeFormat(
+
+        "fr-FR",
+
+        {
+
+            day: "numeric",
+
+            month: "long",
+
+            year: "numeric"
+
+        }
+
+    ).format(date);
+
+}
+
+function showToast(message) {
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+
+        showToast.timer
+
+    );
+
+    showToast.timer =
+
+        setTimeout(
+
+            () => {
+
+                toast.classList.remove(
+
+                    "show"
+
+                );
+
+            },
+
+            2500
+
+        );
+
+}
+
+function goTo(url) {
+
+    window.location.href = url;
+
+}
+
+function scrollToSection(id) {
+
+    closeSideMenu();
+
+    const element =
+
+        document.getElementById(id);
+
+    if (element) {
+
+        element.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+    }
+
+}
+
+/* ============================================================
+
+   MENU
+
+============================================================ */
+
+function openSideMenu() {
+
+    sideMenu.classList.add("open");
+
+    menuOverlay.classList.add("open");
+
+    menuButton.setAttribute(
+
+        "aria-expanded",
+
+        "true"
+
+    );
+
+    document.body.style.overflow =
+
+        "hidden";
+
+}
+
+function closeSideMenu() {
+
+    sideMenu.classList.remove("open");
+
+    menuOverlay.classList.remove("open");
+
+    menuButton.setAttribute(
+
+        "aria-expanded",
+
+        "false"
+
+    );
+
+    document.body.style.overflow =
+
+        "";
+
+}
+
+menuButton.addEventListener(
+
+    "click",
+
+    openSideMenu
+
+);
+
+closeMenu.addEventListener(
+
+    "click",
+
+    closeSideMenu
+
+);
+
+menuOverlay.addEventListener(
+
+    "click",
+
+    closeSideMenu
+
+);
+
+/* ============================================================
+
+   COMPTE / AUTH
+
+============================================================ */
+
+async function updateAuthInterface() {
+
+    const {
+
+        data
+
+    } =
+
+        await supabaseClient.auth.getUser();
+
+    currentUser =
+
+        data?.user || null;
+
+    if (currentUser) {
+
+        menuUser.innerHTML = `
+
+            <strong>👤 Mon compte</strong>
+
+            <span>
+
+                ${escapeHtml(
+
+                    currentUser.email ||
+
+                    "Compte connecté"
+
+                )}
+
+            </span>
+
+        `;
+
+        menuLogin.style.display =
+
+            "none";
+
+        menuSignup.style.display =
+
+            "none";
+
+        menuLogout.style.display =
+
+            "flex";
+
+        heroSignup.style.display =
+
+            "none";
+
+    } else {
+
+        menuUser.innerHTML = `
+
+            <strong>👤 Visiteur</strong>
+
+            <span>
+
+                Connectez-vous pour accéder
+
+                à votre espace.
+
+            </span>
+
+        `;
+
+        menuLogin.style.display =
+
+            "flex";
+
+        menuSignup.style.display =
+
+            "flex";
+
+        menuLogout.style.display =
+
+            "none";
+
+        heroSignup.style.display =
+
+            "inline-flex";
+
+    }
+
+}
+
+headerAccountButton.addEventListener(
+
+    "click",
+
+    () => {
+
+        if (currentUser) {
+
+            goTo("compte.html");
+
+        } else {
+
+            goTo("connexion.html");
+
+        }
+
+    }
+
+);
+
+menuLogout.addEventListener(
+
+    "click",
+
+    async () => {
+
+        await supabaseClient.auth.signOut();
+
+        closeSideMenu();
+
+        await updateAuthInterface();
+
+        showToast(
+
+            "Vous êtes déconnecté."
+
+        );
+
+    }
+
+);
+
+/* ============================================================
+
+   NAVIGATION MENU
+
+============================================================ */
+
+async function handleMenuAction(action) {
+
+    closeSideMenu();
+
+    if (action === "home") {
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+        return;
+
+    }
+
+    if (action === "cart") {
+
+        openCart();
+
+        return;
+
+    }
+
+    if (action === "categories") {
+
+        scrollToSection(
+
+            "categories"
+
+        );
+
+        return;
+
+    }
+
+    if (action === "new-products") {
+
+        scrollToSection(
+
+            "new-products"
+
+        );
+
+        return;
+
+    }
+
+    if (action === "promotion") {
+
+        scrollToSection(
+
+            "publicites"
+
+        );
+
+        return;
+
+    }
+
+    if (action === "popular") {
+
+        scrollToSection(
+
+            "popular-products"
+
+        );
+
+        return;
+
+    }
+
+    if (action === "shops") {
+
+        scrollToSection(
+
+            "shops"
+
+        );
+
+        return;
+
+    }
+
+    if (action === "advertisements") {
+
+        scrollToSection(
+
+            "publicites"
+
+        );
+
+        return;
+
+    }
+
+    if (action === "seller") {
+
+        goTo(
+
+            "inscription-vendeur.html"
+
+        );
+
+        return;
+
+    }
+
+    if (action === "login") {
+
+        goTo(
+
+            "connexion.html"
+
+        );
+
+        return;
+
+    }
+
+    if (action === "signup") {
+
+        goTo(
+
+            "inscription.html"
+
+        );
+
+        return;
+
+    }
+
+    /*
+
+       Toutes les fonctions personnelles
+
+       utilisent compte.html.
+
+       Si l'utilisateur n'est pas connecté,
+
+       il est envoyé vers connexion.html.
+
+    */
+
+    const privateActions = [
+
+        "orders",
+
+        "delivery",
+
+        "notifications",
+
+        "reviews",
+
+        "help",
+
+        "problem"
+
+    ];
+
+    if (
+
+        privateActions.includes(
+
+            action
+
+        )
+
+    ) {
+
+        if (!currentUser) {
+
+            goTo(
+
+                "connexion.html"
+
+            );
+
+            return;
+
+        }
+
+        const anchors = {
+
+            orders:
+
+                "orders",
+
+            delivery:
+
+                "delivery",
+
+            notifications:
+
+                "notifications",
+
+            reviews:
+
+                "reviews",
+
+            help:
+
+                "help",
+
+            problem:
+
+                "problem"
+
+        };
+
+        goTo(
+
+            "compte.html#" +
+
+            anchors[action]
+
+        );
+
+    }
+
+}
+
+document
+
+    .querySelectorAll(
+
+        ".menu-link[data-action]"
+
+    )
+
+    .forEach(
+
+        button => {
+
+            button.addEventListener(
+
+                "click",
+
+                () => {
+
+                    handleMenuAction(
+
+                        button.dataset.action
+
+                    );
+
+                }
+
+            );
+
+        }
+
+    );
+
+/* ============================================================
+
+   BOTTOM NAVIGATION
+
+============================================================ */
+
+document
+
+    .querySelectorAll(
+
+        ".bottom-nav button"
+
+    )
+
+    .forEach(
+
+        button => {
+
+            button.addEventListener(
+
+                "click",
+
+                () => {
+
+                    const action =
+
+                        button.dataset.bottom;
+
+                    document
+
+                        .querySelectorAll(
+
+                            ".bottom-nav button"
+
+                        )
+
+                        .forEach(
+
+                            item =>
+
+                                item.classList.remove(
+
+                                    "active"
+
+                                )
+
+                        );
+
+                    button.classList.add(
+
+                        "active"
+
+                    );
+
+                    if (
+
+                        action ===
+
+                        "home"
+
+                    ) {
+
+                        window.scrollTo({
+
+                            top: 0,
+
+                            behavior: "smooth"
+
+                        });
+
+                    }
+
+                    if (
+
+                        action ===
+
+                        "cart"
+
+                    ) {
+
+                        openCart();
+
+                    }
+
+                    if (
+
+                        action ===
+
+                        "advertisements"
+
+                    ) {
+
+                        scrollToSection(
+
+                            "publicites"
+
+                        );
+
+                    }
+
+                    if (
+
+                        action ===
+
+                        "account"
+
+                    ) {
+
+                        if (currentUser) {
+
+                            goTo(
+
+                                "compte.html"
+
+                            );
+
+                        } else {
+
+                            goTo(
+
+                                "connexion.html"
+
+                            );
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    );
+
+/* ============================================================
+
+   CATEGORIES
+
+============================================================ */
+
+async function loadCategories() {
+
+    categoryScroll.innerHTML = `
+
+        <div class="category-chip">
+
+            Chargement...
+
+        </div>
+
+    `;
+
+    try {
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await supabaseClient
+
+                .from("categories")
+
+                .select(
+
+                    "id,name,parent_id,is_active"
+
+                )
+
+                .eq(
+
+                    "is_active",
+
+                    true
+
+                )
+
+                .order(
+
+                    "name",
+
+                    {
+
+                        ascending: true
+
+                    }
+
+                );
+
+        if (error) {
+
+            throw error;
+
+        }
+
+        categories =
+
+            data || [];
+
+        const mainCategories =
+
+            categories.filter(
+
+                category =>
+
+                    !category.parent_id
+
+            );
+
+        if (
+
+            mainCategories.length === 0
+
+        ) {
+
+            categoryScroll.innerHTML = `
+
+                <div class="category-chip">
+
+                    Aucune catégorie disponible
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        categoryScroll.innerHTML = "";
+
+        mainCategories.forEach(
+
+            category => {
+
+                const button =
+
+                    document.createElement(
+
+                        "button"
+
+                    );
+
+                button.type = "button";
+
+                button.className =
+
+                    "category-chip";
+
+                button.dataset.categoryId =
+
+                    category.id;
+
+                button.textContent =
+
+                    category.name;
+
+                button.addEventListener(
+
+                    "click",
+
+                    () => {
+
+                        document
+
+                            .querySelectorAll(
+
+                                ".category-chip"
+
+                            )
+
+                            .forEach(
+
+                                item =>
+
+                                    item.classList.remove(
+
+                                        "active"
+
+                                    )
+
+                            );
+
+                        button.classList.add(
+
+                            "active"
+
+                        );
+
+                        currentCategoryId =
+
+                            category.id;
+
+                        filterProductsByCategory(
+
+                            category.id
+
+                        );
+
+                    }
+
+                );
+
+                categoryScroll.appendChild(
+
+                    button
+
+                );
+
+            }
+
+        );
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur catégories :",
+
+            error
+
+        );
+
+        categoryScroll.innerHTML = `
+
+            <div class="category-chip">
+
+                Impossible de charger les catégories.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+document
+
+    .getElementById(
+
+        "allCategoriesButton"
+
+    )
+
+    .addEventListener(
+
+        "click",
+
+        () => {
+
+            currentCategoryId =
+
+                null;
+
+            document
+
+                .querySelectorAll(
+
+                    ".category-chip"
+
+                )
+
+                .forEach(
+
+                    item =>
+
+                        item.classList.remove(
+
+                            "active"
+
+                        )
+
+                );
+
+            renderProductSections(
+
+                products
+
+            );
+
+            scrollToSection(
+
+                "new-products"
+
+            );
+
+        }
+
+    );
+
+/* ============================================================
+
+   PRODUCTS
+
+============================================================ */
+
+async function loadProducts() {
+
+    try {
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await supabaseClient
+
+                .from("products")
+
+                .select(`
+
+                    id,
+
+                    seller_id,
+
+                    shop_id,
+
+                    category_id,
+
+                    name,
+
+                    description,
+
+                    price,
+
+                    stock,
+
+                    sizes,
+
+                    image_url_1,
+
+                    image_url_2,
+
+                    image_url_3,
+
+                    whatsapp_phone,
+
+                    is_active,
+
+                    created_at,
+
+                    categories:category_id (
+
+                        id,
+
+                        name,
+
+                        parent_id
+
+                    ),
+
+                    shops:shop_id (
+
+                        id,
+
+                        shop_name,
+
+                        city,
+
+                        district,
+
+                        status
+
+                    )
+
+                `)
+
+                .eq(
+
+                    "is_active",
+
+                    true
+
+                )
+
+                .order(
+
+                    "created_at",
+
+                    {
+
+                        ascending: false
+
+                    }
+
+                );
+
+        if (error) {
+
+            throw error;
+
+        }
+
+        products =
+
+            data || [];
+
+        renderProductSections(
+
+            products
+
+        );
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur produits :",
+
+            error
+
+        );
+
+        newProductGrid.innerHTML = `
+
+            <div class="product-empty">
+
+                Impossible de charger les produits.
+
+            </div>
+
+        `;
+
+        popularProductGrid.innerHTML = `
+
+            <div class="product-empty">
+
+                Impossible de charger les produits.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+function getFilteredProducts(
+
+    sourceProducts
+
+) {
+
+    if (!currentCategoryId) {
+
+        return sourceProducts;
+
+    }
+
+    const selectedCategory =
+
+        categories.find(
+
+            category =>
+
+                category.id ===
+
+                currentCategoryId
+
+        );
+
+    if (!selectedCategory) {
+
+        return sourceProducts;
+
+    }
+
+    const allowedCategoryIds =
+
+        categories
+
+            .filter(
+
+                category =>
+
+                    category.id ===
+
+                    currentCategoryId ||
+
+                    category.parent_id ===
+
+                    currentCategoryId
+
+            )
+
+            .map(
+
+                category =>
+
+                    category.id
+
+            );
+
+    return sourceProducts.filter(
+
+        product =>
+
+            allowedCategoryIds.includes(
+
+                product.category_id
+
+            )
+
+    );
+
+}
+
+function filterProductsByCategory(
+
+    categoryId
+
+) {
+
+    currentCategoryId =
+
+        categoryId;
+
+    const filtered =
+
+        getFilteredProducts(
+
+            products
+
+        );
+
+    renderProductSections(
+
+        filtered
+
+    );
+
+    scrollToSection(
+
+        "new-products"
+
+    );
+
+}
+
+function renderProductSections(
+
+    sourceProducts
+
+) {
+
+    const filtered =
+
+        getFilteredProducts(
+
+            sourceProducts
+
+        );
+
+    const newest =
+
+        filtered.slice(
+
+            0,
+
+            8
+
+        );
+
+    const popular =
+
+        [...filtered]
+
+            .sort(
+
+                (a, b) =>
+
+                    Number(b.stock || 0) -
+
+                    Number(a.stock || 0)
+
+            )
+
+            .slice(
+
+                0,
+
+                8
+
+            );
+
+    renderProducts(
+
+        newProductGrid,
+
+        newest
+
+    );
+
+    renderProducts(
+
+        popularProductGrid,
+
+        popular
+
+    );
+
+}
+
+function renderProducts(
+
+    container,
+
+    items
+
+) {
+
+    if (
+
+        !items ||
+
+        items.length === 0
+
+    ) {
+
+        container.innerHTML = `
+
+            <div class="product-empty">
+
+                Aucun produit disponible dans cette catégorie.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML =
+
+        items.map(
+
+            product => {
+
+                const image =
+
+                    product.image_url_1 ||
+
+                    product.image_url_2 ||
+
+                    product.image_url_3 ||
+
+                    "";
+
+                const stock =
+
+                    Number(
+
+                        product.stock || 0
+
+                    );
+
+                return `
+
+                    <article
+
+                        class="product-card"
+
+                        data-product-id="${escapeHtml(product.id)}"
+
+                    >
+
+                        ${
+
+                            image
+
+                            ?
+
+                            `
+
+                            <img
+
+                                class="product-image"
+
+                                src="${escapeHtml(image)}"
+
+                                alt="${escapeHtml(product.name)}"
+
+                                loading="lazy"
+
+                            >
+
+                            `
+
+                            :
+
+                            `
+
+                            <div
+
+                                class="product-image"
+
+                                style="
+
+                                    display:flex;
+
+                                    align-items:center;
+
+                                    justify-content:center;
+
+                                    font-size:32px;
+
+                                "
+
+                            >
+
+                                🛍️
+
+                            </div>
+
+                            `
+
+                        }
+
+                        <div class="product-info">
+
+                            <div class="product-name">
+
+                                ${escapeHtml(product.name)}
+
+                            </div>
+
+                            <div class="product-price">
+
+                                ${formatPrice(product.price)}
+
+                            </div>
+
+                            <div class="product-stock">
+
+                                ${
+
+                                    stock > 0
+
+                                    ?
+
+                                    stock + " disponible(s)"
+
+                                    :
+
+                                    "Rupture de stock"
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                `;
+
+            }
+
+        ).join("");
+
+    container
+
+        .querySelectorAll(
+
+            ".product-card"
+
+        )
+
+        .forEach(
+
+            card => {
+
+                card.addEventListener(
+
+                    "click",
+
+                    () => {
+
+                        const id =
+
+                            card.dataset.productId;
+
+                        goTo(
+
+                            "produit.html?id=" +
+
+                            encodeURIComponent(id)
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+}
+
+/* ============================================================
+
+   FEATURED PRODUCTS
+
+============================================================ */
+
+async function loadFeaturedProducts() {
+
+    try {
+
+        const now =
+
+            new Date().toISOString();
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await supabaseClient
+
+                .from("featured_products")
+
+                .select(`
+
+                    id,
+
+                    product_id,
+
+                    image_url,
+
+                    is_active,
+
+                    show_on_home,
+
+                    start_at,
+
+                    end_at
+
+                `)
+
+                .eq(
+
+                    "is_active",
+
+                    true
+
+                )
+
+                .eq(
+
+                    "show_on_home",
+
+                    true
+
+                )
+
+                .or(
+
+                    "start_at.is.null,start_at.lte." +
+
+                    now
+
+                )
+
+                .or(
+
+                    "end_at.is.null,end_at.gte." +
+
+                    now
+
+                )
+
+                .order(
+
+                    "created_at",
+
+                    {
+
+                        ascending: false
+
+                    }
+
+                );
+
+        if (error) {
+
+            throw error;
+
+        }
+
+        const activeFeatured =
+
+            data || [];
+
+        if (
+
+            activeFeatured.length === 0
+
+        ) {
+
+            featuredProductGrid.innerHTML = `
+
+                <div class="product-empty">
+
+                    Aucun produit mis en avant pour le moment.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        const ids =
+
+            activeFeatured.map(
+
+                item =>
+
+                    item.product_id
+
+            );
+
+        const {
+
+            data: productData,
+
+            error: productError
+
+        } =
+
+            await supabaseClient
+
+                .from("products")
+
+                .select(`
+
+                    id,
+
+                    name,
+
+                    price,
+
+                    stock,
+
+                    image_url_1,
+
+                    image_url_2,
+
+                    image_url_3,
+
+                    is_active
+
+                `)
+
+                .in(
+
+                    "id",
+
+                    ids
+
+                )
+
+                .eq(
+
+                    "is_active",
+
+                    true
+
+                );
+
+        if (productError) {
+
+            throw productError;
+
+        }
+
+        const productMap =
+
+            new Map(
+
+                (productData || [])
+
+                    .map(
+
+                        product => [
+
+                            product.id,
+
+                            product
+
+                        ]
+
+                    )
+
+            );
+
+        featuredProducts =
+
+            activeFeatured
+
+                .map(
+
+                    featured => ({
+
+                        ...featured,
+
+                        product:
+
+                            productMap.get(
+
+                                featured.product_id
+
+                            )
+
+                    })
+
+                )
+
+                .filter(
+
+                    item =>
+
+                        item.product
+
+                );
+
+        renderFeaturedProducts();
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur produits mis en avant :",
+
+            error
+
+        );
+
+        featuredProductGrid.innerHTML = `
+
+            <div class="product-empty">
+
+                Impossible de charger les produits mis en avant.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+function renderFeaturedProducts() {
+
+    if (
+
+        featuredProducts.length === 0
+
+    ) {
+
+        featuredProductGrid.innerHTML = `
+
+            <div class="product-empty">
+
+                Aucun produit mis en avant pour le moment.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    featuredProductGrid.innerHTML =
+
+        featuredProducts
+
+            .slice(0, 8)
+
+            .map(
+
+                item => {
+
+                    const product =
+
+                        item.product;
+
+                    const image =
+
+                        item.image_url ||
+
+                        product.image_url_1 ||
+
+                        product.image_url_2 ||
+
+                        product.image_url_3 ||
+
+                        "";
+
+                    return `
+
+                        <article
+
+                            class="product-card featured-card"
+
+                            data-featured-product-id="${escapeHtml(product.id)}"
+
+                        >
+
+                            <span class="featured-badge">
+
+                                🔥 À LA UNE
+
+                            </span>
+
+                            ${
+
+                                image
+
+                                ?
+
+                                `
+
+                                <img
+
+                                    class="product-image"
+
+                                    src="${escapeHtml(image)}"
+
+                                    alt="${escapeHtml(product.name)}"
+
+                                    loading="lazy"
+
+                                >
+
+                                `
+
+                                :
+
+                                `
+
+                                <div
+
+                                    class="product-image"
+
+                                    style="
+
+                                        display:flex;
+
+                                        align-items:center;
+
+                                        justify-content:center;
+
+                                        font-size:32px;
+
+                                    "
+
+                                >
+
+                                    🛍️
+
+                                </div>
+
+                                `
+
+                            }
+
+                            <div class="product-info">
+
+                                <div class="product-name">
+
+                                    ${escapeHtml(product.name)}
+
+                                </div>
+
+                                <div class="product-price">
+
+                                    ${formatPrice(product.price)}
+
+                                </div>
+
+                                <div class="product-stock">
+
+                                    ${
+
+                                        Number(product.stock || 0) > 0
+
+                                        ?
+
+                                        "Disponible"
+
+                                        :
+
+                                        "Rupture de stock"
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+
+            )
+
+            .join("");
+
+    featuredProductGrid
+
+        .querySelectorAll(
+
+            ".featured-card"
+
+        )
+
+        .forEach(
+
+            card => {
+
+                card.addEventListener(
+
+                    "click",
+
+                    () => {
+
+                        const id =
+
+                            card.dataset
+
+                                .featuredProductId;
+
+                        goTo(
+
+                            "produit.html?id=" +
+
+                            encodeURIComponent(id)
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+}
+
+/* ============================================================
+
+   BOUTIQUES
+
+============================================================ */
+
+async function loadShops() {
+
+    try {
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await supabaseClient
+
+                .from("shops")
+
+                .select(`
+
+                    id,
+
+                    shop_name,
+
+                    description,
+
+                    city,
+
+                    district,
+
+                    profile_photo_url,
+
+                    status
+
+                `)
+
+                .eq(
+
+                    "status",
+
+                    "active"
+
+                )
+
+                .order(
+
+                    "created_at",
+
+                    {
+
+                        ascending: false
+
+                    }
+
+                );
+
+        if (error) {
+
+            throw error;
+
+        }
+
+        shops =
+
+            data || [];
+
+        renderShops();
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur boutiques :",
+
+            error
+
+        );
+
+        shopGrid.innerHTML = `
+
+            <div class="product-empty">
+
+                Impossible de charger les boutiques.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+function renderShops() {
+
+    if (
+
+        shops.length === 0
+
+    ) {
+
+        shopGrid.innerHTML = `
+
+            <div class="product-empty">
+
+                Aucune boutique active pour le moment.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    shopGrid.innerHTML =
+
+        shops
+
+            .slice(0, 8)
+
+            .map(
+
+                shop => {
+
+                    const photo =
+
+                        shop.profile_photo_url ||
+
+                        "";
+
+                    return `
+
+                        <article
+
+                            class="shop-card"
+
+                            data-shop-id="${escapeHtml(shop.id)}"
+
+                        >
+
+                            ${
+
+                                photo
+
+                                ?
+
+                                `
+
+                                <img
+
+                                    class="shop-photo"
+
+                                    src="${escapeHtml(photo)}"
+
+                                    alt="${escapeHtml(shop.shop_name)}"
+
+                                    loading="lazy"
+
+                                >
+
+                                `
+
+                                :
+
+                                `
+
+                                <div
+
+                                    class="shop-photo"
+
+                                    style="
+
+                                        display:flex;
+
+                                        align-items:center;
+
+                                        justify-content:center;
+
+                                        font-size:24px;
+
+                                    "
+
+                                >
+
+                                    🏪
+
+                                </div>
+
+                                `
+
+                            }
+
+                            <div>
+
+                                <div class="shop-name">
+
+                                    ${escapeHtml(shop.shop_name)}
+
+                                </div>
+
+                                <div class="shop-location">
+
+                                    📍
+
+                                    ${escapeHtml(shop.city || "Bouaké")}
+
+                                    ${
+
+                                        shop.district
+
+                                        ?
+
+                                        " · " +
+
+                                        escapeHtml(
+
+                                            shop.district
+
+                                        )
+
+                                        :
+
+                                        ""
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+
+            )
+
+            .join("");
+
+    shopGrid
+
+        .querySelectorAll(
+
+            ".shop-card"
+
+        )
+
+        .forEach(
+
+            card => {
+
+                card.addEventListener(
+
+                    "click",
+
+                    () => {
+
+                        const id =
+
+                            card.dataset.shopId;
+
+                        /*
+
+                           Aucun fichier boutique.html
+
+                           n'existe actuellement.
+
+                           On ouvre donc la liste des
+
+                           produits de cette boutique
+
+                           sans créer de 404.
+
+                        */
+
+                        const shopProducts =
+
+                            products.filter(
+
+                                product =>
+
+                                    product.shop_id === id
+
+                            );
+
+                        if (
+
+                            shopProducts.length === 0
+
+                        ) {
+
+                            showToast(
+
+                                "Cette boutique n'a pas encore de produit disponible."
+
+                            );
+
+                            return;
+
+                        }
+
+                        currentCategoryId =
+
+                            null;
+
+                        renderProductSections(
+
+                            shopProducts
+
+                        );
+
+                        scrollToSection(
+
+                            "new-products"
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+}
+
+/* ============================================================
+
+   PUBLICITÉS
+
+============================================================ */
+
+async function loadAdvertisements() {
+
+    try {
+
+        const now =
+
+            new Date().toISOString();
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await supabaseClient
+
+                .from("advertisements")
+
+                .select(`
+
+                    id,
+
+                    title,
+
+                    description,
+
+                    advertisement_type,
+
+                    image_url,
+
+                    event_date,
+
+                    event_time,
+
+                    location,
+
+                    contact_phone,
+
+                    ticket_url,
+
+                    external_url,
+
+                    button_label,
+
+                    is_active,
+
+                    show_on_home,
+
+                    start_at,
+
+                    end_at
+
+                `)
+
+                .eq(
+
+                    "is_active",
+
+                    true
+
+                )
+
+                .eq(
+
+                    "show_on_home",
+
+                    true
+
+                )
+
+                .or(
+
+                    "start_at.is.null,start_at.lte." +
+
+                    now
+
+                )
+
+                .or(
+
+                    "end_at.is.null,end_at.gte." +
+
+                    now
+
+                )
+
+                .order(
+
+                    "created_at",
+
+                    {
+
+                        ascending: false
+
+                    }
+
+                );
+
+        if (error) {
+
+            throw error;
+
+        }
+
+        advertisements =
+
+            data || [];
+
+        renderAdvertisements();
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur publicités :",
+
+            error
+
+        );
+
+        advertisementTrack.innerHTML = `
+
+            <div class="ad-empty" style="width:100%;">
+
+                Impossible de charger les publicités pour le moment.
+
+            </div>
+
+        `;
+
+        adPrev.style.display =
+
+            "none";
+
+        adNext.style.display =
+
+            "none";
+
+        advertisementDots.innerHTML =
+
+            "";
+
+    }
+
+}
+
+function renderAdvertisements() {
+
+    if (
+
+        advertisements.length === 0
+
+    ) {
+
+        advertisementTrack.innerHTML = `
+
+            <div
+
+                class="ad-empty"
+
+                style="width:100%;"
+
+            >
+
+                Aucune publicité disponible pour le moment.
+
+            </div>
+
+        `;
+
+        adPrev.style.display =
+
+            "none";
+
+        adNext.style.display =
+
+            "none";
+
+        advertisementDots.innerHTML =
+
+            "";
+
+        return;
+
+    }
+
+    adPrev.style.display =
+
+        advertisements.length > 1
+
+        ? "block"
+
+        : "none";
+
+    adNext.style.display =
+
+        advertisements.length > 1
+
+        ? "block"
+
+        : "none";
+
+    advertisementTrack.innerHTML =
+
+        advertisements
+
+            .map(
+
+                ad => {
+
+                    let subtitle = "";
+
+                    if (
+
+                        ad.event_date
+
+                    ) {
+
+                        subtitle +=
+
+                            "📅 " +
+
+                            formatDate(
+
+                                ad.event_date
+
+                            );
+
+                    }
+
+                    if (
+
+                        ad.event_time
+
+                    ) {
+
+                        subtitle +=
+
+                            " · ⏰ " +
+
+                            String(
+
+                                ad.event_time
+
+                            ).slice(
+
+                                0,
+
+                                5
+
+                            );
+
+                    }
+
+                    if (
+
+                        ad.location
+
+                    ) {
+
+                        subtitle +=
+
+                            " · 📍 " +
+
+                            ad.location;
+
+                    }
+
+                    return `
+
+                        <article
+
+                            class="advertisement-slide"
+
+                            data-ad-id="${escapeHtml(ad.id)}"
+
+                        >
+
+                            <img
+
+                                src="${escapeHtml(ad.image_url)}"
+
+                                alt="${escapeHtml(ad.title)}"
+
+                                loading="eager"
+
+                            >
+
+                            <div class="advertisement-overlay">
+
+                                <strong>
+
+                                    ${escapeHtml(ad.title)}
+
+                                </strong>
+
+                                <span>
+
+                                    ${escapeHtml(subtitle)}
+
+                                </span>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+
+            )
+
+            .join("");
+
+    advertisementDots.innerHTML =
+
+        advertisements
+
+            .map(
+
+                (_, index) =>
+
+                    `
+
+                    <button
+
+                        type="button"
+
+                        class="ad-dot ${
+
+                            index === 0
+
+                            ? "active"
+
+                            : ""
+
+                        }"
+
+                        data-ad-index="${index}"
+
+                        aria-label="Afficher la publicité ${index + 1}"
+
+                    ></button>
+
+                    `
+
+            )
+
+            .join("");
+
+    advertisementTrack
+
+        .querySelectorAll(
+
+            ".advertisement-slide"
+
+        )
+
+        .forEach(
+
+            slide => {
+
+                slide.addEventListener(
+
+                    "click",
+
+                    () => {
+
+                        const id =
+
+                            slide.dataset.adId;
+
+                        goTo(
+
+                            "publicite.html?id=" +
+
+                            encodeURIComponent(id)
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    advertisementDots
+
+        .querySelectorAll(
+
+            ".ad-dot"
+
+        )
+
+        .forEach(
+
+            dot => {
+
+                dot.addEventListener(
+
+                    "click",
+
+                    event => {
+
+                        event.stopPropagation();
+
+                        currentAdIndex =
+
+                            Number(
+
+                                dot.dataset.adIndex
+
+                            );
+
+                        updateAdvertisementSlider();
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    currentAdIndex =
+
+        0;
+
+    updateAdvertisementSlider();
+
+    startAdvertisementTimer();
+
+}
+
+function updateAdvertisementSlider() {
+
+    if (
+
+        advertisements.length === 0
+
+    ) {
+
+        return;
+
+    }
+
+    advertisementTrack.style.transform =
+
+        "translateX(-" +
+
+        (
+
+            currentAdIndex * 100
+
+        ) +
+
+        "%)";
+
+    advertisementDots
+
+        .querySelectorAll(
+
+            ".ad-dot"
+
+        )
+
+        .forEach(
+
+            (dot, index) => {
+
+                dot.classList.toggle(
+
+                    "active",
+
+                    index ===
+
+                    currentAdIndex
+
+                );
+
+            }
+
+        );
+
+}
+
+function nextAdvertisement() {
+
+    if (
+
+        advertisements.length <= 1
+
+    ) {
+
+        return;
+
+    }
+
+    currentAdIndex =
+
+        (
+
+            currentAdIndex + 1
+
+        ) %
+
+        advertisements.length;
+
+    updateAdvertisementSlider();
+
+}
+
+function previousAdvertisement() {
+
+    if (
+
+        advertisements.length <= 1
+
+    ) {
+
+        return;
+
+    }
+
+    currentAdIndex =
+
+        (
+
+            currentAdIndex -
+
+            1 +
+
+            advertisements.length
+
+        ) %
+
+        advertisements.length;
+
+    updateAdvertisementSlider();
+
+}
+
+function startAdvertisementTimer() {
+
+    clearInterval(
+
+        adTimer
+
+    );
+
+    if (
+
+        advertisements.length <= 1
+
+    ) {
+
+        return;
+
+    }
+
+    adTimer =
+
+        setInterval(
+
+            nextAdvertisement,
+
+            4500
+
+        );
+
+}
+
+adNext.addEventListener(
+
+    "click",
+
+    nextAdvertisement
+
+);
+
+adPrev.addEventListener(
+
+    "click",
+
+    previousAdvertisement
+
+);
+
+advertisementSlider.addEventListener(
+
+    "mouseenter",
+
+    () => {
+
+        clearInterval(
+
+            adTimer
+
+        );
+
+    }
+
+);
+
+advertisementSlider.addEventListener(
+
+    "mouseleave",
+
+    startAdvertisementTimer
+
+);
+
+/* ============================================================
+
+   RECHERCHE
+
+============================================================ */
+
+function performSearch() {
+
+    const query =
+
+        searchInput.value
+
+            .trim()
+
+            .toLowerCase();
+
+    if (!query) {
+
+        currentCategoryId =
+
+            null;
+
+        renderProductSections(
+
+            products
+
+        );
+
+        return;
+
+    }
+
+    const results =
+
+        products.filter(
+
+            product => {
+
+                const productName =
+
+                    String(
+
+                        product.name || ""
+
+                    ).toLowerCase();
+
+                const description =
+
+                    String(
+
+                        product.description || ""
+
+                    ).toLowerCase();
+
+                const categoryName =
+
+                    String(
+
+                        product.categories?.name || ""
+
+                    ).toLowerCase();
+
+                return (
+
+                    productName.includes(
+
+                        query
+
+                    ) ||
+
+                    description.includes(
+
+                        query
+
+                    ) ||
+
+                    categoryName.includes(
+
+                        query
+
+                    )
+
+                );
+
+            }
+
+        );
+
+    currentCategoryId =
+
+        null;
+
+    renderProducts(
+
+        newProductGrid,
+
+        results
+
+    );
+
+    renderProducts(
+
+        popularProductGrid,
+
+        results
+
+    );
+
+    scrollToSection(
+
+        "new-products"
+
+    );
+
+    if (
+
+        results.length === 0
+
+    ) {
+
+        showToast(
+
+            "Aucun produit trouvé."
+
+        );
+
+    }
+
+}
+
+searchButton.addEventListener(
+
+    "click",
+
+    performSearch
+
+);
+
+searchInput.addEventListener(
+
+    "keydown",
+
+    event => {
+
+        if (
+
+            event.key === "Enter"
+
+        ) {
+
+            performSearch();
+
+        }
+
+    }
+
+);
+
+/* ============================================================
+
+   PANIER
+
+============================================================ */
+
+function getCart() {
+
+    try {
+
+        const saved =
+
+            localStorage.getItem(
+
+                "market_bouake_cart"
+
+            );
+
+        if (!saved) {
+
+            return [];
+
+        }
+
+        const parsed =
+
+            JSON.parse(saved);
+
+        return Array.isArray(parsed)
+
+            ? parsed
+
+            : [];
+
+    } catch (error) {
+
+        console.warn(
+
+            "Panier local invalide :",
+
+            error
+
+        );
+
+        return [];
+
+    }
+
+}
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+
+        "market_bouake_cart",
+
+        JSON.stringify(cart)
+
+    );
+
+    updateCartCount();
+
+}
+
+function updateCartCount() {
+
+    const cart =
+
+        getCart();
+
+    const count =
+
+        cart.reduce(
+
+            (
+
+                total,
+
+                item
+
+            ) =>
+
+                total +
+
+                Number(
+
+                    item.quantity || 1
+
+                ),
+
+            0
+
+        );
+
+    headerCartCount.textContent =
+
+        count;
+
+}
+
+function openCart() {
+
+    renderCart();
+
+    cartPanel.classList.add(
+
+        "open"
+
+    );
+
+    cartOverlay.classList.add(
+
+        "open"
+
+    );
+
+    document.body.style.overflow =
+
+        "hidden";
+
+}
+
+function closeCart() {
+
+    cartPanel.classList.remove(
+
+        "open"
+
+    );
+
+    cartOverlay.classList.remove(
+
+        "open"
+
+    );
+
+    document.body.style.overflow =
+
+        "";
+
+}
+
+function renderCart() {
+
+    const cart =
+
+        getCart();
+
+    if (
+
+        cart.length === 0
+
+    ) {
+
+        cartContent.innerHTML = `
+
+            <div class="cart-empty">
+
+                🛒<br><br>
+
+                Votre panier est vide.
+
+            </div>
+
+        `;
+
+        cartTotal.textContent =
+
+            "0 FCFA";
+
+        return;
+
+    }
+
+    let total =
+
+        0;
+
+    cartContent.innerHTML =
+
+        cart.map(
+
+            item => {
+
+                const quantity =
+
+                    Number(
+
+                        item.quantity || 1
+
+                    );
+
+                const price =
+
+                    Number(
+
+                        item.price || 0
+
+                    );
+
+                total +=
+
+                    price *
+
+                    quantity;
+
+                return `
+
+                    <div class="cart-item">
+
+                        ${
+
+                            item.image
+
+                            ?
+
+                            `
+
+                            <img
+
+                                src="${escapeHtml(item.image)}"
+
+                                alt="${escapeHtml(item.name || "Produit")}"
+
+                            >
+
+                            `
+
+                            :
+
+                            `
+
+                            <div
+
+                                style="
+
+                                    width:60px;
+
+                                    height:60px;
+
+                                    border-radius:9px;
+
+                                    background:#edf1ef;
+
+                                    display:flex;
+
+                                    align-items:center;
+
+                                    justify-content:center;
+
+                                    font-size:22px;
+
+                                "
+
+                            >
+
+                                🛍️
+
+                            </div>
+
+                            `
+
+                        }
+
+                        <div class="cart-item-info">
+
+                            <div class="cart-item-name">
+
+                                ${escapeHtml(item.name || "Produit")}
+
+                            </div>
+
+                            <div class="cart-item-price">
+
+                                ${formatPrice(price)}
+
+                                × ${quantity}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+        )
+
+        .join("");
+
+    cartTotal.textContent =
+
+        formatPrice(total);
+
+}
+
+headerCartButton.addEventListener(
+
+    "click",
+
+    openCart
+
+);
+
+cartClose.addEventListener(
+
+    "click",
+
+    closeCart
+
+);
+
+cartOverlay.addEventListener(
+
+    "click",
+
+    closeCart
+
+);
+
+cartContinue.addEventListener(
+
+    "click",
+
+    () => {
+
+        if (!currentUser) {
+
+            closeCart();
+
+            goTo(
+
+                "connexion.html"
+
+            );
+
+            return;
+
+        }
+
+        /*
+
+           Aucun panier.html n'existe
+
+           actuellement dans ton dépôt.
+
+           On dirige donc l'utilisateur
+
+           vers son compte plutôt que
+
+           de créer un lien 404.
+
+        */
+
+        closeCart();
+
+        goTo(
+
+            "compte.html#orders"
+
+        );
+
+    }
+
+);
+
+/* ============================================================
+
+   BOUTONS "VOIR TOUT"
+
+============================================================ */
+
+document
+
+    .querySelectorAll(
+
+        "[data-show-all]"
+
+    )
+
+    .forEach(
+
+        button => {
+
+            button.addEventListener(
+
+                "click",
+
+                () => {
+
+                    const type =
+
+                        button.dataset.showAll;
+
+                    if (
+
+                        type ===
+
+                        "products"
+
+                    ) {
+
+                        currentCategoryId =
+
+                            null;
+
+                        renderProducts(
+
+                            newProductGrid,
+
+                            products
+
+                        );
+
+                        scrollToSection(
+
+                            "new-products"
+
+                        );
+
+                    }
+
+                    if (
+
+                        type ===
+
+                        "popular"
+
+                    ) {
+
+                        currentCategoryId =
+
+                            null;
+
+                        renderProducts(
+
+                            popularProductGrid,
+
+                            products
+
+                        );
+
+                        scrollToSection(
+
+                            "popular-products"
+
+                        );
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    );
+
+document
+
+    .getElementById(
+
+        "allShopsButton"
+
+    )
+
+    .addEventListener(
+
+        "click",
+
+        () => {
+
+            renderShops();
+
+            scrollToSection(
+
+                "shops"
+
+            );
+
+        }
+
+    );
+
+/* ============================================================
+
+   INITIALISATION
+
+============================================================ */
+
+async function initializePage() {
+
+    await updateAuthInterface();
+
+    updateCartCount();
+
+    await Promise.all([
+
+        loadCategories(),
+
+        loadProducts(),
+
+        loadShops(),
+
+        loadAdvertisements(),
+
+        loadFeaturedProducts()
+
+    ]);
+
+}
+
+initializePage();
+
+/* ============================================================
+
+   SURVEILLER LA CONNEXION SUPABASE
+
+============================================================ */
+
+supabaseClient.auth.onAuthStateChange(
+
+    async (
+
+        event,
+
+        session
+
+    ) => {
+
+        currentUser =
+
+            session?.user || null;
+
+        await updateAuthInterface();
+
+    }
+
+);
+
+</script>
+
+</body>
+
+</html>
