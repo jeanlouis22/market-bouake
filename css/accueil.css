@@ -1,0 +1,865 @@
+/* ============================================================
+
+   MARKET BOUAKÉ
+
+   ACCUEIL — CSS
+
+   ============================================================ */
+
+.products-section {
+
+    width: 100%;
+
+    margin: 25px 0;
+
+}
+
+.products-section-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+
+}
+
+.products-section-title {
+
+    margin: 0;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #17211b;
+
+}
+
+.products-section-link {
+
+    color: #0b6b43;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+}
+
+.products-section-link:hover {
+
+    text-decoration: underline;
+
+}
+
+/* ============================================================
+
+   GRILLE PRODUITS
+
+   ============================================================ */
+
+.products-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 14px;
+
+    width: 100%;
+
+}
+
+/* ============================================================
+
+   CARTE PRODUIT
+
+   ============================================================ */
+
+.product-card {
+
+    min-width: 0;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    border: 1px solid #e7ece9;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+
+    transition:
+
+        transform 0.2s ease,
+
+        box-shadow 0.2s ease;
+
+}
+
+.product-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.08);
+
+}
+
+/* ============================================================
+
+   IMAGE PRODUIT
+
+   ============================================================ */
+
+.product-card-image-button {
+
+    display: block;
+
+    width: 100%;
+
+    padding: 0;
+
+    margin: 0;
+
+    border: 0;
+
+    background: #f3f5f4;
+
+    cursor: pointer;
+
+}
+
+.product-card-image {
+
+    display: block;
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: cover;
+
+}
+
+/* ============================================================
+
+   CONTENU CARTE
+
+   ============================================================ */
+
+.product-card-content {
+
+    padding: 11px;
+
+}
+
+.product-card-title {
+
+    margin: 0 0 7px;
+
+    font-size: 15px;
+
+    line-height: 1.3;
+
+    font-weight: 600;
+
+    color: #17211b;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+}
+
+.product-card-price {
+
+    margin-bottom: 7px;
+
+    color: #0b6b43;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+}
+
+.product-card-price small {
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+}
+
+.product-stock {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #68756f;
+
+    font-size: 12px;
+
+}
+
+.product-stock.out {
+
+    color: #b42318;
+
+    font-weight: 600;
+
+}
+
+/* ============================================================
+
+   BOUTON PRODUIT
+
+   ============================================================ */
+
+.product-button {
+
+    width: 100%;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px 10px;
+
+    background: #0b6b43;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+
+}
+
+.product-button:hover {
+
+    background: #095735;
+
+}
+
+.product-button:active {
+
+    transform: scale(0.98);
+
+}
+
+/* ============================================================
+
+   PRODUITS VIDES / ERREUR
+
+   ============================================================ */
+
+.products-empty {
+
+    grid-column: 1 / -1;
+
+    width: 100%;
+
+    padding: 25px 15px;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7ece9;
+
+    color: #68756f;
+
+    text-align: center;
+
+}
+
+/* ============================================================
+
+   PRODUITS MIS EN AVANT
+
+   ============================================================ */
+
+#featured-products-container {
+
+    width: 100%;
+
+}
+
+/* ============================================================
+
+   BOUTIQUES
+
+   ============================================================ */
+
+.shops-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 14px;
+
+    width: 100%;
+
+}
+
+.shop-card {
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    border: 1px solid #e7ece9;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+
+}
+
+.shop-card-image {
+
+    display: block;
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: cover;
+
+    background: #f3f5f4;
+
+}
+
+.shop-card-content {
+
+    padding: 12px;
+
+}
+
+.shop-card-content h3 {
+
+    margin: 0 0 6px;
+
+    font-size: 15px;
+
+    color: #17211b;
+
+}
+
+.shop-card-content p {
+
+    margin: 0 0 10px;
+
+    color: #68756f;
+
+    font-size: 13px;
+
+}
+
+/* ============================================================
+
+   PUBLICITÉS
+
+   ============================================================ */
+
+#advertisements-container {
+
+    width: 100%;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+}
+
+.advertisement-slide {
+
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    max-height: 300px;
+
+    overflow: hidden;
+
+    background: #e9eeeb;
+
+    border-radius: 14px;
+
+}
+
+.advertisement-image {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+.advertisement-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    padding: 20px;
+
+    background:
+
+        linear-gradient(
+
+            to top,
+
+            rgba(0, 0, 0, 0.7),
+
+            rgba(0, 0, 0, 0.05) 65%
+
+        );
+
+}
+
+.advertisement-content {
+
+    width: 100%;
+
+    color: #ffffff;
+
+}
+
+.advertisement-content h2 {
+
+    margin: 0 0 7px;
+
+    font-size: 22px;
+
+    line-height: 1.2;
+
+}
+
+.advertisement-content p {
+
+    margin: 0 0 8px;
+
+    max-width: 700px;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+}
+
+.advertisement-event-info {
+
+    margin-bottom: 10px;
+
+    font-size: 13px;
+
+}
+
+.advertisement-button {
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px 14px;
+
+    background: #f0a500;
+
+    color: #ffffff;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+.advertisement-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    padding: 8px 0;
+
+}
+
+.advertisement-controls button {
+
+    width: 32px;
+
+    height: 32px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #0b6b43;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+}
+
+.advertisement-indicators {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+}
+
+.advertisement-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #cbd5cf;
+
+    cursor: pointer;
+
+}
+
+.advertisement-dot.active {
+
+    background: #0b6b43;
+
+}
+
+.advertisement-empty {
+
+    min-height: 80px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #68756f;
+
+}
+
+/* ============================================================
+
+   RESPONSIVE TABLETTE
+
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .products-grid,
+
+    .shops-grid {
+
+        grid-template-columns:
+
+            repeat(3, minmax(0, 1fr));
+
+    }
+
+    .products-section-title {
+
+        font-size: 20px;
+
+    }
+
+}
+
+/* ============================================================
+
+   RESPONSIVE MOBILE
+
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .products-section {
+
+        margin: 20px 0;
+
+    }
+
+    .products-section-header {
+
+        margin-bottom: 10px;
+
+    }
+
+    .products-section-title {
+
+        font-size: 18px;
+
+    }
+
+    .products-section-link {
+
+        font-size: 13px;
+
+    }
+
+    .products-grid,
+
+    .shops-grid {
+
+        grid-template-columns:
+
+            repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
+
+    }
+
+    .product-card {
+
+        border-radius: 11px;
+
+    }
+
+    .product-card-content {
+
+        padding: 9px;
+
+    }
+
+    .product-card-title {
+
+        font-size: 13px;
+
+    }
+
+    .product-card-price {
+
+        font-size: 14px;
+
+    }
+
+    .product-stock {
+
+        font-size: 11px;
+
+    }
+
+    .product-button {
+
+        padding: 8px;
+
+        font-size: 12px;
+
+    }
+
+    /* Publicité mobile :
+
+       une seule affiche,
+
+       16:9,
+
+       hauteur visuelle proche de 150–190px */
+
+    #advertisements-container {
+
+        border-radius: 11px;
+
+    }
+
+    .advertisement-slide {
+
+        width: 100%;
+
+        aspect-ratio: 16 / 9;
+
+        max-height: 190px;
+
+        border-radius: 11px;
+
+    }
+
+    .advertisement-overlay {
+
+        padding: 11px;
+
+    }
+
+    .advertisement-content h2 {
+
+        margin-bottom: 4px;
+
+        font-size: 16px;
+
+    }
+
+    .advertisement-content p {
+
+        margin-bottom: 5px;
+
+        font-size: 11px;
+
+        line-height: 1.3;
+
+        -webkit-line-clamp: 1;
+
+    }
+
+    .advertisement-event-info {
+
+        margin-bottom: 6px;
+
+        font-size: 10px;
+
+    }
+
+    .advertisement-button {
+
+        padding: 7px 10px;
+
+        font-size: 11px;
+
+    }
+
+    .advertisement-controls {
+
+        gap: 10px;
+
+    }
+
+    .advertisement-controls button {
+
+        width: 28px;
+
+        height: 28px;
+
+    }
+
+    .shop-card {
+
+        border-radius: 11px;
+
+    }
+
+    .shop-card-content {
+
+        padding: 9px;
+
+    }
+
+    .shop-card-content h3 {
+
+        font-size: 13px;
+
+    }
+
+    .shop-card-content p {
+
+        font-size: 11px;
+
+    }
+
+}
+
+/* ============================================================
+
+   PETIT MOBILE
+
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .products-grid,
+
+    .shops-grid {
+
+        gap: 7px;
+
+    }
+
+    .product-card-content {
+
+        padding: 8px;
+
+    }
+
+    .product-card-title {
+
+        font-size: 12px;
+
+    }
+
+    .product-card-price {
+
+        font-size: 13px;
+
+    }
+
+    .product-button {
+
+        font-size: 11px;
+
+    }
+
+    .advertisement-slide {
+
+        max-height: 170px;
+
+    }
+
+}
