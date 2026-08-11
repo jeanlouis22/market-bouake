@@ -2,11 +2,13 @@
 
    MARKET BOUAKÉ
 
-   PUBLICITÉS — ACCUEIL
+   PUBLICITÉS + PRODUITS MIS EN AVANT — ACCUEIL
 
    ============================================================ */
 
 let publicites = [];
+
+let produitsMisEnAvant = [];
 
 let publiciteIndex = 0;
 
@@ -20,33 +22,93 @@ let publiciteTimer = null;
 
 async function chargerPublicites() {
 
-    const container = document.getElementById("advertisements-container");
+    const container =
+
+        document.getElementById("advertisements-container");
 
     if (!container) return;
 
-    const maintenant = new Date().toISOString();
+    const maintenant =
 
-    const { data, error } = await supabase
+        new Date().toISOString();
 
-        .from("advertisements")
+    try {
 
-        .select("*")
+        const { data, error } = await supabase
 
-        .eq("is_active", true)
+            .from("advertisements")
 
-        .eq("show_on_home", true)
+            .select("*")
 
-        .or(`start_at.is.null,start_at.lte.${maintenant}`)
+            .eq("is_active", true)
 
-        .or(`end_at.is.null,end_at.gte.${maintenant}`)
+            .eq("show_on_home", true)
 
-        .order("created_at", { ascending: false });
+            .or(
 
-    if (error) {
+                `start_at.is.null,start_at.lte.${maintenant}`
+
+            )
+
+            .or(
+
+                `end_at.is.null,end_at.gte.${maintenant}`
+
+            )
+
+            .order("created_at", {
+
+                ascending: false
+
+            });
+
+        if (error) {
+
+            console.error(
+
+                "Erreur chargement publicités :",
+
+                error
+
+            );
+
+            container.innerHTML = "";
+
+            return;
+
+        }
+
+        publicites = data || [];
+
+        publiciteIndex = 0;
+
+        /*
+
+         * On charge également les produits mis en avant.
+
+         * Ils restent totalement séparés des publicités.
+
+         */
+
+        await chargerProduitsMisEnAvant();
+
+        if (publicites.length === 0) {
+
+            afficherEtatPubliciteVide();
+
+            return;
+
+        }
+
+        afficherPublicite();
+
+        demarrerDefilementPublicites();
+
+    } catch (error) {
 
         console.error(
 
-            "Erreur chargement publicités :",
+            "Erreur inattendue chargement publicités :",
 
             error
 
@@ -54,33 +116,127 @@ async function chargerPublicites() {
 
         container.innerHTML = "";
 
-        return;
-
     }
 
-    publicites = data || [];
+}
 
-    if (publicites.length === 0) {
+/* ============================================================
 
-        container.innerHTML = `
+   CHARGER LES PRODUITS MIS EN AVANT
 
-            <div class="advertisement-empty">
+   ============================================================ */
 
-                <p>Aucune publicité pour le moment.</p>
+async function chargerProduitsMisEnAvant() {
 
-            </div>
+    try {
 
-        `;
+        const maintenant =
 
-        return;
+            new Date().toISOString();
+
+        const { data, error } = await supabase
+
+            .from("featured_products")
+
+            .select(`
+
+                *,
+
+                products:product_id (
+
+                    id,
+
+                    name,
+
+                    title,
+
+                    price,
+
+                    stock,
+
+                    is_active
+
+                )
+
+            `)
+
+            .eq("is_active", true)
+
+            .eq("show_on_home", true)
+
+            .or(
+
+                `start_at.is.null,start_at.lte.${maintenant}`
+
+            )
+
+            .or(
+
+                `end_at.is.null,end_at.gte.${maintenant}`
+
+            )
+
+            .order("created_at", {
+
+                ascending: false
+
+            });
+
+        if (error) {
+
+            console.error(
+
+                "Erreur chargement produits mis en avant :",
+
+                error
+
+            );
+
+            produitsMisEnAvant = [];
+
+            return;
+
+        }
+
+        produitsMisEnAvant =
+
+            (data || []).filter(item => {
+
+                if (!item.product_id) {
+
+                    return false;
+
+                }
+
+                if (!item.products) {
+
+                    return false;
+
+                }
+
+                if (item.products.is_active === false) {
+
+                    return false;
+
+                }
+
+                return true;
+
+            });
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur produits mis en avant :",
+
+            error
+
+        );
+
+        produitsMisEnAvant = [];
 
     }
-
-    publiciteIndex = 0;
-
-    afficherPublicite();
-
-    demarrerDefilementPublicites();
 
 }
 
@@ -94,15 +250,27 @@ function afficherPublicite() {
 
     const container =
 
-        document.getElementById("advertisements-container");
+        document.getElementById(
 
-    if (!container || publicites.length === 0) {
+            "advertisements-container"
+
+        );
+
+    if (
+
+        !container ||
+
+        publicites.length === 0
+
+    ) {
 
         return;
 
     }
 
-    const publicite = publicites[publiciteIndex];
+    const publicite =
+
+        publicites[publiciteIndex];
 
     if (!publicite) return;
 
@@ -118,7 +286,11 @@ function afficherPublicite() {
 
             class="advertisement-slide"
 
-            data-advertisement-id="${publicite.id}"
+            data-advertisement-id="${escapeHtmlPublicite(
+
+                publicite.id
+
+            )}"
 
         >
 
@@ -128,7 +300,9 @@ function afficherPublicite() {
 
                 alt="${escapeHtmlPublicite(
 
-                    publicite.title || "Publicité Market Bouaké"
+                    publicite.title ||
+
+                    "Publicité Market Bouaké"
 
                 )}"
 
@@ -180,9 +354,15 @@ function afficherPublicite() {
 
                             ? `
 
-                                <div class="advertisement-event-info">
+                                <div
 
-                                    📅 ${formaterDatePublicite(
+                                    class="advertisement-event-info"
+
+                                >
+
+                                    📅
+
+                                    ${formaterDatePublicite(
 
                                         publicite.event_date
 
@@ -194,9 +374,15 @@ function afficherPublicite() {
 
                                             ? `
 
-                                                · ⏰ ${escapeHtmlPublicite(
+                                                · ⏰
 
-                                                    publicite.event_time
+                                                ${escapeHtmlPublicite(
+
+                                                    formaterHeurePublicite(
+
+                                                        publicite.event_time
+
+                                                    )
 
                                                 )}
 
@@ -212,7 +398,9 @@ function afficherPublicite() {
 
                                             ? `
 
-                                                · 📍 ${escapeHtmlPublicite(
+                                                · 📍
+
+                                                ${escapeHtmlPublicite(
 
                                                     publicite.location
 
@@ -238,7 +426,11 @@ function afficherPublicite() {
 
                         class="advertisement-button"
 
-                        onclick="ouvrirPublicite('${publicite.id}')"
+                        onclick="ouvrirPublicite('${escapeHtmlPublicite(
+
+                            publicite.id
+
+                        )}')"
 
                     >
 
@@ -280,7 +472,11 @@ function afficherPublicite() {
 
                         </button>
 
-                        <div class="advertisement-indicators">
+                        <div
+
+                            class="advertisement-indicators"
+
+                        >
 
                             ${publicites
 
@@ -292,7 +488,9 @@ function afficherPublicite() {
 
                                             class="advertisement-dot ${
 
-                                                index === publiciteIndex
+                                                index ===
+
+                                                publiciteIndex
 
                                                     ? "active"
 
@@ -301,6 +499,10 @@ function afficherPublicite() {
                                             }"
 
                                             onclick="allerPublicite(${index})"
+
+                                            role="button"
+
+                                            tabindex="0"
 
                                         ></span>
 
@@ -336,7 +538,45 @@ function afficherPublicite() {
 
     `;
 
-    enregistrerVuePublicite(publicite.id);
+    enregistrerVuePublicite(
+
+        publicite.id
+
+    );
+
+}
+
+/* ============================================================
+
+   AFFICHAGE VIDE
+
+   ============================================================ */
+
+function afficherEtatPubliciteVide() {
+
+    const container =
+
+        document.getElementById(
+
+            "advertisements-container"
+
+        );
+
+    if (!container) return;
+
+    container.innerHTML = `
+
+        <div class="advertisement-empty">
+
+            <p>
+
+                Aucune publicité pour le moment.
+
+            </p>
+
+        </div>
+
+    `;
 
 }
 
@@ -348,11 +588,17 @@ function afficherPublicite() {
 
 function publiciteSuivante() {
 
-    if (publicites.length <= 1) return;
+    if (publicites.length <= 1) {
+
+        return;
+
+    }
 
     publiciteIndex =
 
-        (publiciteIndex + 1) % publicites.length;
+        (publiciteIndex + 1) %
+
+        publicites.length;
 
     afficherPublicite();
 
@@ -366,11 +612,23 @@ function publiciteSuivante() {
 
 function publicitePrecedente() {
 
-    if (publicites.length <= 1) return;
+    if (publicites.length <= 1) {
+
+        return;
+
+    }
 
     publiciteIndex =
 
-        (publiciteIndex - 1 + publicites.length) %
+        (
+
+            publiciteIndex -
+
+            1 +
+
+            publicites.length
+
+        ) %
 
         publicites.length;
 
@@ -422,17 +680,31 @@ function demarrerDefilementPublicites() {
 
     }
 
-    publiciteTimer = setInterval(() => {
+    publiciteTimer =
 
-        publiciteIndex =
+        setInterval(
 
-            (publiciteIndex + 1) %
+            () => {
 
-            publicites.length;
+                publiciteIndex =
 
-        afficherPublicite();
+                    (
 
-    }, 4500);
+                        publiciteIndex +
+
+                        1
+
+                    ) %
+
+                    publicites.length;
+
+                afficherPublicite();
+
+            },
+
+            4500
+
+        );
 
 }
 
@@ -440,7 +712,11 @@ function arreterDefilementPublicites() {
 
     if (publiciteTimer) {
 
-        clearInterval(publiciteTimer);
+        clearInterval(
+
+            publiciteTimer
+
+        );
 
         publiciteTimer = null;
 
@@ -460,27 +736,87 @@ function redemarrerDefilementPublicites() {
 
    ============================================================ */
 
-async function ouvrirPublicite(publiciteId) {
+async function ouvrirPublicite(
 
-    if (!publiciteId) return;
+    publiciteId
 
-    await enregistrerClicPublicite(publiciteId);
+) {
+
+    if (!publiciteId) {
+
+        return;
+
+    }
+
+    await enregistrerClicPublicite(
+
+        publiciteId
+
+    );
 
     window.location.href =
 
-        `publicite.html?id=${encodeURIComponent(publiciteId)}`;
+        `publicite.html?id=${encodeURIComponent(
+
+            publiciteId
+
+        )}`;
 
 }
 
 /* ============================================================
 
-   STATISTIQUE — VUE
+   OUVRIR UN PRODUIT MIS EN AVANT
 
    ============================================================ */
 
-async function enregistrerVuePublicite(publiciteId) {
+async function ouvrirProduitMisEnAvant(
 
-    if (!publiciteId) return;
+    featuredId,
+
+    productId
+
+) {
+
+    if (!productId) {
+
+        return;
+
+    }
+
+    await enregistrerClicProduitMisEnAvant(
+
+        featuredId
+
+    );
+
+    window.location.href =
+
+        `produit.html?id=${encodeURIComponent(
+
+            productId
+
+        )}`;
+
+}
+
+/* ============================================================
+
+   STATISTIQUE — VUE PUBLICITÉ
+
+   ============================================================ */
+
+async function enregistrerVuePublicite(
+
+    publiciteId
+
+) {
+
+    if (!publiciteId) {
+
+        return;
+
+    }
 
     try {
 
@@ -488,29 +824,65 @@ async function enregistrerVuePublicite(publiciteId) {
 
             publicites.find(
 
-                item => item.id === publiciteId
+                item =>
+
+                    item.id ===
+
+                    publiciteId
 
             );
 
-        if (!publicite) return;
+        if (!publicite) {
+
+            return;
+
+        }
 
         const nouveauNombre =
 
-            Number(publicite.views_count || 0) + 1;
+            Number(
 
-        publicite.views_count = nouveauNombre;
+                publicite.views_count || 0
 
-        await supabase
+            ) + 1;
 
-            .from("advertisements")
+        publicite.views_count =
 
-            .update({
+            nouveauNombre;
 
-                views_count: nouveauNombre
+        const { error } =
 
-            })
+            await supabase
 
-            .eq("id", publiciteId);
+                .from("advertisements")
+
+                .update({
+
+                    views_count:
+
+                        nouveauNombre
+
+                })
+
+                .eq(
+
+                    "id",
+
+                    publiciteId
+
+                );
+
+        if (error) {
+
+            console.warn(
+
+                "Vue publicité non enregistrée :",
+
+                error.message
+
+            );
+
+        }
 
     } catch (error) {
 
@@ -528,13 +900,21 @@ async function enregistrerVuePublicite(publiciteId) {
 
 /* ============================================================
 
-   STATISTIQUE — CLIC
+   STATISTIQUE — CLIC PUBLICITÉ
 
    ============================================================ */
 
-async function enregistrerClicPublicite(publiciteId) {
+async function enregistrerClicPublicite(
 
-    if (!publiciteId) return;
+    publiciteId
+
+) {
+
+    if (!publiciteId) {
+
+        return;
+
+    }
 
     try {
 
@@ -542,29 +922,65 @@ async function enregistrerClicPublicite(publiciteId) {
 
             publicites.find(
 
-                item => item.id === publiciteId
+                item =>
+
+                    item.id ===
+
+                    publiciteId
 
             );
 
-        if (!publicite) return;
+        if (!publicite) {
+
+            return;
+
+        }
 
         const nouveauNombre =
 
-            Number(publicite.clicks_count || 0) + 1;
+            Number(
 
-        publicite.clicks_count = nouveauNombre;
+                publicite.clicks_count || 0
 
-        await supabase
+            ) + 1;
 
-            .from("advertisements")
+        publicite.clicks_count =
 
-            .update({
+            nouveauNombre;
 
-                clicks_count: nouveauNombre
+        const { error } =
 
-            })
+            await supabase
 
-            .eq("id", publiciteId);
+                .from("advertisements")
+
+                .update({
+
+                    clicks_count:
+
+                        nouveauNombre
+
+                })
+
+                .eq(
+
+                    "id",
+
+                    publiciteId
+
+                );
+
+        if (error) {
+
+            console.warn(
+
+                "Clic publicité non enregistré :",
+
+                error.message
+
+            );
+
+        }
 
     } catch (error) {
 
@@ -582,17 +998,425 @@ async function enregistrerClicPublicite(publiciteId) {
 
 /* ============================================================
 
+   STATISTIQUE — VUE PRODUIT MIS EN AVANT
+
+   ============================================================ */
+
+async function enregistrerVueProduitMisEnAvant(
+
+    featuredId
+
+) {
+
+    if (!featuredId) {
+
+        return;
+
+    }
+
+    try {
+
+        const produit =
+
+            produitsMisEnAvant.find(
+
+                item =>
+
+                    item.id ===
+
+                    featuredId
+
+            );
+
+        if (!produit) {
+
+            return;
+
+        }
+
+        const nouveauNombre =
+
+            Number(
+
+                produit.views_count || 0
+
+            ) + 1;
+
+        produit.views_count =
+
+            nouveauNombre;
+
+        const { error } =
+
+            await supabase
+
+                .from("featured_products")
+
+                .update({
+
+                    views_count:
+
+                        nouveauNombre
+
+                })
+
+                .eq(
+
+                    "id",
+
+                    featuredId
+
+                );
+
+        if (error) {
+
+            console.warn(
+
+                "Vue produit mis en avant non enregistrée :",
+
+                error.message
+
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur statistique produit mis en avant :",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   STATISTIQUE — CLIC PRODUIT MIS EN AVANT
+
+   ============================================================ */
+
+async function enregistrerClicProduitMisEnAvant(
+
+    featuredId
+
+) {
+
+    if (!featuredId) {
+
+        return;
+
+    }
+
+    try {
+
+        const produit =
+
+            produitsMisEnAvant.find(
+
+                item =>
+
+                    item.id ===
+
+                    featuredId
+
+            );
+
+        if (!produit) {
+
+            return;
+
+        }
+
+        const nouveauNombre =
+
+            Number(
+
+                produit.clicks_count || 0
+
+            ) + 1;
+
+        produit.clicks_count =
+
+            nouveauNombre;
+
+        const { error } =
+
+            await supabase
+
+                .from("featured_products")
+
+                .update({
+
+                    clicks_count:
+
+                        nouveauNombre
+
+                })
+
+                .eq(
+
+                    "id",
+
+                    featuredId
+
+                );
+
+        if (error) {
+
+            console.warn(
+
+                "Clic produit mis en avant non enregistré :",
+
+                error.message
+
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur statistique clic produit :",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   STATISTIQUE — AJOUT AU PANIER
+
+   ============================================================ */
+
+async function enregistrerAjoutPanierProduitMisEnAvant(
+
+    featuredId
+
+) {
+
+    if (!featuredId) {
+
+        return;
+
+    }
+
+    try {
+
+        const produit =
+
+            produitsMisEnAvant.find(
+
+                item =>
+
+                    item.id ===
+
+                    featuredId
+
+            );
+
+        if (!produit) {
+
+            return;
+
+        }
+
+        const nouveauNombre =
+
+            Number(
+
+                produit.cart_additions_count ||
+
+                0
+
+            ) + 1;
+
+        produit.cart_additions_count =
+
+            nouveauNombre;
+
+        const { error } =
+
+            await supabase
+
+                .from("featured_products")
+
+                .update({
+
+                    cart_additions_count:
+
+                        nouveauNombre
+
+                })
+
+                .eq(
+
+                    "id",
+
+                    featuredId
+
+                );
+
+        if (error) {
+
+            console.warn(
+
+                "Ajout panier non enregistré :",
+
+                error.message
+
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur statistique ajout panier :",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   STATISTIQUE — COMMANDE PRODUIT MIS EN AVANT
+
+   ============================================================ */
+
+async function enregistrerCommandeProduitMisEnAvant(
+
+    featuredId
+
+) {
+
+    if (!featuredId) {
+
+        return;
+
+    }
+
+    try {
+
+        const produit =
+
+            produitsMisEnAvant.find(
+
+                item =>
+
+                    item.id ===
+
+                    featuredId
+
+            );
+
+        if (!produit) {
+
+            return;
+
+        }
+
+        const nouveauNombre =
+
+            Number(
+
+                produit.orders_count ||
+
+                0
+
+            ) + 1;
+
+        produit.orders_count =
+
+            nouveauNombre;
+
+        const { error } =
+
+            await supabase
+
+                .from("featured_products")
+
+                .update({
+
+                    orders_count:
+
+                        nouveauNombre
+
+                })
+
+                .eq(
+
+                    "id",
+
+                    featuredId
+
+                );
+
+        if (error) {
+
+            console.warn(
+
+                "Commande produit mis en avant non enregistrée :",
+
+                error.message
+
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur statistique commande produit :",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
    FORMATAGE DATE
 
    ============================================================ */
 
-function formaterDatePublicite(date) {
+function formaterDatePublicite(
 
-    if (!date) return "";
+    date
+
+) {
+
+    if (!date) {
+
+        return "";
+
+    }
 
     try {
 
-        return new Date(date).toLocaleDateString(
+        return new Date(
+
+            date
+
+        ).toLocaleDateString(
 
             "fr-FR",
 
@@ -618,11 +1442,59 @@ function formaterDatePublicite(date) {
 
 /* ============================================================
 
+   FORMATAGE HEURE
+
+   ============================================================ */
+
+function formaterHeurePublicite(
+
+    heure
+
+) {
+
+    if (!heure) {
+
+        return "";
+
+    }
+
+    const valeur =
+
+        String(heure);
+
+    const parties =
+
+        valeur.split(":");
+
+    if (parties.length < 2) {
+
+        return valeur;
+
+    }
+
+    return (
+
+        parties[0] +
+
+        ":" +
+
+        parties[1]
+
+    );
+
+}
+
+/* ============================================================
+
    PROTECTION HTML
 
    ============================================================ */
 
-function escapeHtmlPublicite(value) {
+function escapeHtmlPublicite(
+
+    value
+
+) {
 
     if (
 
@@ -638,21 +1510,51 @@ function escapeHtmlPublicite(value) {
 
     return String(value)
 
-        .replace(/&/g, "&amp;")
+        .replace(
 
-        .replace(/</g, "&lt;")
+            /&/g,
 
-        .replace(/>/g, "&gt;")
+            "&amp;"
 
-        .replace(/"/g, "&quot;")
+        )
 
-        .replace(/'/g, "&#039;");
+        .replace(
+
+            /</g,
+
+            "&lt;"
+
+        )
+
+        .replace(
+
+            />/g,
+
+            "&gt;"
+
+        )
+
+        .replace(
+
+            /"/g,
+
+            "&quot;"
+
+        )
+
+        .replace(
+
+            /'/g,
+
+            "&#039;"
+
+        );
 
 }
 
 /* ============================================================
 
-   PAUSE AU SURVOL / REPRISE
+   PAUSE AU SURVOL
 
    ============================================================ */
 
@@ -683,6 +1585,12 @@ document.addEventListener(
     true
 
 );
+
+/* ============================================================
+
+   REPRISE APRÈS SURVOL
+
+   ============================================================ */
 
 document.addEventListener(
 
