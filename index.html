@@ -1,0 +1,3877 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Market Bouaké</title>
+
+<style>
+
+*{
+
+    box-sizing:border-box;
+
+    margin:0;
+
+    padding:0;
+
+}
+
+body{
+
+    font-family:Arial,Helvetica,sans-serif;
+
+    background:#f5f7f6;
+
+    color:#17211b;
+
+}
+
+button,
+
+a{
+
+    -webkit-tap-highlight-color:transparent;
+
+}
+
+button{
+
+    font-family:inherit;
+
+}
+
+.header{
+
+    background:#0b6b43;
+
+    color:white;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    box-shadow:0 2px 12px rgba(0,0,0,.12);
+
+}
+
+.header-main{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    min-height:72px;
+
+    padding:10px 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:21px;
+
+    font-weight:800;
+
+    white-space:nowrap;
+
+}
+
+.logo-icon{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:#0b6b43;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:22px;
+
+}
+
+.search{
+
+    flex:1;
+
+    max-width:500px;
+
+    margin:auto;
+
+    position:relative;
+
+}
+
+.search input{
+
+    width:100%;
+
+    height:44px;
+
+    border:0;
+
+    outline:none;
+
+    border-radius:12px;
+
+    padding:0 45px 0 16px;
+
+    font-size:14px;
+
+}
+
+.search button{
+
+    position:absolute;
+
+    right:4px;
+
+    top:4px;
+
+    width:36px;
+
+    height:36px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:#f0a500;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.header-button{
+
+    border:0;
+
+    background:white;
+
+    color:#0b6b43;
+
+    min-height:42px;
+
+    padding:9px 12px;
+
+    border-radius:10px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    text-decoration:none;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:6px;
+
+}
+
+.cart-count{
+
+    min-width:20px;
+
+    height:20px;
+
+    padding:0 5px;
+
+    border-radius:10px;
+
+    background:#f0a500;
+
+    color:white;
+
+    font-size:11px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.menu-button{
+
+    width:44px;
+
+    height:42px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:white;
+
+    color:#0b6b43;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+}
+
+.menu-panel{
+
+    display:none;
+
+    position:absolute;
+
+    right:18px;
+
+    top:66px;
+
+    width:min(340px,calc(100vw - 36px));
+
+    background:white;
+
+    color:#17211b;
+
+    border-radius:14px;
+
+    box-shadow:0 8px 30px rgba(0,0,0,.18);
+
+    overflow:hidden;
+
+}
+
+.menu-panel.open{
+
+    display:block;
+
+}
+
+.menu-title{
+
+    padding:15px 17px;
+
+    font-weight:800;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.menu-section{
+
+    padding:8px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.menu-link{
+
+    width:100%;
+
+    border:0;
+
+    background:white;
+
+    color:#17211b;
+
+    padding:12px;
+
+    border-radius:9px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+}
+
+.menu-link:hover{
+
+    background:#f1f5f3;
+
+}
+
+.menu-link.danger{
+
+    color:#b00020;
+
+}
+
+main{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:22px 16px 90px;
+
+}
+
+.hero{
+
+    background:linear-gradient(135deg,#ffffff,#eef7f2);
+
+    border-radius:20px;
+
+    padding:42px 20px;
+
+    text-align:center;
+
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+
+}
+
+.hero h1{
+
+    font-size:34px;
+
+    line-height:1.15;
+
+    margin-bottom:12px;
+
+}
+
+.hero p{
+
+    color:#66736d;
+
+    margin-bottom:22px;
+
+    font-size:16px;
+
+}
+
+.hero-actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+.primary,
+
+.secondary{
+
+    border:0;
+
+    padding:13px 18px;
+
+    border-radius:10px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    text-decoration:none;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.primary{
+
+    background:#0b6b43;
+
+    color:white;
+
+}
+
+.secondary{
+
+    background:#f0a500;
+
+    color:white;
+
+}
+
+.section{
+
+    margin-top:30px;
+
+}
+
+.section-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    margin-bottom:14px;
+
+}
+
+.section-header h2{
+
+    font-size:21px;
+
+}
+
+.view-all{
+
+    border:0;
+
+    background:none;
+
+    color:#0b6b43;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.categories{
+
+    display:grid;
+
+    grid-template-columns:repeat(6,1fr);
+
+    gap:10px;
+
+}
+
+.category-card{
+
+    background:white;
+
+    border:1px solid #e7ece9;
+
+    border-radius:13px;
+
+    padding:15px 8px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+}
+
+.category-card:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+
+}
+
+.category-image{
+
+    width:52px;
+
+    height:52px;
+
+    border-radius:12px;
+
+    object-fit:cover;
+
+    margin-bottom:8px;
+
+}
+
+.category-icon{
+
+    width:52px;
+
+    height:52px;
+
+    margin:0 auto 8px;
+
+    border-radius:12px;
+
+    background:#eef7f2;
+
+    color:#0b6b43;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:24px;
+
+}
+
+.category-name{
+
+    font-weight:700;
+
+    font-size:13px;
+
+}
+
+.products{
+
+    display:grid;
+
+    grid-template-columns:repeat(5,1fr);
+
+    gap:12px;
+
+}
+
+.product-card{
+
+    background:white;
+
+    border-radius:13px;
+
+    overflow:hidden;
+
+    border:1px solid #e7ece9;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.04);
+
+}
+
+.product-image-wrap{
+
+    height:170px;
+
+    background:#eef1ef;
+
+    position:relative;
+
+}
+
+.product-image{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+.favorite{
+
+    position:absolute;
+
+    top:8px;
+
+    right:8px;
+
+    width:32px;
+
+    height:32px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:white;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+}
+
+.product-info{
+
+    padding:11px;
+
+}
+
+.product-name{
+
+    font-weight:700;
+
+    font-size:14px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.product-price{
+
+    margin-top:7px;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    color:#0b6b43;
+
+}
+
+.product-stock{
+
+    margin-top:5px;
+
+    font-size:12px;
+
+    color:#66736d;
+
+}
+
+.product-shop{
+
+    margin-top:5px;
+
+    font-size:12px;
+
+    color:#66736d;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.product-button{
+
+    width:100%;
+
+    margin-top:9px;
+
+    border:0;
+
+    background:#0b6b43;
+
+    color:white;
+
+    padding:9px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+}
+
+.shops{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:12px;
+
+}
+
+.shop-card{
+
+    background:white;
+
+    border:1px solid #e7ece9;
+
+    border-radius:14px;
+
+    padding:12px;
+
+    display:flex;
+
+    gap:12px;
+
+    align-items:center;
+
+}
+
+.shop-image{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:12px;
+
+    object-fit:cover;
+
+    background:#eef1ef;
+
+    flex-shrink:0;
+
+}
+
+.shop-name{
+
+    font-weight:800;
+
+    font-size:14px;
+
+}
+
+.shop-location{
+
+    margin-top:5px;
+
+    color:#66736d;
+
+    font-size:12px;
+
+}
+
+.shop-button{
+
+    margin-top:8px;
+
+    border:0;
+
+    background:#eef7f2;
+
+    color:#0b6b43;
+
+    padding:7px 9px;
+
+    border-radius:7px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    font-size:12px;
+
+}
+
+.local-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:12px;
+
+}
+
+.info-card{
+
+    background:white;
+
+    border-radius:14px;
+
+    padding:18px;
+
+    border:1px solid #e7ece9;
+
+}
+
+.info-card strong{
+
+    display:block;
+
+    margin-bottom:7px;
+
+}
+
+.info-card span{
+
+    color:#66736d;
+
+    font-size:13px;
+
+    line-height:1.45;
+
+}
+
+.message{
+
+    padding:16px;
+
+    background:white;
+
+    border:1px solid #e7ece9;
+
+    border-radius:12px;
+
+    color:#66736d;
+
+    font-size:14px;
+
+}
+
+.hidden{
+
+    display:none!important;
+
+}
+
+footer{
+
+    padding:30px 16px;
+
+    text-align:center;
+
+    color:#66736d;
+
+    font-size:13px;
+
+}
+
+.mobile-nav{
+
+    display:none;
+
+}
+
+@media(max-width:950px){
+
+    .categories{
+
+        grid-template-columns:repeat(4,1fr);
+
+    }
+
+    .products{
+
+        grid-template-columns:repeat(4,1fr);
+
+    }
+
+    .shops{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+    .local-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:700px){
+
+    .header-main{
+
+        min-height:64px;
+
+        padding:8px 10px;
+
+        gap:7px;
+
+    }
+
+    .logo{
+
+        font-size:16px;
+
+        gap:5px;
+
+    }
+
+    .logo-icon{
+
+        width:36px;
+
+        height:36px;
+
+        font-size:19px;
+
+    }
+
+    .search{
+
+        position:absolute;
+
+        left:10px;
+
+        right:10px;
+
+        top:70px;
+
+        max-width:none;
+
+        margin:0;
+
+    }
+
+    .header{
+
+        padding-bottom:58px;
+
+    }
+
+    .header-actions{
+
+        margin-left:auto;
+
+    }
+
+    .header-button{
+
+        min-height:38px;
+
+        padding:7px 9px;
+
+        font-size:12px;
+
+    }
+
+    .menu-button{
+
+        width:40px;
+
+        height:38px;
+
+    }
+
+    .menu-panel{
+
+        top:57px;
+
+    }
+
+    main{
+
+        padding-top:18px;
+
+    }
+
+    .hero{
+
+        padding:32px 15px;
+
+    }
+
+    .hero h1{
+
+        font-size:27px;
+
+    }
+
+    .categories{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+    .products{
+
+        grid-template-columns:repeat(2,1fr);
+
+        gap:9px;
+
+    }
+
+    .product-image-wrap{
+
+        height:145px;
+
+    }
+
+    .product-info{
+
+        padding:9px;
+
+    }
+
+    .product-button{
+
+        font-size:12px;
+
+    }
+
+    .shops{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .local-grid{
+
+        grid-template-columns:1fr 1fr;
+
+    }
+
+    .mobile-nav{
+
+        display:grid;
+
+        grid-template-columns:repeat(3,1fr);
+
+        position:fixed;
+
+        bottom:0;
+
+        left:0;
+
+        right:0;
+
+        height:65px;
+
+        background:white;
+
+        border-top:1px solid #ddd;
+
+        z-index:999;
+
+        box-shadow:0 -3px 15px rgba(0,0,0,.08);
+
+    }
+
+    .mobile-nav button{
+
+        border:0;
+
+        background:white;
+
+        color:#17211b;
+
+        font-weight:700;
+
+        cursor:pointer;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        justify-content:center;
+
+        gap:3px;
+
+    }
+
+    .mobile-nav button.active{
+
+        color:#0b6b43;
+
+    }
+
+}
+
+@media(max-width:400px){
+
+    .header-button span.label{
+
+        display:none;
+
+    }
+
+    .categories{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+    .product-image-wrap{
+
+        height:135px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-main">
+
+        <a href="index.html" class="logo">
+
+            <div class="logo-icon">🛒</div>
+
+            <span>Market Bouaké</span>
+
+        </a>
+
+        <div class="search">
+
+            <input
+
+                type="search"
+
+                id="searchInput"
+
+                placeholder="Rechercher un produit ou une boutique..."
+
+                autocomplete="off"
+
+            >
+
+            <button id="searchButton" type="button">🔎</button>
+
+        </div>
+
+        <div class="header-actions">
+
+            <button
+
+                class="header-button"
+
+                id="cartButton"
+
+                type="button"
+
+            >
+
+                🛒
+
+                <span class="label">Panier</span>
+
+                <span class="cart-count" id="cartCount">0</span>
+
+            </button>
+
+            <button
+
+                class="header-button"
+
+                id="accountButton"
+
+                type="button"
+
+            >
+
+                👤
+
+                <span class="label" id="accountLabel">Compte</span>
+
+            </button>
+
+            <button
+
+                class="menu-button"
+
+                id="menuButton"
+
+                type="button"
+
+                aria-label="Menu"
+
+            >
+
+                ☰
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="menu-panel" id="menuPanel">
+
+        <div class="menu-title">
+
+            Menu Market Bouaké
+
+        </div>
+
+        <div class="menu-section">
+
+            <button class="menu-link" data-action="home">
+
+                🏠 Accueil
+
+            </button>
+
+            <button class="menu-link" data-action="categories">
+
+                🗂️ Catégories
+
+            </button>
+
+            <button class="menu-link" data-action="promotions">
+
+                🔥 Promotions
+
+            </button>
+
+            <button class="menu-link" data-action="new">
+
+                🆕 Nouveautés
+
+            </button>
+
+            <button class="menu-link" data-action="popular">
+
+                ⭐ Produits populaires
+
+            </button>
+
+            <button class="menu-link" data-action="shops">
+
+                🏪 Boutiques
+
+            </button>
+
+            <button class="menu-link" data-action="seller">
+
+                🛍️ Devenir vendeur
+
+            </button>
+
+            <button class="menu-link" data-action="cart">
+
+                🛒 Mon panier
+
+            </button>
+
+        </div>
+
+        <div class="menu-section" id="accountMenuSection">
+
+            <button class="menu-link" data-action="account">
+
+                👤 Mon compte
+
+            </button>
+
+            <button class="menu-link" data-action="orders">
+
+                📦 Mes commandes
+
+            </button>
+
+            <button class="menu-link" data-action="favorites">
+
+                ❤️ Mes favoris
+
+            </button>
+
+            <button class="menu-link" data-action="delivery">
+
+                📍 Mes informations de livraison
+
+            </button>
+
+            <button class="menu-link" data-action="notifications">
+
+                🔔 Notifications
+
+            </button>
+
+            <button class="menu-link" data-action="reviews">
+
+                ⭐ Mes avis
+
+            </button>
+
+            <button class="menu-link" data-action="help">
+
+                🆘 Aide
+
+            </button>
+
+            <button class="menu-link" data-action="problem">
+
+                ⚠️ Signaler un problème
+
+            </button>
+
+            <button class="menu-link" data-action="settings">
+
+                ⚙️ Paramètres
+
+            </button>
+
+            <button class="menu-link" data-action="security">
+
+                🔐 Sécurité du compte
+
+            </button>
+
+            <button class="menu-link danger" data-action="logout">
+
+                🚪 Déconnexion
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main>
+
+    <section class="hero">
+
+        <h1>
+
+            Tout ce dont vous avez besoin,<br>
+
+            près de chez vous.
+
+        </h1>
+
+        <p>
+
+            Découvrez les produits des vendeurs de Bouaké.
+
+        </p>
+
+        <div class="hero-actions">
+
+            <button
+
+                class="primary"
+
+                id="buyButton"
+
+                type="button"
+
+            >
+
+                🛍️ Acheter maintenant
+
+            </button>
+
+            <button
+
+                class="secondary"
+
+                id="sellerButton"
+
+                type="button"
+
+            >
+
+                🏪 Devenir vendeur
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <section class="section" id="categoriesSection">
+
+        <div class="section-header">
+
+            <h2>🗂️ Découvrez nos catégories</h2>
+
+            <button
+
+                class="view-all"
+
+                data-action="categories"
+
+                type="button"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="categories"
+
+            id="categoriesContainer"
+
+        ></div>
+
+        <div
+
+            class="message hidden"
+
+            id="categoriesMessage"
+
+        ></div>
+
+    </section>
+
+    <section class="section" id="newSection">
+
+        <div class="section-header">
+
+            <h2>🆕 Nouveautés</h2>
+
+            <button
+
+                class="view-all"
+
+                data-action="new"
+
+                type="button"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="products"
+
+            id="newProductsContainer"
+
+        ></div>
+
+        <div
+
+            class="message hidden"
+
+            id="newProductsMessage"
+
+        ></div>
+
+    </section>
+
+    <section class="section" id="popularSection">
+
+        <div class="section-header">
+
+            <h2>⭐ Les produits populaires</h2>
+
+            <button
+
+                class="view-all"
+
+                data-action="popular"
+
+                type="button"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="products"
+
+            id="popularProductsContainer"
+
+        ></div>
+
+        <div
+
+            class="message hidden"
+
+            id="popularProductsMessage"
+
+        ></div>
+
+    </section>
+
+    <section class="section" id="shopsSection">
+
+        <div class="section-header">
+
+            <h2>🏪 Découvrez nos boutiques</h2>
+
+            <button
+
+                class="view-all"
+
+                data-action="shops"
+
+                type="button"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div
+
+            class="shops"
+
+            id="shopsContainer"
+
+        ></div>
+
+        <div
+
+            class="message hidden"
+
+            id="shopsMessage"
+
+        ></div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>📍 Achetez auprès des vendeurs de Bouaké</h2>
+
+        </div>
+
+        <div class="local-grid">
+
+            <div class="info-card">
+
+                <strong>🏪 Vendeurs locaux</strong>
+
+                <span>
+
+                    Découvrez les boutiques présentes sur Market Bouaké.
+
+                </span>
+
+            </div>
+
+            <div class="info-card">
+
+                <strong>🚚 Livraison</strong>
+
+                <span>
+
+                    Les vendeurs peuvent proposer leurs propres tarifs de livraison.
+
+                </span>
+
+            </div>
+
+            <div class="info-card">
+
+                <strong>💬 WhatsApp</strong>
+
+                <span>
+
+                    Contactez directement les vendeurs pour vos commandes.
+
+                </span>
+
+            </div>
+
+            <div class="info-card">
+
+                <strong>🔐 Compte sécurisé</strong>
+
+                <span>
+
+                    Les comptes et les données sont protégés par Supabase.
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+
+    Market Bouaké — Marketplace locale de Bouaké
+
+</footer>
+
+<nav class="mobile-nav">
+
+    <button
+
+        class="active"
+
+        id="mobileHome"
+
+        type="button"
+
+    >
+
+        <span>🏠</span>
+
+        <span>Accueil</span>
+
+    </button>
+
+    <button
+
+        id="mobileCart"
+
+        type="button"
+
+    >
+
+        <span>🛒</span>
+
+        <span>Panier</span>
+
+    </button>
+
+    <button
+
+        id="mobileAccount"
+
+        type="button"
+
+    >
+
+        <span>👤</span>
+
+        <span>Compte</span>
+
+    </button>
+
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* ============================================================
+
+   SUPABASE
+
+============================================================ */
+
+const SUPABASE_URL =
+
+    "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+
+    "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+const supabaseClient =
+
+    window.supabase.createClient(
+
+        SUPABASE_URL,
+
+        SUPABASE_PUBLISHABLE_KEY
+
+    );
+
+/* ============================================================
+
+   ÉLÉMENTS
+
+============================================================ */
+
+const menuButton =
+
+    document.getElementById("menuButton");
+
+const menuPanel =
+
+    document.getElementById("menuPanel");
+
+const accountButton =
+
+    document.getElementById("accountButton");
+
+const accountLabel =
+
+    document.getElementById("accountLabel");
+
+const cartButton =
+
+    document.getElementById("cartButton");
+
+const cartCount =
+
+    document.getElementById("cartCount");
+
+const searchInput =
+
+    document.getElementById("searchInput");
+
+const searchButton =
+
+    document.getElementById("searchButton");
+
+const categoriesContainer =
+
+    document.getElementById("categoriesContainer");
+
+const categoriesMessage =
+
+    document.getElementById("categoriesMessage");
+
+const newProductsContainer =
+
+    document.getElementById("newProductsContainer");
+
+const newProductsMessage =
+
+    document.getElementById("newProductsMessage");
+
+const popularProductsContainer =
+
+    document.getElementById("popularProductsContainer");
+
+const popularProductsMessage =
+
+    document.getElementById("popularProductsMessage");
+
+const shopsContainer =
+
+    document.getElementById("shopsContainer");
+
+const shopsMessage =
+
+    document.getElementById("shopsMessage");
+
+/* ============================================================
+
+   SESSION
+
+============================================================ */
+
+let currentUser = null;
+
+async function loadSession(){
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } = await supabaseClient.auth.getSession();
+
+        if(error){
+
+            console.error(
+
+                "Erreur session :",
+
+                error
+
+            );
+
+            return;
+
+        }
+
+        currentUser =
+
+            data.session
+
+                ? data.session.user
+
+                : null;
+
+        updateAccountInterface();
+
+    }catch(error){
+
+        console.error(
+
+            "Erreur session :",
+
+            error
+
+        );
+
+    }
+
+}
+
+supabaseClient.auth.onAuthStateChange(
+
+    function(event, session){
+
+        currentUser =
+
+            session
+
+                ? session.user
+
+                : null;
+
+        updateAccountInterface();
+
+        updateCartCount();
+
+    }
+
+);
+
+/* ============================================================
+
+   COMPTE
+
+============================================================ */
+
+function updateAccountInterface(){
+
+    if(currentUser){
+
+        accountLabel.textContent =
+
+            "Mon compte";
+
+    }else{
+
+        accountLabel.textContent =
+
+            "Compte";
+
+    }
+
+}
+
+/* ============================================================
+
+   PANIER LOCAL
+
+============================================================ */
+
+function getCart(){
+
+    try{
+
+        const cart =
+
+            JSON.parse(
+
+                localStorage.getItem(
+
+                    "market_bouake_cart"
+
+                ) || "[]"
+
+            );
+
+        return Array.isArray(cart)
+
+            ? cart
+
+            : [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+function saveCart(cart){
+
+    localStorage.setItem(
+
+        "market_bouake_cart",
+
+        JSON.stringify(cart)
+
+    );
+
+}
+
+function updateCartCount(){
+
+    const cart =
+
+        getCart();
+
+    const count =
+
+        cart.reduce(
+
+            function(total,item){
+
+                return total +
+
+                    Number(
+
+                        item.quantity || 1
+
+                    );
+
+            },
+
+            0
+
+        );
+
+    cartCount.textContent =
+
+        count;
+
+}
+
+function addToCart(product){
+
+    const cart =
+
+        getCart();
+
+    const existing =
+
+        cart.find(
+
+            function(item){
+
+                return item.id === product.id;
+
+            }
+
+        );
+
+    if(existing){
+
+        existing.quantity =
+
+            Number(existing.quantity || 1) + 1;
+
+    }else{
+
+        cart.push({
+
+            id:product.id,
+
+            name:product.name,
+
+            price:Number(product.price),
+
+            image_url_1:product.image_url_1,
+
+            shop_id:product.shop_id,
+
+            shop_name:
+
+                product.shops
+
+                    ? product.shops.shop_name
+
+                    : "",
+
+            quantity:1
+
+        });
+
+    }
+
+    saveCart(cart);
+
+    updateCartCount();
+
+    alert(
+
+        "✅ Produit ajouté au panier."
+
+    );
+
+}
+
+/* ============================================================
+
+   CATÉGORIES
+
+============================================================ */
+
+function getCategoryIcon(name){
+
+    const icons = {
+
+        "Mode":"👕",
+
+        "Téléphones":"📱",
+
+        "Électronique":"💻",
+
+        "Électroménager":"🔌",
+
+        "Maison":"🏠",
+
+        "Beauté":"💄",
+
+        "Alimentation":"🍎",
+
+        "Chaussures":"👟",
+
+        "Enfants":"🧒",
+
+        "Sports":"⚽",
+
+        "Services":"🔧",
+
+        "Autres":"📦"
+
+    };
+
+    return icons[name] || "📦";
+
+}
+
+async function loadCategories(){
+
+    categoriesContainer.innerHTML = "";
+
+    categoriesMessage.classList.add(
+
+        "hidden"
+
+    );
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+        await supabaseClient
+
+            .from("categories")
+
+            .select(
+
+                "id,name,image_url,is_active"
+
+            )
+
+            .eq(
+
+                "is_active",
+
+                true
+
+            )
+
+            .order(
+
+                "name",
+
+                {
+
+                    ascending:true
+
+                }
+
+            );
+
+        if(error){
+
+            console.error(
+
+                "Erreur catégories :",
+
+                error
+
+            );
+
+            throw error;
+
+        }
+
+        if(!data || data.length === 0){
+
+            categoriesMessage.textContent =
+
+                "Aucune catégorie disponible pour le moment.";
+
+            categoriesMessage.classList.remove(
+
+                "hidden"
+
+            );
+
+            return;
+
+        }
+
+        data.forEach(
+
+            function(category){
+
+                const card =
+
+                    document.createElement(
+
+                        "button"
+
+                    );
+
+                card.type =
+
+                    "button";
+
+                card.className =
+
+                    "category-card";
+
+                if(category.image_url){
+
+                    card.innerHTML = `
+
+                        <img
+
+                            class="category-image"
+
+                            src="${escapeHtml(category.image_url)}"
+
+                            alt="${escapeHtml(category.name)}"
+
+                        >
+
+                        <div class="category-name">
+
+                            ${escapeHtml(category.name)}
+
+                        </div>
+
+                    `;
+
+                }else{
+
+                    card.innerHTML = `
+
+                        <div class="category-icon">
+
+                            ${getCategoryIcon(category.name)}
+
+                        </div>
+
+                        <div class="category-name">
+
+                            ${escapeHtml(category.name)}
+
+                        </div>
+
+                    `;
+
+                }
+
+                card.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        goToCategory(
+
+                            category.id,
+
+                            category.name
+
+                        );
+
+                    }
+
+                );
+
+                categoriesContainer.appendChild(
+
+                    card
+
+                );
+
+            }
+
+        );
+
+    }catch(error){
+
+        categoriesMessage.textContent =
+
+            "Impossible de charger les catégories pour le moment.";
+
+        categoriesMessage.classList.remove(
+
+            "hidden"
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   PRODUITS
+
+============================================================ */
+
+async function getProducts(){
+
+    const {
+
+        data,
+
+        error
+
+    } =
+
+    await supabaseClient
+
+        .from("products")
+
+        .select(`
+
+            id,
+
+            name,
+
+            description,
+
+            price,
+
+            stock,
+
+            sizes,
+
+            image_url_1,
+
+            image_url_2,
+
+            image_url_3,
+
+            category_id,
+
+            shop_id,
+
+            created_at,
+
+            is_active,
+
+            shops (
+
+                id,
+
+                shop_name,
+
+                city,
+
+                district,
+
+                status
+
+            ),
+
+            categories (
+
+                id,
+
+                name,
+
+                is_active
+
+            )
+
+        `)
+
+        .eq(
+
+            "is_active",
+
+            true
+
+        )
+
+        .order(
+
+            "created_at",
+
+            {
+
+                ascending:false
+
+            }
+
+        );
+
+    if(error){
+
+        console.error(
+
+            "Erreur produits :",
+
+            error
+
+        );
+
+        throw error;
+
+    }
+
+    return data || [];
+
+}
+
+function createProductCard(product){
+
+    const card =
+
+        document.createElement(
+
+            "article"
+
+        );
+
+    card.className =
+
+        "product-card";
+
+    const image =
+
+        product.image_url_1 ||
+
+        product.image_url_2 ||
+
+        product.image_url_3 ||
+
+        "";
+
+    const shopName =
+
+        product.shops
+
+            ? product.shops.shop_name
+
+            : "Vendeur";
+
+    const stockText =
+
+        Number(product.stock) > 0
+
+            ? "✅ En stock"
+
+            : "❌ Rupture de stock";
+
+    card.innerHTML = `
+
+        <div class="product-image-wrap">
+
+            ${
+
+                image
+
+                ?
+
+                `
+
+                <img
+
+                    class="product-image"
+
+                    src="${escapeHtml(image)}"
+
+                    alt="${escapeHtml(product.name)}"
+
+                    loading="lazy"
+
+                >
+
+                `
+
+                :
+
+                `
+
+                <div
+
+                    style="
+
+                        width:100%;
+
+                        height:100%;
+
+                        display:flex;
+
+                        align-items:center;
+
+                        justify-content:center;
+
+                        font-size:40px;
+
+                    "
+
+                >
+
+                    🛍️
+
+                </div>
+
+                `
+
+            }
+
+            <button
+
+                class="favorite"
+
+                type="button"
+
+                title="Ajouter aux favoris"
+
+            >
+
+                ♡
+
+            </button>
+
+        </div>
+
+        <div class="product-info">
+
+            <div class="product-name">
+
+                ${escapeHtml(product.name)}
+
+            </div>
+
+            <div class="product-price">
+
+                ${formatPrice(product.price)} FCFA
+
+            </div>
+
+            <div class="product-stock">
+
+                ${stockText}
+
+            </div>
+
+            <div class="product-shop">
+
+                🏪 ${escapeHtml(shopName)}
+
+            </div>
+
+            <button
+
+                class="product-button"
+
+                type="button"
+
+                ${Number(product.stock) <= 0 ? "disabled" : ""}
+
+            >
+
+                🛒 Ajouter au panier
+
+            </button>
+
+        </div>
+
+    `;
+
+    const favoriteButton =
+
+        card.querySelector(
+
+            ".favorite"
+
+        );
+
+    favoriteButton.addEventListener(
+
+        "click",
+
+        function(event){
+
+            event.stopPropagation();
+
+            if(!currentUser){
+
+                window.location.href =
+
+                    "connexion.html";
+
+                return;
+
+            }
+
+            alert(
+
+                "❤️ Les favoris seront disponibles dans votre espace compte."
+
+            );
+
+        }
+
+    );
+
+    const addButton =
+
+        card.querySelector(
+
+            ".product-button"
+
+        );
+
+    addButton.addEventListener(
+
+        "click",
+
+        function(event){
+
+            event.stopPropagation();
+
+            if(Number(product.stock) <= 0){
+
+                return;
+
+            }
+
+            addToCart(product);
+
+        }
+
+    );
+
+    card.addEventListener(
+
+        "click",
+
+        function(event){
+
+            if(
+
+                event.target.closest(
+
+                    "button"
+
+                )
+
+            ){
+
+                return;
+
+            }
+
+            /*
+
+             * Si une fiche produit existe,
+
+             * on l'ouvre.
+
+             * Sinon aucun faux chemin n'est créé.
+
+             */
+
+            window.location.href =
+
+                "produit.html?id=" +
+
+                encodeURIComponent(
+
+                    product.id
+
+                );
+
+        }
+
+    );
+
+    return card;
+
+}
+
+async function loadNewProducts(){
+
+    newProductsContainer.innerHTML = "";
+
+    newProductsMessage.classList.add(
+
+        "hidden"
+
+    );
+
+    try{
+
+        const products =
+
+            await getProducts();
+
+        const list =
+
+            products.slice(
+
+                0,
+
+                5
+
+            );
+
+        if(list.length === 0){
+
+            newProductsMessage.textContent =
+
+                "Aucun produit disponible pour le moment.";
+
+            newProductsMessage.classList.remove(
+
+                "hidden"
+
+            );
+
+            return;
+
+        }
+
+        list.forEach(
+
+            function(product){
+
+                newProductsContainer.appendChild(
+
+                    createProductCard(
+
+                        product
+
+                    )
+
+                );
+
+            }
+
+        );
+
+    }catch(error){
+
+        newProductsMessage.textContent =
+
+            "Impossible de charger les produits.";
+
+        newProductsMessage.classList.remove(
+
+            "hidden"
+
+        );
+
+    }
+
+}
+
+async function loadPopularProducts(){
+
+    popularProductsContainer.innerHTML = "";
+
+    popularProductsMessage.classList.add(
+
+        "hidden"
+
+    );
+
+    try{
+
+        const products =
+
+            await getProducts();
+
+        /*
+
+         * Tant qu'une table de statistiques
+
+         * des ventes n'est pas définie,
+
+         * on affiche les produits actifs
+
+         * comme produits populaires.
+
+         */
+
+        const list =
+
+            products.slice(
+
+                0,
+
+                5
+
+            );
+
+        if(list.length === 0){
+
+            popularProductsMessage.textContent =
+
+                "Aucun produit disponible pour le moment.";
+
+            popularProductsMessage.classList.remove(
+
+                "hidden"
+
+            );
+
+            return;
+
+        }
+
+        list.forEach(
+
+            function(product){
+
+                popularProductsContainer.appendChild(
+
+                    createProductCard(
+
+                        product
+
+                    )
+
+                );
+
+            }
+
+        );
+
+    }catch(error){
+
+        popularProductsMessage.textContent =
+
+            "Impossible de charger les produits.";
+
+        popularProductsMessage.classList.remove(
+
+            "hidden"
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   BOUTIQUES
+
+============================================================ */
+
+async function loadShops(){
+
+    shopsContainer.innerHTML = "";
+
+    shopsMessage.classList.add(
+
+        "hidden"
+
+    );
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+        await supabaseClient
+
+            .from("shops")
+
+            .select(`
+
+                id,
+
+                shop_name,
+
+                description,
+
+                city,
+
+                district,
+
+                profile_photo_url,
+
+                status
+
+            `)
+
+            .eq(
+
+                "status",
+
+                "active"
+
+            )
+
+            .order(
+
+                "created_at",
+
+                {
+
+                    ascending:false
+
+                }
+
+            );
+
+        if(error){
+
+            console.error(
+
+                "Erreur boutiques :",
+
+                error
+
+            );
+
+            throw error;
+
+        }
+
+        if(!data || data.length === 0){
+
+            shopsMessage.textContent =
+
+                "Aucune boutique disponible pour le moment.";
+
+            shopsMessage.classList.remove(
+
+                "hidden"
+
+            );
+
+            return;
+
+        }
+
+        data.slice(
+
+            0,
+
+            4
+
+        ).forEach(
+
+            function(shop){
+
+                const card =
+
+                    document.createElement(
+
+                        "article"
+
+                    );
+
+                card.className =
+
+                    "shop-card";
+
+                const image =
+
+                    shop.profile_photo_url;
+
+                card.innerHTML = `
+
+                    ${
+
+                        image
+
+                        ?
+
+                        `
+
+                        <img
+
+                            class="shop-image"
+
+                            src="${escapeHtml(image)}"
+
+                            alt="${escapeHtml(shop.shop_name)}"
+
+                            loading="lazy"
+
+                        >
+
+                        `
+
+                        :
+
+                        `
+
+                        <div class="shop-image"
+
+                            style="
+
+                                display:flex;
+
+                                align-items:center;
+
+                                justify-content:center;
+
+                                font-size:28px;
+
+                            "
+
+                        >
+
+                            🏪
+
+                        </div>
+
+                        `
+
+                    }
+
+                    <div>
+
+                        <div class="shop-name">
+
+                            ${escapeHtml(shop.shop_name)}
+
+                        </div>
+
+                        <div class="shop-location">
+
+                            📍 ${escapeHtml(shop.city || "Bouaké")}
+
+                            ${
+
+                                shop.district
+
+                                ?
+
+                                " · " +
+
+                                escapeHtml(
+
+                                    shop.district
+
+                                )
+
+                                :
+
+                                ""
+
+                            }
+
+                        </div>
+
+                        <button
+
+                            class="shop-button"
+
+                            type="button"
+
+                        >
+
+                            Voir la boutique →
+
+                        </button>
+
+                    </div>
+
+                `;
+
+                card.querySelector(
+
+                    ".shop-button"
+
+                ).addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        goToShop(
+
+                            shop.id
+
+                        );
+
+                    }
+
+                );
+
+                shopsContainer.appendChild(
+
+                    card
+
+                );
+
+            }
+
+        );
+
+    }catch(error){
+
+        shopsMessage.textContent =
+
+            "Impossible de charger les boutiques.";
+
+        shopsMessage.classList.remove(
+
+            "hidden"
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   NAVIGATION
+
+============================================================ */
+
+function requireLogin(){
+
+    if(!currentUser){
+
+        window.location.href =
+
+            "connexion.html";
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+function goToCategory(
+
+    categoryId,
+
+    categoryName
+
+){
+
+    /*
+
+     * On utilise une page générique
+
+     * uniquement si elle existe dans ton projet.
+
+     */
+
+    window.location.href =
+
+        "categories.html?id=" +
+
+        encodeURIComponent(
+
+            categoryId
+
+        ) +
+
+        "&name=" +
+
+        encodeURIComponent(
+
+            categoryName
+
+        );
+
+}
+
+function goToShop(shopId){
+
+    window.location.href =
+
+        "boutique.html?id=" +
+
+        encodeURIComponent(
+
+            shopId
+
+        );
+
+}
+
+function goToCart(){
+
+    window.location.href =
+
+        "panier.html";
+
+}
+
+function goToAccount(){
+
+    if(!currentUser){
+
+        window.location.href =
+
+            "connexion.html";
+
+        return;
+
+    }
+
+    window.location.href =
+
+        "mon-compte.html";
+
+}
+
+function goToSeller(){
+
+    /*
+
+     * Devenir vendeur reste accessible
+
+     * même sans connexion.
+
+     */
+
+    if(!currentUser){
+
+        window.location.href =
+
+            "connexion.html";
+
+        return;
+
+    }
+
+    window.location.href =
+
+        "inscription-vendeur.html";
+
+}
+
+function handleMenuAction(
+
+    action
+
+){
+
+    menuPanel.classList.remove(
+
+        "open"
+
+    );
+
+    switch(action){
+
+        case "home":
+
+            window.scrollTo({
+
+                top:0,
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "categories":
+
+            document
+
+                .getElementById(
+
+                    "categoriesSection"
+
+                )
+
+                .scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            break;
+
+        case "new":
+
+            document
+
+                .getElementById(
+
+                    "newSection"
+
+                )
+
+                .scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            break;
+
+        case "popular":
+
+            document
+
+                .getElementById(
+
+                    "popularSection"
+
+                )
+
+                .scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            break;
+
+        case "shops":
+
+            document
+
+                .getElementById(
+
+                    "shopsSection"
+
+                )
+
+                .scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            break;
+
+        case "cart":
+
+            goToCart();
+
+            break;
+
+        case "seller":
+
+            goToSeller();
+
+            break;
+
+        case "account":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "mon-compte.html";
+
+            }
+
+            break;
+
+        case "orders":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "mes-commandes.html";
+
+            }
+
+            break;
+
+        case "favorites":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "favoris.html";
+
+            }
+
+            break;
+
+        case "delivery":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "informations-livraison.html";
+
+            }
+
+            break;
+
+        case "notifications":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "notifications.html";
+
+            }
+
+            break;
+
+        case "reviews":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "mes-avis.html";
+
+            }
+
+            break;
+
+        case "help":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "aide.html";
+
+            }
+
+            break;
+
+        case "problem":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "signaler-probleme.html";
+
+            }
+
+            break;
+
+        case "settings":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "parametres.html";
+
+            }
+
+            break;
+
+        case "security":
+
+            if(requireLogin()){
+
+                window.location.href =
+
+                    "securite.html";
+
+            }
+
+            break;
+
+        case "promotions":
+
+            /*
+
+             * Pas de fausse page.
+
+             * On affiche les produits actuellement
+
+             * disponibles jusqu'à la création du
+
+             * vrai système de promotions.
+
+             */
+
+            document
+
+                .getElementById(
+
+                    "newSection"
+
+                )
+
+                .scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            break;
+
+        case "logout":
+
+            logout();
+
+            break;
+
+    }
+
+}
+
+/* ============================================================
+
+   RECHERCHE
+
+============================================================ */
+
+function performSearch(){
+
+    const value =
+
+        searchInput.value.trim();
+
+    if(!value){
+
+        return;
+
+    }
+
+    window.location.href =
+
+        "recherche.html?q=" +
+
+        encodeURIComponent(
+
+            value
+
+        );
+
+}
+
+searchButton.addEventListener(
+
+    "click",
+
+    performSearch
+
+);
+
+searchInput.addEventListener(
+
+    "keydown",
+
+    function(event){
+
+        if(event.key === "Enter"){
+
+            performSearch();
+
+        }
+
+    }
+
+);
+
+/* ============================================================
+
+   DÉCONNEXION
+
+============================================================ */
+
+async function logout(){
+
+    const {
+
+        error
+
+    } =
+
+    await supabaseClient.auth.signOut();
+
+    if(error){
+
+        console.error(
+
+            "Erreur déconnexion :",
+
+            error
+
+        );
+
+        alert(
+
+            "Impossible de vous déconnecter pour le moment."
+
+        );
+
+        return;
+
+    }
+
+    currentUser = null;
+
+    updateAccountInterface();
+
+    menuPanel.classList.remove(
+
+        "open"
+
+    );
+
+    window.location.href =
+
+        "index.html";
+
+}
+
+/* ============================================================
+
+   UTILITAIRES
+
+============================================================ */
+
+function formatPrice(value){
+
+    return Number(
+
+        value || 0
+
+    ).toLocaleString(
+
+        "fr-FR"
+
+    );
+
+}
+
+function escapeHtml(value){
+
+    return String(
+
+        value ?? ""
+
+    )
+
+    .replace(
+
+        /&/g,
+
+        "&amp;"
+
+    )
+
+    .replace(
+
+        /</g,
+
+        "&lt;"
+
+    )
+
+    .replace(
+
+        />/g,
+
+        "&gt;"
+
+    )
+
+    .replace(
+
+        /"/g,
+
+        "&quot;"
+
+    )
+
+    .replace(
+
+        /'/g,
+
+        "&#039;"
+
+    );
+
+}
+
+/* ============================================================
+
+   ÉVÉNEMENTS
+
+============================================================ */
+
+menuButton.addEventListener(
+
+    "click",
+
+    function(event){
+
+        event.stopPropagation();
+
+        menuPanel.classList.toggle(
+
+            "open"
+
+        );
+
+    }
+
+);
+
+document.addEventListener(
+
+    "click",
+
+    function(event){
+
+        if(
+
+            !menuPanel.contains(event.target) &&
+
+            event.target !== menuButton
+
+        ){
+
+            menuPanel.classList.remove(
+
+                "open"
+
+            );
+
+        }
+
+    }
+
+);
+
+document
+
+    .querySelectorAll(
+
+        "[data-action]"
+
+    )
+
+    .forEach(
+
+        function(button){
+
+            button.addEventListener(
+
+                "click",
+
+                function(){
+
+                    handleMenuAction(
+
+                        button.dataset.action
+
+                    );
+
+                }
+
+            );
+
+        }
+
+    );
+
+accountButton.addEventListener(
+
+    "click",
+
+    goToAccount
+
+);
+
+cartButton.addEventListener(
+
+    "click",
+
+    goToCart
+
+);
+
+document
+
+    .getElementById(
+
+        "buyButton"
+
+    )
+
+    .addEventListener(
+
+        "click",
+
+        function(){
+
+            document
+
+                .getElementById(
+
+                    "newSection"
+
+                )
+
+                .scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+        }
+
+    );
+
+document
+
+    .getElementById(
+
+        "sellerButton"
+
+    )
+
+    .addEventListener(
+
+        "click",
+
+        goToSeller
+
+    );
+
+document
+
+    .getElementById(
+
+        "mobileHome"
+
+    )
+
+    .addEventListener(
+
+        "click",
+
+        function(){
+
+            window.scrollTo({
+
+                top:0,
+
+                behavior:"smooth"
+
+            });
+
+        }
+
+    );
+
+document
+
+    .getElementById(
+
+        "mobileCart"
+
+    )
+
+    .addEventListener(
+
+        "click",
+
+        goToCart
+
+    );
+
+document
+
+    .getElementById(
+
+        "mobileAccount"
+
+    )
+
+    .addEventListener(
+
+        "click",
+
+        goToAccount
+
+    );
+
+/* ============================================================
+
+   INITIALISATION
+
+============================================================ */
+
+async function initialize(){
+
+    await loadSession();
+
+    updateCartCount();
+
+    await Promise.all([
+
+        loadCategories(),
+
+        loadNewProducts(),
+
+        loadPopularProducts(),
+
+        loadShops()
+
+    ]);
+
+}
+
+initialize();
+
+</script>
+
+</body>
+
+</html>
