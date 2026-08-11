@@ -1,0 +1,3501 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Market Bouaké</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+
+    box-sizing:border-box;
+
+    margin:0;
+
+    padding:0;
+
+}
+
+:root{
+
+    --green:#087443;
+
+    --green-dark:#055b35;
+
+    --orange:#f39a19;
+
+    --orange-dark:#dc7f00;
+
+    --bg:#f5f7f6;
+
+    --text:#17211b;
+
+    --muted:#68736e;
+
+    --white:#ffffff;
+
+    --border:#e5e9e7;
+
+    --shadow:0 6px 22px rgba(0,0,0,.07);
+
+}
+
+body{
+
+    font-family:Arial,Helvetica,sans-serif;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    min-height:100vh;
+
+}
+
+button,
+
+a{
+
+    font-family:inherit;
+
+}
+
+button{
+
+    cursor:pointer;
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+/* =========================
+
+   HEADER
+
+========================= */
+
+.header{
+
+    background:var(--white);
+
+    border-bottom:1px solid var(--border);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+}
+
+.header-inner{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    min-height:72px;
+
+    padding:12px 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    font-size:20px;
+
+    font-weight:800;
+
+    color:var(--green);
+
+    white-space:nowrap;
+
+}
+
+.logo{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    background:var(--green);
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:22px;
+
+}
+
+.search{
+
+    flex:1;
+
+    max-width:480px;
+
+    margin-left:auto;
+
+    margin-right:auto;
+
+    position:relative;
+
+}
+
+.search input{
+
+    width:100%;
+
+    height:44px;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:0 44px 0 15px;
+
+    outline:none;
+
+    background:#f8faf9;
+
+    font-size:14px;
+
+}
+
+.search input:focus{
+
+    border-color:var(--green);
+
+    background:white;
+
+}
+
+.search-icon{
+
+    position:absolute;
+
+    right:14px;
+
+    top:12px;
+
+    font-size:18px;
+
+}
+
+.location{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+    white-space:nowrap;
+
+}
+
+.header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.header-button{
+
+    min-height:42px;
+
+    padding:9px 13px;
+
+    border-radius:11px;
+
+    border:1px solid var(--border);
+
+    background:white;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+}
+
+.header-button:hover{
+
+    border-color:var(--green);
+
+    color:var(--green);
+
+}
+
+.cart-count{
+
+    min-width:21px;
+
+    height:21px;
+
+    padding:0 5px;
+
+    border-radius:20px;
+
+    background:var(--orange);
+
+    color:white;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:11px;
+
+}
+
+/* =========================
+
+   MENU
+
+========================= */
+
+.menu-button{
+
+    width:44px;
+
+    height:44px;
+
+    border:0;
+
+    border-radius:11px;
+
+    background:var(--green);
+
+    color:white;
+
+    font-size:23px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+
+}
+
+.menu-button:hover{
+
+    background:var(--green-dark);
+
+}
+
+.menu-panel{
+
+    position:fixed;
+
+    top:0;
+
+    right:-360px;
+
+    width:min(350px,90vw);
+
+    height:100vh;
+
+    background:white;
+
+    z-index:3000;
+
+    box-shadow:-8px 0 30px rgba(0,0,0,.15);
+
+    transition:right .25s ease;
+
+    overflow-y:auto;
+
+}
+
+.menu-panel.open{
+
+    right:0;
+
+}
+
+.menu-head{
+
+    height:72px;
+
+    padding:15px 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.menu-title{
+
+    font-size:20px;
+
+    font-weight:800;
+
+    color:var(--green);
+
+}
+
+.menu-close{
+
+    width:40px;
+
+    height:40px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:#f1f4f2;
+
+    font-size:22px;
+
+}
+
+.menu-content{
+
+    padding:15px;
+
+}
+
+.menu-section-title{
+
+    font-size:12px;
+
+    text-transform:uppercase;
+
+    color:#89938e;
+
+    font-weight:800;
+
+    margin:15px 8px 7px;
+
+}
+
+.menu-item{
+
+    width:100%;
+
+    min-height:46px;
+
+    padding:11px 12px;
+
+    margin-bottom:5px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:white;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    text-align:left;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:var(--text);
+
+}
+
+.menu-item:hover{
+
+    background:#eef7f2;
+
+    color:var(--green);
+
+}
+
+.menu-item .icon{
+
+    width:25px;
+
+    text-align:center;
+
+    font-size:18px;
+
+}
+
+/* =========================
+
+   OVERLAY
+
+========================= */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.35);
+
+    z-index:2500;
+
+    display:none;
+
+}
+
+.overlay.show{
+
+    display:block;
+
+}
+
+/* =========================
+
+   MAIN
+
+========================= */
+
+main{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:24px 18px 45px;
+
+}
+
+/* =========================
+
+   HERO
+
+========================= */
+
+.hero{
+
+    background:linear-gradient(135deg,#ffffff,#edf7f1);
+
+    border-radius:22px;
+
+    padding:38px 25px;
+
+    box-shadow:var(--shadow);
+
+    text-align:center;
+
+}
+
+.hero h1{
+
+    font-size:34px;
+
+    line-height:1.15;
+
+    margin-bottom:12px;
+
+}
+
+.hero p{
+
+    color:var(--muted);
+
+    font-size:16px;
+
+    line-height:1.5;
+
+    margin-bottom:24px;
+
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+.action-button{
+
+    min-height:46px;
+
+    padding:12px 19px;
+
+    border:0;
+
+    border-radius:11px;
+
+    font-weight:800;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:7px;
+
+}
+
+.buy-button{
+
+    background:var(--green);
+
+    color:white;
+
+}
+
+.buy-button:hover{
+
+    background:var(--green-dark);
+
+}
+
+.signup-button{
+
+    background:var(--orange);
+
+    color:white;
+
+}
+
+.signup-button:hover{
+
+    background:var(--orange-dark);
+
+}
+
+/* =========================
+
+   SECTIONS
+
+========================= */
+
+.section{
+
+    margin-top:32px;
+
+}
+
+.section-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:15px;
+
+}
+
+.section-head h2{
+
+    font-size:21px;
+
+}
+
+.see-all{
+
+    color:var(--green);
+
+    font-size:14px;
+
+    font-weight:800;
+
+    white-space:nowrap;
+
+}
+
+.see-all:hover{
+
+    text-decoration:underline;
+
+}
+
+/* =========================
+
+   CATEGORIES
+
+========================= */
+
+.category-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(6,1fr);
+
+    gap:11px;
+
+}
+
+.category-card{
+
+    min-height:105px;
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    padding:15px 8px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.035);
+
+    cursor:pointer;
+
+}
+
+.category-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:#b8d9c8;
+
+}
+
+.category-icon{
+
+    font-size:26px;
+
+}
+
+.category-name{
+
+    font-size:13px;
+
+    font-weight:700;
+
+    text-align:center;
+
+}
+
+/* =========================
+
+   PRODUCTS
+
+========================= */
+
+.product-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:14px;
+
+}
+
+.product-card{
+
+    background:white;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    border:1px solid var(--border);
+
+    box-shadow:0 3px 13px rgba(0,0,0,.045);
+
+    cursor:pointer;
+
+    min-width:0;
+
+}
+
+.product-card:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:var(--shadow);
+
+}
+
+.product-image{
+
+    width:100%;
+
+    aspect-ratio:1/1;
+
+    object-fit:cover;
+
+    background:#eef1ef;
+
+    display:block;
+
+}
+
+.product-info{
+
+    padding:11px;
+
+}
+
+.product-name{
+
+    font-size:14px;
+
+    font-weight:800;
+
+    margin-bottom:7px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.product-price{
+
+    font-size:16px;
+
+    font-weight:900;
+
+    color:var(--green);
+
+    margin-bottom:5px;
+
+}
+
+.product-shop{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.stock{
+
+    margin-top:7px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+.in-stock{
+
+    color:#168047;
+
+}
+
+.out-stock{
+
+    color:#b42318;
+
+}
+
+/* =========================
+
+   SHOPS
+
+========================= */
+
+.shop-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:14px;
+
+}
+
+.shop-card{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    padding:13px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    cursor:pointer;
+
+}
+
+.shop-card:hover{
+
+    border-color:#b8d9c8;
+
+}
+
+.shop-image{
+
+    width:64px;
+
+    height:64px;
+
+    border-radius:13px;
+
+    object-fit:cover;
+
+    background:#edf2ef;
+
+    flex-shrink:0;
+
+}
+
+.shop-name{
+
+    font-weight:800;
+
+    font-size:15px;
+
+    margin-bottom:5px;
+
+}
+
+.shop-location{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+/* =========================
+
+   LOCAL SECTION
+
+========================= */
+
+.local-section{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.local-text{
+
+    color:var(--muted);
+
+    line-height:1.6;
+
+    margin-top:8px;
+
+    max-width:750px;
+
+}
+
+.features{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:12px;
+
+    margin-top:20px;
+
+}
+
+.feature{
+
+    background:#f7faf8;
+
+    border-radius:13px;
+
+    padding:16px;
+
+}
+
+.feature-icon{
+
+    font-size:22px;
+
+    margin-bottom:8px;
+
+}
+
+.feature strong{
+
+    display:block;
+
+    font-size:14px;
+
+    margin-bottom:4px;
+
+}
+
+.feature span{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    line-height:1.4;
+
+}
+
+/* =========================
+
+   LOADING / EMPTY / ERROR
+
+========================= */
+
+.message{
+
+    padding:18px;
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:13px;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+}
+
+.hidden{
+
+    display:none!important;
+
+}
+
+/* =========================
+
+   FOOTER
+
+========================= */
+
+footer{
+
+    background:#10231a;
+
+    color:#cbd6d0;
+
+    padding:28px 18px;
+
+    text-align:center;
+
+    font-size:13px;
+
+}
+
+/* =========================
+
+   MOBILE NAV
+
+========================= */
+
+.mobile-nav{
+
+    display:none;
+
+}
+
+/* =========================
+
+   RESPONSIVE
+
+========================= */
+
+@media(max-width:1000px){
+
+    .category-grid{
+
+        grid-template-columns:repeat(4,1fr);
+
+    }
+
+    .product-grid{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+    .features{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:760px){
+
+    .header-inner{
+
+        min-height:64px;
+
+        padding:9px 12px;
+
+        gap:7px;
+
+    }
+
+    .brand span{
+
+        display:none;
+
+    }
+
+    .logo{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+    .search{
+
+        order:3;
+
+        flex-basis:100%;
+
+        max-width:none;
+
+        margin:0;
+
+    }
+
+    .header{
+
+        position:sticky;
+
+    }
+
+    .header-inner{
+
+        flex-wrap:wrap;
+
+    }
+
+    .location{
+
+        display:none;
+
+    }
+
+    .header-button{
+
+        padding:8px 9px;
+
+        min-height:40px;
+
+    }
+
+    .header-button span.label{
+
+        display:none;
+
+    }
+
+    main{
+
+        padding:18px 12px 90px;
+
+    }
+
+    .hero{
+
+        padding:30px 17px;
+
+    }
+
+    .hero h1{
+
+        font-size:28px;
+
+    }
+
+    .hero p{
+
+        font-size:15px;
+
+    }
+
+    .category-grid{
+
+        grid-template-columns:repeat(3,1fr);
+
+        gap:8px;
+
+    }
+
+    .category-card{
+
+        min-height:92px;
+
+        padding:10px 5px;
+
+    }
+
+    .category-icon{
+
+        font-size:23px;
+
+    }
+
+    .product-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+        gap:10px;
+
+    }
+
+    .product-info{
+
+        padding:9px;
+
+    }
+
+    .product-name{
+
+        font-size:13px;
+
+    }
+
+    .product-price{
+
+        font-size:15px;
+
+    }
+
+    .shop-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .features{
+
+        grid-template-columns:1fr 1fr;
+
+    }
+
+    .mobile-nav{
+
+        position:fixed;
+
+        display:grid;
+
+        grid-template-columns:repeat(3,1fr);
+
+        left:0;
+
+        right:0;
+
+        bottom:0;
+
+        height:67px;
+
+        background:white;
+
+        border-top:1px solid var(--border);
+
+        z-index:1800;
+
+        box-shadow:0 -5px 20px rgba(0,0,0,.08);
+
+    }
+
+    .mobile-nav a,
+
+    .mobile-nav button{
+
+        border:0;
+
+        background:white;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        justify-content:center;
+
+        gap:3px;
+
+        color:#68736e;
+
+        font-weight:700;
+
+        font-size:11px;
+
+    }
+
+    .mobile-nav .nav-icon{
+
+        font-size:20px;
+
+    }
+
+    .mobile-nav .active{
+
+        color:var(--green);
+
+    }
+
+}
+
+@media(max-width:430px){
+
+    .hero-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .action-button{
+
+        width:100%;
+
+    }
+
+    .section-head h2{
+
+        font-size:18px;
+
+    }
+
+    .category-grid{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+    .features{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <a href="index.html" class="brand" aria-label="Accueil Market Bouaké">
+
+            <div class="logo">🛒</div>
+
+            <span>Market Bouaké</span>
+
+        </a>
+
+        <div class="search">
+
+            <input
+
+                type="search"
+
+                id="searchInput"
+
+                placeholder="Rechercher un produit ou une boutique..."
+
+                autocomplete="off"
+
+            >
+
+            <span class="search-icon">🔎</span>
+
+        </div>
+
+        <div class="location">
+
+            📍 Bouaké
+
+        </div>
+
+        <div class="header-actions">
+
+            <a
+
+                href="panier.html"
+
+                class="header-button"
+
+                aria-label="Panier"
+
+            >
+
+                🛒
+
+                <span class="label">Panier</span>
+
+                <span id="cartCount" class="cart-count">0</span>
+
+            </a>
+
+            <button
+
+                type="button"
+
+                class="header-button"
+
+                id="accountButton"
+
+                aria-label="Compte"
+
+            >
+
+                👤
+
+                <span class="label">Compte</span>
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-button"
+
+                id="menuButton"
+
+                aria-label="Ouvrir le menu"
+
+            >
+
+                ☰
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="menuPanel" class="menu-panel">
+
+    <div class="menu-head">
+
+        <div class="menu-title">
+
+            Market Bouaké
+
+        </div>
+
+        <button
+
+            type="button"
+
+            class="menu-close"
+
+            id="menuClose"
+
+            aria-label="Fermer le menu"
+
+        >
+
+            ×
+
+        </button>
+
+    </div>
+
+    <div class="menu-content">
+
+        <div class="menu-section-title">
+
+            Navigation
+
+        </div>
+
+        <button class="menu-item" data-action="home">
+
+            <span class="icon">🏠</span>
+
+            <span>Accueil</span>
+
+        </button>
+
+        <button class="menu-item" data-action="categories">
+
+            <span class="icon">🗂️</span>
+
+            <span>Catégories</span>
+
+        </button>
+
+        <button class="menu-item" data-action="promotions">
+
+            <span class="icon">🔥</span>
+
+            <span>Promotions</span>
+
+        </button>
+
+        <button class="menu-item" data-action="new">
+
+            <span class="icon">🆕</span>
+
+            <span>Nouveautés</span>
+
+        </button>
+
+        <button class="menu-item" data-action="popular">
+
+            <span class="icon">⭐</span>
+
+            <span>Produits populaires</span>
+
+        </button>
+
+        <button class="menu-item" data-action="shops">
+
+            <span class="icon">🏪</span>
+
+            <span>Boutiques</span>
+
+        </button>
+
+        <button class="menu-item" data-action="seller">
+
+            <span class="icon">🛍️</span>
+
+            <span>Devenir vendeur</span>
+
+        </button>
+
+        <button class="menu-item" data-action="cart">
+
+            <span class="icon">🛒</span>
+
+            <span>Mon panier</span>
+
+        </button>
+
+        <div class="menu-section-title">
+
+            Mon compte
+
+        </div>
+
+        <button class="menu-item private-action" data-action="account">
+
+            <span class="icon">👤</span>
+
+            <span>Mon compte</span>
+
+        </button>
+
+        <button class="menu-item private-action" data-action="orders">
+
+            <span class="icon">📦</span>
+
+            <span>Mes commandes</span>
+
+        </button>
+
+        <button class="menu-item private-action" data-action="favorites">
+
+            <span class="icon">❤️</span>
+
+            <span>Mes favoris</span>
+
+        </button>
+
+        <button class="menu-item private-action" data-action="delivery">
+
+            <span class="icon">📍</span>
+
+            <span>Mes informations de livraison</span>
+
+        </button>
+
+        <button class="menu-item private-action" data-action="notifications">
+
+            <span class="icon">🔔</span>
+
+            <span>Notifications</span>
+
+        </button>
+
+        <button class="menu-item private-action" data-action="reviews">
+
+            <span class="icon">⭐</span>
+
+            <span>Mes avis</span>
+
+        </button>
+
+        <div class="menu-section-title">
+
+            Aide
+
+        </div>
+
+        <button class="menu-item private-action" data-action="help">
+
+            <span class="icon">🆘</span>
+
+            <span>Aide</span>
+
+        </button>
+
+        <button class="menu-item private-action" data-action="problem">
+
+            <span class="icon">⚠️</span>
+
+            <span>Signaler un problème</span>
+
+        </button>
+
+        <div class="menu-section-title">
+
+            Paramètres
+
+        </div>
+
+        <button class="menu-item private-action" data-action="settings">
+
+            <span class="icon">⚙️</span>
+
+            <span>Paramètres</span>
+
+        </button>
+
+        <button class="menu-item private-action" data-action="security">
+
+            <span class="icon">🔐</span>
+
+            <span>Sécurité du compte</span>
+
+        </button>
+
+        <button
+
+            class="menu-item private-action"
+
+            data-action="logout"
+
+            id="logoutMenuItem"
+
+        >
+
+            <span class="icon">🚪</span>
+
+            <span>Déconnexion</span>
+
+        </button>
+
+    </div>
+
+</aside>
+
+<main id="top">
+
+    <section class="hero">
+
+        <h1>
+
+            Tout ce dont vous avez besoin, près de chez vous.
+
+        </h1>
+
+        <p>
+
+            Découvrez les produits des vendeurs de Bouaké.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+
+                href="#products"
+
+                class="action-button buy-button"
+
+            >
+
+                🛍️ Acheter maintenant
+
+            </a>
+
+            <a
+
+                href="inscription.html"
+
+                class="action-button signup-button"
+
+            >
+
+                ✍️ S'inscrire
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <section class="section" id="categoriesSection">
+
+        <div class="section-head">
+
+            <h2>🗂️ Découvrez nos catégories</h2>
+
+            <button
+
+                type="button"
+
+                class="see-all"
+
+                data-action="categories"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div id="categoriesGrid" class="category-grid">
+
+            <div class="message">
+
+                Chargement des catégories...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section" id="newProductsSection">
+
+        <div class="section-head">
+
+            <h2>🆕 Nouveautés</h2>
+
+            <button
+
+                type="button"
+
+                class="see-all"
+
+                data-action="new"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div id="newProductsGrid" class="product-grid">
+
+            <div class="message">
+
+                Chargement des produits...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section" id="popularSection">
+
+        <div class="section-head">
+
+            <h2>⭐ Les produits populaires</h2>
+
+            <button
+
+                type="button"
+
+                class="see-all"
+
+                data-action="popular"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div id="popularProductsGrid" class="product-grid">
+
+            <div class="message">
+
+                Chargement des produits...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section" id="shopsSection">
+
+        <div class="section-head">
+
+            <h2>🏪 Découvrez nos boutiques</h2>
+
+            <button
+
+                type="button"
+
+                class="see-all"
+
+                data-action="shops"
+
+            >
+
+                Voir tout →
+
+            </button>
+
+        </div>
+
+        <div id="shopsGrid" class="shop-grid">
+
+            <div class="message">
+
+                Chargement des boutiques...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="local-section">
+
+            <h2>
+
+                📍 Achetez auprès des vendeurs de Bouaké
+
+            </h2>
+
+            <p class="local-text">
+
+                Découvrez les produits proposés par les vendeurs de Bouaké
+
+                et échangez directement avec eux pour vos achats et votre livraison.
+
+            </p>
+
+            <div class="features">
+
+                <div class="feature">
+
+                    <div class="feature-icon">🏪</div>
+
+                    <strong>Vendeurs locaux</strong>
+
+                    <span>
+
+                        Découvrez les boutiques présentes sur Market Bouaké.
+
+                    </span>
+
+                </div>
+
+                <div class="feature">
+
+                    <div class="feature-icon">🚚</div>
+
+                    <strong>Livraison</strong>
+
+                    <span>
+
+                        Les vendeurs peuvent proposer leurs propres tarifs de livraison.
+
+                    </span>
+
+                </div>
+
+                <div class="feature">
+
+                    <div class="feature-icon">💬</div>
+
+                    <strong>WhatsApp</strong>
+
+                    <span>
+
+                        Contactez les vendeurs directement pour vos commandes.
+
+                    </span>
+
+                </div>
+
+                <div class="feature">
+
+                    <div class="feature-icon">🔐</div>
+
+                    <strong>Compte sécurisé</strong>
+
+                    <span>
+
+                        Les comptes et les données sont protégés par Supabase.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+
+    Market Bouaké — Marketplace locale de Bouaké
+
+</footer>
+
+<nav class="mobile-nav">
+
+    <a
+
+        href="index.html"
+
+        class="active"
+
+    >
+
+        <span class="nav-icon">🏠</span>
+
+        Accueil
+
+    </a>
+
+    <a href="panier.html">
+
+        <span class="nav-icon">🛒</span>
+
+        Panier
+
+    </a>
+
+    <button
+
+        type="button"
+
+        id="mobileAccountButton"
+
+    >
+
+        <span class="nav-icon">👤</span>
+
+        Compte
+
+    </button>
+
+</nav>
+
+<script>
+
+/* ============================================================
+
+   CONFIGURATION SUPABASE
+
+============================================================ */
+
+const SUPABASE_URL =
+
+    "https://qgdxxrnsiyzbacxxfdrg.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+
+    "sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N";
+
+const supabaseClient =
+
+    window.supabase.createClient(
+
+        SUPABASE_URL,
+
+        SUPABASE_PUBLISHABLE_KEY
+
+    );
+
+/* ============================================================
+
+   ÉLÉMENTS
+
+============================================================ */
+
+const menuButton =
+
+    document.getElementById("menuButton");
+
+const menuPanel =
+
+    document.getElementById("menuPanel");
+
+const menuClose =
+
+    document.getElementById("menuClose");
+
+const overlay =
+
+    document.getElementById("overlay");
+
+const accountButton =
+
+    document.getElementById("accountButton");
+
+const mobileAccountButton =
+
+    document.getElementById("mobileAccountButton");
+
+const cartCount =
+
+    document.getElementById("cartCount");
+
+const categoriesGrid =
+
+    document.getElementById("categoriesGrid");
+
+const newProductsGrid =
+
+    document.getElementById("newProductsGrid");
+
+const popularProductsGrid =
+
+    document.getElementById("popularProductsGrid");
+
+const shopsGrid =
+
+    document.getElementById("shopsGrid");
+
+const searchInput =
+
+    document.getElementById("searchInput");
+
+/* ============================================================
+
+   MENU
+
+============================================================ */
+
+function openMenu(){
+
+    menuPanel.classList.add("open");
+
+    overlay.classList.add("show");
+
+    document.body.style.overflow =
+
+        "hidden";
+
+}
+
+function closeMenu(){
+
+    menuPanel.classList.remove("open");
+
+    overlay.classList.remove("show");
+
+    document.body.style.overflow =
+
+        "";
+
+}
+
+menuButton.addEventListener(
+
+    "click",
+
+    openMenu
+
+);
+
+menuClose.addEventListener(
+
+    "click",
+
+    closeMenu
+
+);
+
+overlay.addEventListener(
+
+    "click",
+
+    closeMenu
+
+);
+
+/* ============================================================
+
+   AUTHENTIFICATION
+
+============================================================ */
+
+async function getCurrentUser(){
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+        await supabaseClient.auth.getUser();
+
+        if(error){
+
+            console.error(
+
+                "Erreur utilisateur :",
+
+                error
+
+            );
+
+            return null;
+
+        }
+
+        return data.user || null;
+
+    }catch(error){
+
+        console.error(error);
+
+        return null;
+
+    }
+
+}
+
+async function goToAccount(){
+
+    const user =
+
+        await getCurrentUser();
+
+    if(user){
+
+        window.location.href =
+
+            "compte.html";
+
+    }else{
+
+        window.location.href =
+
+            "connexion.html";
+
+    }
+
+}
+
+accountButton.addEventListener(
+
+    "click",
+
+    goToAccount
+
+);
+
+mobileAccountButton.addEventListener(
+
+    "click",
+
+    goToAccount
+
+);
+
+/* ============================================================
+
+   PANIER
+
+============================================================ */
+
+function updateCartCount(){
+
+    try{
+
+        const cart =
+
+            JSON.parse(
+
+                localStorage.getItem("market_bouake_cart")
+
+            ) || [];
+
+        let total = 0;
+
+        cart.forEach(item => {
+
+            const quantity =
+
+                Number(item.quantity) || 1;
+
+            total += quantity;
+
+        });
+
+        cartCount.textContent =
+
+            total;
+
+    }catch(error){
+
+        console.error(
+
+            "Erreur panier :",
+
+            error
+
+        );
+
+        cartCount.textContent =
+
+            "0";
+
+    }
+
+}
+
+updateCartCount();
+
+window.addEventListener(
+
+    "storage",
+
+    updateCartCount
+
+);
+
+/* ============================================================
+
+   CATÉGORIES
+
+============================================================ */
+
+function getCategoryIcon(name){
+
+    const icons = {
+
+        "Mode":"👕",
+
+        "Téléphones":"📱",
+
+        "Informatique":"💻",
+
+        "Maison":"🏠",
+
+        "Beauté":"💄",
+
+        "Chaussures":"👟",
+
+        "Alimentation":"🍎",
+
+        "Électronique":"⚡",
+
+        "Électroménager":"🔌",
+
+        "Enfants":"🧸",
+
+        "Sports":"⚽",
+
+        "Services":"🔧",
+
+        "Autres":"📦"
+
+    };
+
+    return icons[name] || "📦";
+
+}
+
+async function loadCategories(){
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+        await supabaseClient
+
+            .from("categories")
+
+            .select(
+
+                "id,name,image_url,is_active"
+
+            )
+
+            .eq(
+
+                "is_active",
+
+                true
+
+            )
+
+            .order(
+
+                "name",
+
+                {
+
+                    ascending:true
+
+                }
+
+            );
+
+        if(error){
+
+            throw error;
+
+        }
+
+        if(!data || data.length === 0){
+
+            categoriesGrid.innerHTML =
+
+                '<div class="message">Aucune catégorie disponible pour le moment.</div>';
+
+            return;
+
+        }
+
+        categoriesGrid.innerHTML =
+
+            data.map(category => {
+
+                return `
+
+                    <button
+
+                        type="button"
+
+                        class="category-card"
+
+                        data-category-id="${category.id}"
+
+                    >
+
+                        <div class="category-icon">
+
+                            ${
+
+                                category.image_url
+
+                                ? `<img
+
+                                    src="${escapeHtml(category.image_url)}"
+
+                                    alt=""
+
+                                    style="width:34px;height:34px;object-fit:cover;border-radius:8px;"
+
+                                  >`
+
+                                : getCategoryIcon(category.name)
+
+                            }
+
+                        </div>
+
+                        <div class="category-name">
+
+                            ${escapeHtml(category.name)}
+
+                        </div>
+
+                    </button>
+
+                `;
+
+            }).join("");
+
+        document
+
+            .querySelectorAll(".category-card")
+
+            .forEach(button => {
+
+                button.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        const categoryId =
+
+                            this.dataset.categoryId;
+
+                        window.location.href =
+
+                            "categories.html?id=" +
+
+                            encodeURIComponent(
+
+                                categoryId
+
+                            );
+
+                    }
+
+                );
+
+            });
+
+    }catch(error){
+
+        console.error(
+
+            "Erreur catégories :",
+
+            error
+
+        );
+
+        categoriesGrid.innerHTML =
+
+            '<div class="message">Impossible de charger les catégories pour le moment.</div>';
+
+    }
+
+}
+
+/* ============================================================
+
+   PRODUITS
+
+============================================================ */
+
+async function loadProducts(){
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+        await supabaseClient
+
+            .from("products")
+
+            .select(`
+
+                id,
+
+                name,
+
+                description,
+
+                price,
+
+                stock,
+
+                sizes,
+
+                image_url_1,
+
+                image_url_2,
+
+                image_url_3,
+
+                category_id,
+
+                shop_id,
+
+                created_at,
+
+                is_active,
+
+                categories (
+
+                    id,
+
+                    name
+
+                ),
+
+                shops (
+
+                    id,
+
+                    shop_name,
+
+                    city,
+
+                    district,
+
+                    status
+
+                )
+
+            `)
+
+            .eq(
+
+                "is_active",
+
+                true
+
+            )
+
+            .order(
+
+                "created_at",
+
+                {
+
+                    ascending:false
+
+                }
+
+            );
+
+        if(error){
+
+            throw error;
+
+        }
+
+        if(!data || data.length === 0){
+
+            const empty =
+
+                '<div class="message">Aucun produit disponible pour le moment.</div>';
+
+            newProductsGrid.innerHTML =
+
+                empty;
+
+            popularProductsGrid.innerHTML =
+
+                empty;
+
+            return;
+
+        }
+
+        renderProducts(
+
+            newProductsGrid,
+
+            data
+
+        );
+
+        const popular =
+
+            [...data]
+
+                .sort(
+
+                    (a,b) =>
+
+                        Number(b.stock || 0) -
+
+                        Number(a.stock || 0)
+
+                );
+
+        renderProducts(
+
+            popularProductsGrid,
+
+            popular
+
+        );
+
+    }catch(error){
+
+        console.error(
+
+            "Erreur produits :",
+
+            error
+
+        );
+
+        const errorMessage =
+
+            '<div class="message">Impossible de charger les produits pour le moment.</div>';
+
+        newProductsGrid.innerHTML =
+
+            errorMessage;
+
+        popularProductsGrid.innerHTML =
+
+            errorMessage;
+
+    }
+
+}
+
+function renderProducts(
+
+    container,
+
+    products
+
+){
+
+    const visible =
+
+        products.slice(
+
+            0,
+
+            8
+
+        );
+
+    container.innerHTML =
+
+        visible.map(product => {
+
+            const image =
+
+                product.image_url_1 ||
+
+                product.image_url_2 ||
+
+                product.image_url_3 ||
+
+                "";
+
+            const shopName =
+
+                product.shops
+
+                ? product.shops.shop_name
+
+                : "Vendeur Market Bouaké";
+
+            const categoryName =
+
+                product.categories
+
+                ? product.categories.name
+
+                : "";
+
+            const stock =
+
+                Number(product.stock || 0);
+
+            return `
+
+                <article
+
+                    class="product-card"
+
+                    data-product-id="${product.id}"
+
+                >
+
+                    ${
+
+                        image
+
+                        ?
+
+                        `<img
+
+                            class="product-image"
+
+                            src="${escapeHtml(image)}"
+
+                            alt="${escapeHtml(product.name)}"
+
+                            loading="lazy"
+
+                        >`
+
+                        :
+
+                        `<div
+
+                            class="product-image"
+
+                            style="display:flex;align-items:center;justify-content:center;font-size:45px;"
+
+                        >
+
+                            🛍️
+
+                        </div>`
+
+                    }
+
+                    <div class="product-info">
+
+                        <div class="product-name">
+
+                            ${escapeHtml(product.name)}
+
+                        </div>
+
+                        <div class="product-price">
+
+                            ${formatPrice(product.price)} FCFA
+
+                        </div>
+
+                        <div class="product-shop">
+
+                            🏪 ${escapeHtml(shopName)}
+
+                        </div>
+
+                        ${
+
+                            categoryName
+
+                            ?
+
+                            `<div class="product-shop">
+
+                                ${escapeHtml(categoryName)}
+
+                            </div>`
+
+                            :
+
+                            ""
+
+                        }
+
+                        <div
+
+                            class="stock ${
+
+                                stock > 0
+
+                                ? "in-stock"
+
+                                : "out-stock"
+
+                            }"
+
+                        >
+
+                            ${
+
+                                stock > 0
+
+                                ? "✅ En stock"
+
+                                : "❌ Rupture de stock"
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }).join("");
+
+    container
+
+        .querySelectorAll(".product-card")
+
+        .forEach(card => {
+
+            card.addEventListener(
+
+                "click",
+
+                function(){
+
+                    const id =
+
+                        this.dataset.productId;
+
+                    window.location.href =
+
+                        "produit.html?id=" +
+
+                        encodeURIComponent(id);
+
+                }
+
+            );
+
+        });
+
+}
+
+/* ============================================================
+
+   BOUTIQUES
+
+============================================================ */
+
+async function loadShops(){
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+        await supabaseClient
+
+            .from("shops")
+
+            .select(`
+
+                id,
+
+                shop_name,
+
+                description,
+
+                city,
+
+                district,
+
+                profile_photo_url,
+
+                facebook_url,
+
+                tiktok_url,
+
+                status
+
+            `)
+
+            .eq(
+
+                "status",
+
+                "active"
+
+            )
+
+            .order(
+
+                "created_at",
+
+                {
+
+                    ascending:false
+
+                }
+
+            );
+
+        if(error){
+
+            throw error;
+
+        }
+
+        if(!data || data.length === 0){
+
+            shopsGrid.innerHTML =
+
+                '<div class="message">Aucune boutique disponible pour le moment.</div>';
+
+            return;
+
+        }
+
+        shopsGrid.innerHTML =
+
+            data
+
+                .slice(0,6)
+
+                .map(shop => {
+
+                    return `
+
+                        <article
+
+                            class="shop-card"
+
+                            data-shop-id="${shop.id}"
+
+                        >
+
+                            ${
+
+                                shop.profile_photo_url
+
+                                ?
+
+                                `<img
+
+                                    class="shop-image"
+
+                                    src="${escapeHtml(shop.profile_photo_url)}"
+
+                                    alt="${escapeHtml(shop.shop_name)}"
+
+                                    loading="lazy"
+
+                                >`
+
+                                :
+
+                                `<div
+
+                                    class="shop-image"
+
+                                    style="display:flex;align-items:center;justify-content:center;font-size:28px;"
+
+                                >
+
+                                    🏪
+
+                                </div>`
+
+                            }
+
+                            <div>
+
+                                <div class="shop-name">
+
+                                    ${escapeHtml(shop.shop_name)}
+
+                                </div>
+
+                                <div class="shop-location">
+
+                                    📍 ${escapeHtml(shop.city || "Bouaké")}
+
+                                    ${
+
+                                        shop.district
+
+                                        ? " · " +
+
+                                          escapeHtml(shop.district)
+
+                                        : ""
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }).join("");
+
+        shopsGrid
+
+            .querySelectorAll(".shop-card")
+
+            .forEach(card => {
+
+                card.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        const id =
+
+                            this.dataset.shopId;
+
+                        window.location.href =
+
+                            "boutique.html?id=" +
+
+                            encodeURIComponent(id);
+
+                    }
+
+                );
+
+            });
+
+    }catch(error){
+
+        console.error(
+
+            "Erreur boutiques :",
+
+            error
+
+        );
+
+        shopsGrid.innerHTML =
+
+            '<div class="message">Impossible de charger les boutiques pour le moment.</div>';
+
+    }
+
+}
+
+/* ============================================================
+
+   NAVIGATION DU MENU
+
+============================================================ */
+
+async function handleAction(action){
+
+    closeMenu();
+
+    switch(action){
+
+        case "home":
+
+            window.location.href =
+
+                "index.html";
+
+            break;
+
+        case "categories":
+
+            window.location.href =
+
+                "categories.html";
+
+            break;
+
+        case "promotions":
+
+            window.location.href =
+
+                "promotions.html";
+
+            break;
+
+        case "new":
+
+            window.location.href =
+
+                "nouveautes.html";
+
+            break;
+
+        case "popular":
+
+            window.location.href =
+
+                "produits-populaires.html";
+
+            break;
+
+        case "shops":
+
+            window.location.href =
+
+                "boutiques.html";
+
+            break;
+
+        case "seller":
+
+            window.location.href =
+
+                "inscription-vendeur.html";
+
+            break;
+
+        case "cart":
+
+            window.location.href =
+
+                "panier.html";
+
+            break;
+
+        case "account":
+
+            await goToAccount();
+
+            break;
+
+        case "orders":
+
+            await privateNavigation(
+
+                "mes-commandes.html"
+
+            );
+
+            break;
+
+        case "favorites":
+
+            await privateNavigation(
+
+                "favoris.html"
+
+            );
+
+            break;
+
+        case "delivery":
+
+            await privateNavigation(
+
+                "informations-livraison.html"
+
+            );
+
+            break;
+
+        case "notifications":
+
+            await privateNavigation(
+
+                "notifications.html"
+
+            );
+
+            break;
+
+        case "reviews":
+
+            await privateNavigation(
+
+                "mes-avis.html"
+
+            );
+
+            break;
+
+        case "help":
+
+            await privateNavigation(
+
+                "aide.html"
+
+            );
+
+            break;
+
+        case "problem":
+
+            await privateNavigation(
+
+                "signaler-probleme.html"
+
+            );
+
+            break;
+
+        case "settings":
+
+            await privateNavigation(
+
+                "parametres.html"
+
+            );
+
+            break;
+
+        case "security":
+
+            await privateNavigation(
+
+                "securite.html"
+
+            );
+
+            break;
+
+        case "logout":
+
+            await logout();
+
+            break;
+
+    }
+
+}
+
+async function privateNavigation(
+
+    page
+
+){
+
+    const user =
+
+        await getCurrentUser();
+
+    if(!user){
+
+        window.location.href =
+
+            "connexion.html";
+
+        return;
+
+    }
+
+    window.location.href =
+
+        page;
+
+}
+
+document
+
+    .querySelectorAll("[data-action]")
+
+    .forEach(element => {
+
+        element.addEventListener(
+
+            "click",
+
+            function(){
+
+                handleAction(
+
+                    this.dataset.action
+
+                );
+
+            }
+
+        );
+
+    });
+
+/* ============================================================
+
+   DÉCONNEXION
+
+============================================================ */
+
+async function logout(){
+
+    try{
+
+        const {
+
+            error
+
+        } =
+
+        await supabaseClient.auth.signOut();
+
+        if(error){
+
+            console.error(
+
+                "Erreur déconnexion :",
+
+                error
+
+            );
+
+            return;
+
+        }
+
+        window.location.href =
+
+            "index.html";
+
+    }catch(error){
+
+        console.error(error);
+
+        window.location.href =
+
+            "index.html";
+
+    }
+
+}
+
+/* ============================================================
+
+   RECHERCHE
+
+============================================================ */
+
+searchInput.addEventListener(
+
+    "keydown",
+
+    function(event){
+
+        if(event.key !== "Enter"){
+
+            return;
+
+        }
+
+        const query =
+
+            this.value.trim();
+
+        if(!query){
+
+            return;
+
+        }
+
+        window.location.href =
+
+            "recherche.html?q=" +
+
+            encodeURIComponent(query);
+
+    }
+
+);
+
+/* ============================================================
+
+   OUTILS
+
+============================================================ */
+
+function formatPrice(price){
+
+    return Number(
+
+        price || 0
+
+    ).toLocaleString(
+
+        "fr-FR"
+
+    );
+
+}
+
+function escapeHtml(value){
+
+    if(value === null || value === undefined){
+
+        return "";
+
+    }
+
+    return String(value)
+
+        .replace(
+
+            /&/g,
+
+            "&amp;"
+
+        )
+
+        .replace(
+
+            /</g,
+
+            "&lt;"
+
+        )
+
+        .replace(
+
+            />/g,
+
+            "&gt;"
+
+        )
+
+        .replace(
+
+            /"/g,
+
+            "&quot;"
+
+        )
+
+        .replace(
+
+            /'/g,
+
+            "&#039;"
+
+        );
+
+}
+
+/* ============================================================
+
+   INITIALISATION
+
+============================================================ */
+
+async function initializeHome(){
+
+    await Promise.all([
+
+        loadCategories(),
+
+        loadProducts(),
+
+        loadShops()
+
+    ]);
+
+    updateCartCount();
+
+}
+
+initializeHome();
+
+/* ============================================================
+
+   MISE À JOUR DE SESSION
+
+============================================================ */
+
+supabaseClient.auth.onAuthStateChange(
+
+    function(){
+
+        updateCartCount();
+
+    }
+
+);
+
+</script>
+
+</body>
+
+</html>
