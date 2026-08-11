@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mon panier | Market Bouaké</title>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f7f6;
+
+            color: #17211b;
+
+        }
+
+        header {
+
+            background: #0b6b43;
+
+            color: white;
+
+            padding: 15px 20px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 20;
+
+        }
+
+        .header-content {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+        }
+
+        .logo {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            text-decoration: none;
+
+            color: white;
+
+        }
+
+        .back-button {
+
+            color: white;
+
+            text-decoration: none;
+
+            background: rgba(255,255,255,.12);
+
+            padding: 9px 13px;
+
+            border-radius: 8px;
+
+        }
+
+        main {
+
+            max-width: 1100px;
+
+            margin: 25px auto;
+
+            padding: 0 15px 40px;
+
+        }
+
+        .page-title {
+
+            margin-bottom: 20px;
+
+        }
+
+        .page-title h1 {
+
+            font-size: 28px;
+
+            margin-bottom: 5px;
+
+        }
+
+        .page-title p {
+
+            color: #68756f;
+
+        }
+
+        .cart-layout {
+
+            display: grid;
+
+            grid-template-columns: 1fr 350px;
+
+            gap: 20px;
+
+            align-items: start;
+
+        }
+
+        .cart-products,
+
+        .summary {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 18px;
+
+            box-shadow: 0 4px 18px rgba(0,0,0,.06);
+
+        }
+
+        .seller-group {
+
+            border: 1px solid #e6ebe8;
+
+            border-radius: 13px;
+
+            overflow: hidden;
+
+            margin-bottom: 15px;
+
+        }
+
+        .seller-header {
+
+            background: #f0f5f2;
+
+            padding: 12px 14px;
+
+            font-weight: bold;
+
+            color: #0b6b43;
+
+        }
+
+        .cart-item {
+
+            display: grid;
+
+            grid-template-columns: 90px 1fr auto;
+
+            gap: 14px;
+
+            padding: 14px;
+
+            border-top: 1px solid #edf0ee;
+
+            align-items: center;
+
+        }
+
+        .cart-item-image {
+
+            width: 90px;
+
+            height: 90px;
+
+            object-fit: cover;
+
+            border-radius: 10px;
+
+            background: #eef3f0;
+
+        }
+
+        .cart-item-name {
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+        }
+
+        .cart-item-price {
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+        }
+
+        .cart-item-size {
+
+            color: #68756f;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+
+        }
+
+        .quantity-controls {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+        .quantity-controls button {
+
+            width: 30px;
+
+            height: 30px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            background: #e9efec;
+
+            font-weight: bold;
+
+        }
+
+        .quantity-value {
+
+            min-width: 25px;
+
+            text-align: center;
+
+            font-weight: bold;
+
+        }
+
+        .remove-button {
+
+            border: none;
+
+            background: transparent;
+
+            color: #c62828;
+
+            cursor: pointer;
+
+            margin-top: 8px;
+
+            font-size: 13px;
+
+        }
+
+        .item-total {
+
+            font-weight: bold;
+
+            white-space: nowrap;
+
+        }
+
+        .summary {
+
+            position: sticky;
+
+            top: 85px;
+
+        }
+
+        .summary h2 {
+
+            margin-bottom: 18px;
+
+        }
+
+        .summary-line {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 9px 0;
+
+            border-bottom: 1px solid #edf0ee;
+
+        }
+
+        .delivery-section {
+
+            margin: 15px 0;
+
+        }
+
+        .delivery-section label {
+
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+        }
+
+        .delivery-section select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #d8dfdb;
+
+            border-radius: 8px;
+
+            background: white;
+
+        }
+
+        .delivery-by-seller {
+
+            margin-top: 12px;
+
+        }
+
+        .delivery-seller {
+
+            background: #f7f9f8;
+
+            border-radius: 9px;
+
+            padding: 10px;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+
+        }
+
+        .delivery-seller strong {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+        }
+
+        .summary-total {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-top: 18px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .checkout-button {
+
+            width: 100%;
+
+            border: none;
+
+            background: #0b6b43;
+
+            color: white;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            font-size: 16px;
+
+            margin-top: 18px;
+
+        }
+
+        .checkout-button:hover {
+
+            opacity: .9;
+
+        }
+
+        .checkout-button:disabled {
+
+            opacity: .5;
+
+            cursor: not-allowed;
+
+        }
+
+        .empty-cart {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 50px 20px;
+
+            text-align: center;
+
+            box-shadow: 0 4px 18px rgba(0,0,0,.06);
+
+        }
+
+        .empty-cart-icon {
+
+            font-size: 55px;
+
+            margin-bottom: 15px;
+
+        }
+
+        .empty-cart h2 {
+
+            margin-bottom: 10px;
+
+        }
+
+        .empty-cart p {
+
+            color: #68756f;
+
+            margin-bottom: 20px;
+
+        }
+
+        .continue-button {
+
+            display: inline-block;
+
+            background: #0b6b43;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 18px;
+
+            border-radius: 9px;
+
+            font-weight: bold;
+
+        }
+
+        .loading {
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #68756f;
+
+        }
+
+        .error-message {
+
+            background: #fff0f0;
+
+            color: #b3261e;
+
+            padding: 12px;
+
+            border-radius: 9px;
+
+            margin-bottom: 15px;
+
+        }
+
+        @media (max-width: 800px) {
+
+            .cart-layout {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .summary {
+
+                position: static;
+
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            .page-title h1 {
+
+                font-size: 23px;
+
+            }
+
+            .cart-item {
+
+                grid-template-columns: 70px 1fr;
+
+            }
+
+            .cart-item-image {
+
+                width: 70px;
+
+                height: 70px;
+
+            }
+
+            .item-total {
+
+                grid-column: 2;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-content">
+
+        <a href="index.html" class="logo">
+
+            🛒 Market Bouaké
+
+        </a>
+
+        <a href="index.html" class="back-button">
+
+            ← Continuer mes achats
+
+        </a>
+
+    </div>
+
+</header>
+
+<main>
+
+    <div class="page-title">
+
+        <h1>Mon panier</h1>
+
+        <p>Vérifiez vos articles avant de lancer votre commande.</p>
+
+    </div>
+
+    <div id="cart-message"></div>
+
+    <div id="cart-loading" class="loading">
+
+        Chargement du panier...
+
+    </div>
+
+    <div id="empty-cart" class="empty-cart" style="display:none;">
+
+        <div class="empty-cart-icon">🛒</div>
+
+        <h2>Votre panier est vide</h2>
+
+        <p>
+
+            Ajoutez des produits pour commencer votre commande.
+
+        </p>
+
+        <a href="index.html" class="continue-button">
+
+            Découvrir les produits
+
+        </a>
+
+    </div>
+
+    <div id="cart-layout" class="cart-layout" style="display:none;">
+
+        <section class="cart-products">
+
+            <div id="cart-products-container"></div>
+
+        </section>
+
+        <aside class="summary">
+
+            <h2>Résumé</h2>
+
+            <div class="summary-line">
+
+                <span>Sous-total</span>
+
+                <strong id="cart-subtotal">
+
+                    0 FCFA
+
+                </strong>
+
+            </div>
+
+            <div class="delivery-section">
+
+                <label for="delivery-district">
+
+                    Quartier de livraison
+
+                </label>
+
+                <select id="delivery-district">
+
+                    <option value="">
+
+                        Sélectionner votre quartier
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="delivery-by-seller" id="delivery-by-seller"></div>
+
+            <div class="summary-line">
+
+                <span>Livraison</span>
+
+                <strong id="cart-delivery">
+
+                    0 FCFA
+
+                </strong>
+
+            </div>
+
+            <div class="summary-total">
+
+                <span>Total</span>
+
+                <span id="cart-total">
+
+                    0 FCFA
+
+                </span>
+
+            </div>
+
+            <button
+
+                type="button"
+
+                id="checkout-button"
+
+                class="checkout-button"
+
+            >
+
+                Je lance la commande
+
+            </button>
+
+        </aside>
+
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/cart.js"></script>
+
+</body>
+
+</html>
