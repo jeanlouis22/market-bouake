@@ -1,0 +1,11741 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#ffffff">
+
+<meta name="description" content="Market Bouaké — Marketplace locale de Bouaké">
+
+<title>Market Bouaké</title>
+
+<style>
+
+:root{
+
+    --primary:#075c3a;
+
+    --primary-dark:#043c27;
+
+    --primary-light:#eaf7f1;
+
+    --accent:#f59e0b;
+
+    --danger:#dc2626;
+
+    --text:#111827;
+
+    --muted:#6b7280;
+
+    --border:#e5e7eb;
+
+    --bg:#f7f8fa;
+
+    --card:#ffffff;
+
+    --header:#ffffff;
+
+    --radius:14px;
+
+    --shadow:0 4px 18px rgba(15,23,42,.07);
+
+    --shadow-hover:0 10px 28px rgba(15,23,42,.12);
+
+}
+
+*{
+
+    box-sizing:border-box;
+
+    margin:0;
+
+    padding:0;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:
+
+        Inter,
+
+        -apple-system,
+
+        BlinkMacSystemFont,
+
+        "Segoe UI",
+
+        Roboto,
+
+        Arial,
+
+        sans-serif;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    line-height:1.5;
+
+    min-height:100vh;
+
+}
+
+button,
+
+input,
+
+select,
+
+textarea{
+
+    font:inherit;
+
+}
+
+button{
+
+    cursor:pointer;
+
+}
+
+a{
+
+    color:inherit;
+
+    text-decoration:none;
+
+}
+
+img{
+
+    max-width:100%;
+
+    display:block;
+
+}
+
+.hidden{
+
+    display:none!important;
+
+}
+
+.container{
+
+    width:min(1240px,calc(100% - 28px));
+
+    margin:0 auto;
+
+}
+
+/* =========================================================
+
+   HEADER
+
+========================================================= */
+
+.site-header{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:5000;
+
+    background:rgba(255,255,255,.96);
+
+    backdrop-filter:blur(12px);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.header-main{
+
+    min-height:68px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-size:20px;
+
+    font-weight:900;
+
+    white-space:nowrap;
+
+    color:var(--text);
+
+}
+
+.logo-icon{
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:11px;
+
+    display:grid;
+
+    place-items:center;
+
+    background:var(--primary);
+
+    color:#fff;
+
+    font-size:21px;
+
+}
+
+.header-search{
+
+    flex:1;
+
+    min-width:160px;
+
+    position:relative;
+
+}
+
+.header-search form{
+
+    width:100%;
+
+    display:flex;
+
+}
+
+.header-search input{
+
+    width:100%;
+
+    height:44px;
+
+    border:1px solid var(--border);
+
+    border-radius:12px 0 0 12px;
+
+    background:#f8fafc;
+
+    outline:none;
+
+    padding:0 48px 0 15px;
+
+    color:var(--text);
+
+    transition:.2s;
+
+}
+
+.header-search input:focus{
+
+    border-color:var(--primary);
+
+    background:#fff;
+
+    box-shadow:0 0 0 3px rgba(7,92,58,.08);
+
+}
+
+.search-button{
+
+    width:48px;
+
+    border:0;
+
+    border-radius:0 12px 12px 0;
+
+    background:var(--primary);
+
+    color:#fff;
+
+    font-size:18px;
+
+}
+
+.header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+}
+
+.header-action{
+
+    min-height:42px;
+
+    border:0;
+
+    background:transparent;
+
+    border-radius:11px;
+
+    padding:7px 9px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    color:var(--text);
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+}
+
+.header-action:hover{
+
+    background:#f1f5f9;
+
+}
+
+.cart-action{
+
+    position:relative;
+
+}
+
+.cart-count{
+
+    min-width:20px;
+
+    height:20px;
+
+    padding:0 5px;
+
+    border-radius:999px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:var(--accent);
+
+    color:#fff;
+
+    font-size:11px;
+
+    font-weight:900;
+
+}
+
+.auth-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+}
+
+.auth-button{
+
+    min-height:40px;
+
+    padding:0 13px;
+
+    border-radius:10px;
+
+    font-weight:800;
+
+    border:1px solid var(--border);
+
+    background:#fff;
+
+}
+
+.auth-button.primary{
+
+    background:var(--primary);
+
+    border-color:var(--primary);
+
+    color:#fff;
+
+}
+
+.menu-button{
+
+    width:42px;
+
+    height:42px;
+
+    border:0;
+
+    border-radius:11px;
+
+    background:#f1f5f9;
+
+    font-size:21px;
+
+}
+
+/* =========================================================
+
+   AUTH STATUS
+
+========================================================= */
+
+.auth-status{
+
+    background:#fff;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.auth-status-inner{
+
+    min-height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    font-size:13px;
+
+}
+
+.auth-welcome{
+
+    color:var(--muted);
+
+    font-weight:600;
+
+}
+
+.auth-status-actions{
+
+    display:flex;
+
+    gap:7px;
+
+}
+
+/* =========================================================
+
+   HERO
+
+========================================================= */
+
+.hero{
+
+    padding:26px 0 16px;
+
+}
+
+.hero-box{
+
+    min-height:250px;
+
+    border-radius:22px;
+
+    padding:34px;
+
+    background:
+
+        linear-gradient(
+
+            120deg,
+
+            var(--primary-light),
+
+            #fff 55%,
+
+            #fff7e8
+
+        );
+
+    border:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:30px;
+
+    overflow:hidden;
+
+}
+
+.hero-content{
+
+    max-width:650px;
+
+}
+
+.hero-content .eyebrow{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:6px 10px;
+
+    border-radius:999px;
+
+    background:#fff;
+
+    color:var(--primary);
+
+    font-size:12px;
+
+    font-weight:900;
+
+    margin-bottom:12px;
+
+}
+
+.hero-content h1{
+
+    font-size:clamp(27px,4vw,46px);
+
+    line-height:1.08;
+
+    letter-spacing:-1.2px;
+
+    margin-bottom:12px;
+
+}
+
+.hero-content p{
+
+    color:var(--muted);
+
+    max-width:590px;
+
+    margin-bottom:20px;
+
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:9px;
+
+}
+
+.hero-button{
+
+    min-height:43px;
+
+    border-radius:11px;
+
+    padding:0 15px;
+
+    font-weight:800;
+
+    border:1px solid var(--border);
+
+    background:#fff;
+
+}
+
+.hero-button.primary{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border-color:var(--primary);
+
+}
+
+/* =========================================================
+
+   CATEGORIES
+
+========================================================= */
+
+.section{
+
+    padding:18px 0;
+
+}
+
+.section-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    margin-bottom:13px;
+
+}
+
+.section-title{
+
+    font-size:21px;
+
+    font-weight:900;
+
+    letter-spacing:-.3px;
+
+}
+
+.section-link{
+
+    color:var(--primary);
+
+    font-size:13px;
+
+    font-weight:900;
+
+    border:0;
+
+    background:transparent;
+
+    padding:7px 0;
+
+}
+
+.categories-scroll{
+
+    display:flex;
+
+    gap:9px;
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+
+    padding-bottom:3px;
+
+}
+
+.categories-scroll::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+.category-chip{
+
+    flex:0 0 auto;
+
+    min-height:42px;
+
+    border:1px solid var(--border);
+
+    border-radius:999px;
+
+    background:#fff;
+
+    padding:0 15px;
+
+    font-weight:750;
+
+    color:#374151;
+
+    transition:.2s;
+
+}
+
+.category-chip:hover,
+
+.category-chip.active{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border-color:var(--primary);
+
+}
+
+/* =========================================================
+
+   ADVERTISING
+
+========================================================= */
+
+.ad-section{
+
+    padding:15px 0 5px;
+
+}
+
+.ad-slider{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    background:#e5e7eb;
+
+    min-height:160px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.ad-track{
+
+    display:flex;
+
+    transition:transform .35s ease;
+
+}
+
+.ad-slide{
+
+    min-width:100%;
+
+    min-height:160px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:#e5e7eb;
+
+}
+
+.ad-slide img{
+
+    width:100%;
+
+    height:100%;
+
+    min-height:160px;
+
+    object-fit:cover;
+
+}
+
+.ad-placeholder{
+
+    min-height:160px;
+
+    display:grid;
+
+    place-items:center;
+
+    text-align:center;
+
+    padding:25px;
+
+    color:var(--muted);
+
+}
+
+.ad-overlay{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    padding:45px 20px 18px;
+
+    background:linear-gradient(transparent,rgba(0,0,0,.72));
+
+    color:#fff;
+
+}
+
+.ad-overlay h3{
+
+    font-size:19px;
+
+    font-weight:900;
+
+}
+
+.ad-overlay p{
+
+    font-size:13px;
+
+    opacity:.9;
+
+}
+
+.ad-controls{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    pointer-events:none;
+
+}
+
+.ad-control{
+
+    pointer-events:auto;
+
+    margin:0 10px;
+
+    width:36px;
+
+    height:36px;
+
+    border-radius:50%;
+
+    border:0;
+
+    background:rgba(255,255,255,.9);
+
+    box-shadow:var(--shadow);
+
+}
+
+.ad-dots{
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:9px;
+
+    transform:translateX(-50%);
+
+    display:flex;
+
+    gap:5px;
+
+}
+
+.ad-dot{
+
+    width:7px;
+
+    height:7px;
+
+    border-radius:50%;
+
+    border:0;
+
+    background:rgba(255,255,255,.55);
+
+    padding:0;
+
+}
+
+.ad-dot.active{
+
+    background:#fff;
+
+    width:18px;
+
+    border-radius:10px;
+
+}
+
+/* =========================================================
+
+   PRODUCT GRID
+
+========================================================= */
+
+.product-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(5,minmax(0,1fr));
+
+    gap:13px;
+
+}
+
+.product-card{
+
+    min-width:0;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
+    transition:.2s;
+
+    position:relative;
+
+}
+
+.product-card:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:var(--shadow-hover);
+
+}
+
+.product-image-wrapper{
+
+    position:relative;
+
+    aspect-ratio:1/1;
+
+    background:#f1f5f9;
+
+    overflow:hidden;
+
+}
+
+.product-image{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+.product-favorite{
+
+    position:absolute;
+
+    top:9px;
+
+    right:9px;
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(0,0,0,.06);
+
+    background:rgba(255,255,255,.94);
+
+    display:grid;
+
+    place-items:center;
+
+    font-size:18px;
+
+    z-index:3;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+}
+
+.product-favorite.active{
+
+    color:#e11d48;
+
+}
+
+.product-badge{
+
+    position:absolute;
+
+    left:9px;
+
+    top:9px;
+
+    background:var(--accent);
+
+    color:#fff;
+
+    border-radius:7px;
+
+    padding:4px 7px;
+
+    font-size:10px;
+
+    font-weight:900;
+
+}
+
+.product-card-content{
+
+    padding:11px;
+
+}
+
+.product-name{
+
+    font-size:14px;
+
+    line-height:1.3;
+
+    font-weight:800;
+
+    display:-webkit-box;
+
+    -webkit-line-clamp:2;
+
+    -webkit-box-orient:vertical;
+
+    overflow:hidden;
+
+    min-height:36px;
+
+}
+
+.product-price{
+
+    margin-top:7px;
+
+    font-size:16px;
+
+    font-weight:950;
+
+    color:var(--text);
+
+}
+
+.product-old-price{
+
+    font-size:11px;
+
+    color:#9ca3af;
+
+    text-decoration:line-through;
+
+    margin-left:5px;
+
+    font-weight:700;
+
+}
+
+.product-promo{
+
+    color:#d97706;
+
+    font-size:11px;
+
+    font-weight:900;
+
+}
+
+.product-meta{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:5px 9px;
+
+    margin-top:6px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+.product-rating{
+
+    color:#b7791f;
+
+    font-weight:800;
+
+}
+
+.product-seller{
+
+    color:var(--muted);
+
+}
+
+.product-size{
+
+    color:var(--muted);
+
+}
+
+.product-location{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-top:6px;
+
+}
+
+.product-stock{
+
+    margin-top:6px;
+
+    font-size:11px;
+
+    color:var(--primary);
+
+    font-weight:800;
+
+}
+
+.product-stock.out{
+
+    color:var(--danger);
+
+}
+
+.product-actions{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:7px;
+
+    margin-top:10px;
+
+}
+
+.product-button{
+
+    min-height:38px;
+
+    border-radius:9px;
+
+    border:1px solid var(--border);
+
+    background:#fff;
+
+    font-size:12px;
+
+    font-weight:850;
+
+}
+
+.product-button.cart{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border-color:var(--primary);
+
+}
+
+.product-button.cart.in-cart{
+
+    background:#fff;
+
+    color:var(--primary);
+
+    border-color:var(--primary);
+
+}
+
+.product-button:disabled{
+
+    opacity:.5;
+
+    cursor:not-allowed;
+
+}
+
+/* =========================================================
+
+   SHOPS
+
+========================================================= */
+
+.shop-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,minmax(0,1fr));
+
+    gap:13px;
+
+}
+
+.shop-card{
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    padding:14px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.shop-top{
+
+    display:flex;
+
+    gap:11px;
+
+    align-items:center;
+
+}
+
+.shop-logo{
+
+    width:54px;
+
+    height:54px;
+
+    border-radius:13px;
+
+    object-fit:cover;
+
+    background:#f1f5f9;
+
+}
+
+.shop-name{
+
+    font-weight:900;
+
+    font-size:14px;
+
+}
+
+.shop-info{
+
+    margin-top:7px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+.shop-button{
+
+    width:100%;
+
+    margin-top:12px;
+
+    min-height:38px;
+
+    border-radius:9px;
+
+    border:1px solid var(--primary);
+
+    background:#fff;
+
+    color:var(--primary);
+
+    font-weight:850;
+
+}
+
+/* =========================================================
+
+   EMPTY / LOADING
+
+========================================================= */
+
+.loading-state,
+
+.empty-state{
+
+    width:100%;
+
+    min-height:130px;
+
+    display:grid;
+
+    place-items:center;
+
+    text-align:center;
+
+    padding:25px;
+
+    background:#fff;
+
+    border:1px dashed var(--border);
+
+    border-radius:14px;
+
+    color:var(--muted);
+
+}
+
+.loading-state{
+
+    animation:pulse 1.3s infinite;
+
+}
+
+@keyframes pulse{
+
+    50%{opacity:.55}
+
+}
+
+.full-width{
+
+    grid-column:1/-1;
+
+}
+
+/* =========================================================
+
+   MENU DRAWER
+
+========================================================= */
+
+.menu-backdrop{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(15,23,42,.45);
+
+    z-index:7000;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.2s;
+
+}
+
+.menu-backdrop.open{
+
+    opacity:1;
+
+    pointer-events:auto;
+
+}
+
+.side-menu{
+
+    position:fixed;
+
+    top:0;
+
+    right:0;
+
+    bottom:0;
+
+    width:min(390px,92vw);
+
+    background:#fff;
+
+    z-index:7100;
+
+    transform:translateX(100%);
+
+    transition:.25s ease;
+
+    overflow-y:auto;
+
+    box-shadow:-10px 0 35px rgba(0,0,0,.16);
+
+}
+
+.side-menu.open{
+
+    transform:translateX(0);
+
+}
+
+.menu-head{
+
+    min-height:70px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.menu-title{
+
+    font-size:19px;
+
+    font-weight:950;
+
+}
+
+.close-menu{
+
+    width:38px;
+
+    height:38px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:#f1f5f9;
+
+}
+
+.menu-body{
+
+    padding:12px;
+
+}
+
+.menu-section{
+
+    padding:8px 0 12px;
+
+}
+
+.menu-section-title{
+
+    padding:7px 10px;
+
+    font-size:10px;
+
+    color:#9ca3af;
+
+    font-weight:950;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+
+}
+
+.menu-item{
+
+    width:100%;
+
+    min-height:43px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    border:0;
+
+    background:#fff;
+
+    border-radius:9px;
+
+    padding:0 10px;
+
+    text-align:left;
+
+    font-weight:700;
+
+    color:#374151;
+
+}
+
+.menu-item:hover{
+
+    background:#f8fafc;
+
+}
+
+.menu-item.danger{
+
+    color:var(--danger);
+
+}
+
+/* =========================================================
+
+   MODALS
+
+========================================================= */
+
+.modal-backdrop{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9000;
+
+    background:rgba(15,23,42,.55);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:15px;
+
+}
+
+.modal-backdrop.open{
+
+    display:flex;
+
+}
+
+.modal{
+
+    width:min(520px,100%);
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    box-shadow:0 25px 70px rgba(0,0,0,.22);
+
+}
+
+.modal-head{
+
+    min-height:60px;
+
+    padding:0 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.modal-title{
+
+    font-size:18px;
+
+    font-weight:950;
+
+}
+
+.modal-close{
+
+    width:36px;
+
+    height:36px;
+
+    border:0;
+
+    background:#f1f5f9;
+
+    border-radius:9px;
+
+}
+
+.modal-body{
+
+    padding:18px;
+
+}
+
+.form-group{
+
+    margin-bottom:13px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    font-size:12px;
+
+    font-weight:850;
+
+    margin-bottom:6px;
+
+}
+
+.form-control{
+
+    width:100%;
+
+    min-height:43px;
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    padding:9px 11px;
+
+    outline:none;
+
+    background:#fff;
+
+}
+
+.form-control:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 3px rgba(7,92,58,.08);
+
+}
+
+textarea.form-control{
+
+    min-height:120px;
+
+    resize:vertical;
+
+}
+
+.form-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:8px;
+
+    margin-top:15px;
+
+}
+
+.form-button{
+
+    min-height:42px;
+
+    border-radius:10px;
+
+    padding:0 14px;
+
+    font-weight:850;
+
+    border:1px solid var(--border);
+
+    background:#fff;
+
+}
+
+.form-button.primary{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border-color:var(--primary);
+
+}
+
+/* =========================================================
+
+   INFO SECTIONS
+
+========================================================= */
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,minmax(0,1fr));
+
+    gap:13px;
+
+}
+
+.info-card{
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    padding:17px;
+
+}
+
+.info-card-icon{
+
+    font-size:25px;
+
+    margin-bottom:8px;
+
+}
+
+.info-card h3{
+
+    font-size:15px;
+
+    margin-bottom:5px;
+
+}
+
+.info-card p{
+
+    font-size:12px;
+
+    color:var(--muted);
+
+}
+
+/* =========================================================
+
+   FOOTER
+
+========================================================= */
+
+.site-footer{
+
+    margin-top:35px;
+
+    background:#111827;
+
+    color:#e5e7eb;
+
+    padding:38px 0 85px;
+
+}
+
+.footer-grid{
+
+    display:grid;
+
+    grid-template-columns:1.4fr repeat(3,1fr);
+
+    gap:28px;
+
+}
+
+.footer-brand h2{
+
+    color:#fff;
+
+    font-size:20px;
+
+    margin-bottom:7px;
+
+}
+
+.footer-brand p{
+
+    color:#9ca3af;
+
+    font-size:12px;
+
+    max-width:300px;
+
+}
+
+.footer-column h3{
+
+    color:#fff;
+
+    font-size:12px;
+
+    text-transform:uppercase;
+
+    margin-bottom:10px;
+
+}
+
+.footer-column button,
+
+.footer-column a{
+
+    display:block;
+
+    border:0;
+
+    background:transparent;
+
+    color:#9ca3af;
+
+    padding:4px 0;
+
+    font-size:12px;
+
+    text-align:left;
+
+}
+
+.footer-column button:hover,
+
+.footer-column a:hover{
+
+    color:#fff;
+
+}
+
+.footer-bottom{
+
+    border-top:1px solid rgba(255,255,255,.1);
+
+    margin-top:28px;
+
+    padding-top:18px;
+
+    color:#9ca3af;
+
+    font-size:11px;
+
+    text-align:center;
+
+}
+
+/* =========================================================
+
+   MOBILE NAVIGATION
+
+========================================================= */
+
+.mobile-bottom-nav{
+
+    display:none;
+
+}
+
+/* =========================================================
+
+   NOTIFICATION
+
+========================================================= */
+
+.market-toast{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:85px;
+
+    transform:translateX(-50%) translateY(20px);
+
+    z-index:10000;
+
+    max-width:calc(100% - 30px);
+
+    padding:12px 17px;
+
+    border-radius:11px;
+
+    background:#111827;
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:750;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.22);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.25s;
+
+}
+
+.market-toast.show{
+
+    opacity:1;
+
+    transform:translateX(-50%) translateY(0);
+
+}
+
+/* =========================================================
+
+   RESPONSIVE
+
+========================================================= */
+
+@media(max-width:1100px){
+
+    .product-grid{
+
+        grid-template-columns:repeat(4,minmax(0,1fr));
+
+    }
+
+    .shop-grid{
+
+        grid-template-columns:repeat(3,minmax(0,1fr));
+
+    }
+
+}
+
+@media(max-width:850px){
+
+    .header-main{
+
+        flex-wrap:wrap;
+
+        padding:9px 0;
+
+    }
+
+    .logo{
+
+        flex:1;
+
+    }
+
+    .header-search{
+
+        order:3;
+
+        flex-basis:100%;
+
+    }
+
+    .header-actions{
+
+        gap:2px;
+
+    }
+
+    .header-action .label{
+
+        display:none;
+
+    }
+
+    .auth-actions{
+
+        display:none;
+
+    }
+
+    .hero-box{
+
+        min-height:220px;
+
+        padding:25px;
+
+    }
+
+    .product-grid{
+
+        grid-template-columns:repeat(3,minmax(0,1fr));
+
+    }
+
+    .shop-grid{
+
+        grid-template-columns:repeat(2,minmax(0,1fr));
+
+    }
+
+    .footer-grid{
+
+        grid-template-columns:repeat(2,minmax(0,1fr));
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    body{
+
+        padding-bottom:65px;
+
+    }
+
+    .container{
+
+        width:min(100% - 18px,1240px);
+
+    }
+
+    .site-header{
+
+        position:sticky;
+
+    }
+
+    .header-main{
+
+        min-height:60px;
+
+        gap:7px;
+
+    }
+
+    .logo{
+
+        font-size:17px;
+
+    }
+
+    .logo-icon{
+
+        width:34px;
+
+        height:34px;
+
+        font-size:18px;
+
+    }
+
+    .header-actions{
+
+        margin-left:auto;
+
+    }
+
+    .header-action{
+
+        padding:5px;
+
+        min-width:38px;
+
+        justify-content:center;
+
+    }
+
+    .menu-button{
+
+        width:38px;
+
+        height:38px;
+
+    }
+
+    .auth-status-inner{
+
+        padding:7px 0;
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .hero{
+
+        padding-top:12px;
+
+    }
+
+    .hero-box{
+
+        border-radius:17px;
+
+        padding:22px 18px;
+
+    }
+
+    .hero-content h1{
+
+        font-size:29px;
+
+    }
+
+    .hero-content p{
+
+        font-size:13px;
+
+    }
+
+    .section{
+
+        padding:14px 0;
+
+    }
+
+    .section-title{
+
+        font-size:18px;
+
+    }
+
+    .product-grid{
+
+        grid-template-columns:repeat(2,minmax(0,1fr));
+
+        gap:9px;
+
+    }
+
+    .product-card{
+
+        border-radius:11px;
+
+    }
+
+    .product-card-content{
+
+        padding:9px;
+
+    }
+
+    .product-name{
+
+        font-size:12px;
+
+        min-height:32px;
+
+    }
+
+    .product-price{
+
+        font-size:14px;
+
+    }
+
+    .product-meta{
+
+        font-size:10px;
+
+    }
+
+    .product-button{
+
+        min-height:36px;
+
+        font-size:11px;
+
+    }
+
+    .product-favorite{
+
+        width:31px;
+
+        height:31px;
+
+        font-size:16px;
+
+    }
+
+    .shop-grid{
+
+        grid-template-columns:1fr 1fr;
+
+        gap:9px;
+
+    }
+
+    .shop-card{
+
+        padding:11px;
+
+    }
+
+    .shop-logo{
+
+        width:45px;
+
+        height:45px;
+
+    }
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .footer-grid{
+
+        grid-template-columns:1fr 1fr;
+
+        gap:20px;
+
+    }
+
+    .footer-brand{
+
+        grid-column:1/-1;
+
+    }
+
+    .mobile-bottom-nav{
+
+        position:fixed;
+
+        left:0;
+
+        right:0;
+
+        bottom:0;
+
+        height:62px;
+
+        z-index:6000;
+
+        display:grid;
+
+        grid-template-columns:repeat(4,1fr);
+
+        background:rgba(255,255,255,.98);
+
+        border-top:1px solid var(--border);
+
+        box-shadow:0 -5px 20px rgba(15,23,42,.08);
+
+    }
+
+    .mobile-nav-item{
+
+        border:0;
+
+        background:transparent;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        justify-content:center;
+
+        gap:2px;
+
+        color:#64748b;
+
+        font-size:10px;
+
+        font-weight:800;
+
+    }
+
+    .mobile-nav-item.active{
+
+        color:var(--primary);
+
+    }
+
+    .mobile-nav-icon{
+
+        font-size:18px;
+
+    }
+
+    .ad-slider,
+
+    .ad-slide,
+
+    .ad-slide img,
+
+    .ad-placeholder{
+
+        min-height:145px;
+
+    }
+
+    .toast{
+
+        bottom:75px;
+
+    }
+
+}
+
+@media(max-width:380px){
+
+    .product-grid{
+
+        gap:7px;
+
+    }
+
+    .product-card-content{
+
+        padding:8px;
+
+    }
+
+    .product-actions{
+
+        gap:5px;
+
+    }
+
+    .product-button{
+
+        font-size:10px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================================================
+
+     HEADER
+
+========================================================= -->
+
+<header class="site-header">
+
+    <div class="container header-main">
+
+        <a href="index.html" class="logo" aria-label="Market Bouaké accueil">
+
+            <span class="logo-icon">🛒</span>
+
+            <span id="site-logo-text">Market Bouaké</span>
+
+        </a>
+
+        <div class="header-search">
+
+            <form id="search-form">
+
+                <input
+
+                    id="global-search"
+
+                    type="search"
+
+                    placeholder="Rechercher un produit, une boutique..."
+
+                    autocomplete="off"
+
+                    aria-label="Rechercher"
+
+                >
+
+                <button
+
+                    type="submit"
+
+                    class="search-button"
+
+                    aria-label="Rechercher"
+
+                >🔎</button>
+
+            </form>
+
+        </div>
+
+        <div class="header-actions">
+
+            <button
+
+                type="button"
+
+                class="header-action"
+
+                id="discussion-button"
+
+                title="Discussions"
+
+            >
+
+                <span>💬</span>
+
+                <span class="label">Discussions</span>
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="header-action cart-action"
+
+                id="cart-button"
+
+                title="Panier"
+
+            >
+
+                <span>🛒</span>
+
+                <span class="label">Panier</span>
+
+                <span
+
+                    class="cart-count"
+
+                    id="cart-count"
+
+                    style="display:none"
+
+                >0</span>
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="header-action"
+
+                id="account-button"
+
+                title="Compte"
+
+            >
+
+                <span>👤</span>
+
+                <span class="label">Compte</span>
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-button"
+
+                id="menu-button"
+
+                aria-label="Ouvrir le menu"
+
+            >☰</button>
+
+        </div>
+
+        <div class="auth-actions" id="desktop-auth-actions">
+
+            <button
+
+                type="button"
+
+                class="auth-button"
+
+                id="login-button"
+
+            >
+
+                Se connecter
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="auth-button primary"
+
+                id="signup-button"
+
+            >
+
+                S'inscrire
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<!-- =========================================================
+
+     AUTH STATUS
+
+========================================================= -->
+
+<div class="auth-status" id="auth-status">
+
+    <div class="container auth-status-inner">
+
+        <div class="auth-welcome" id="auth-welcome">
+
+            Vous pouvez consulter Market Bouaké librement.
+
+        </div>
+
+        <div class="auth-status-actions">
+
+            <button
+
+                type="button"
+
+                class="auth-button"
+
+                id="status-login-button"
+
+            >
+
+                Se connecter
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="auth-button primary"
+
+                id="status-signup-button"
+
+            >
+
+                S'inscrire
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+
+     MAIN
+
+========================================================= -->
+
+<main>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="container">
+
+            <div class="hero-box">
+
+                <div class="hero-content">
+
+                    <span class="eyebrow" id="hero-eyebrow">
+
+                        Marketplace locale de Bouaké
+
+                    </span>
+
+                    <h1 id="hero-title">
+
+                        Trouvez ce qu’il vous faut à Bouaké.
+
+                    </h1>
+
+                    <p id="hero-description">
+
+                        Produits, boutiques, vendeurs et offres immobilières
+
+                        réunis au même endroit.
+
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <button
+
+                            type="button"
+
+                            class="hero-button primary"
+
+                            id="hero-browse-button"
+
+                        >
+
+                            🔎 Parcourir
+
+                        </button>
+
+                        <button
+
+                            type="button"
+
+                            class="hero-button"
+
+                            id="hero-seller-button"
+
+                        >
+
+                            🏪 Devenir vendeur
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CATEGORIES -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    Catégories
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    id="all-categories-button"
+
+                >
+
+                    Voir tout
+
+                </button>
+
+            </div>
+
+            <div
+
+                class="categories-scroll"
+
+                id="categories-container"
+
+            >
+
+                <button
+
+                    type="button"
+
+                    class="category-chip active"
+
+                    data-category-id=""
+
+                >
+
+                    Voir tout
+
+                </button>
+
+                <div class="loading-state">
+
+                    Chargement...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PUBLICITÉS -->
+
+    <section
+
+        class="ad-section"
+
+        id="advertising-section"
+
+    >
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    📢 Publicités
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    id="advertising-more-button"
+
+                >
+
+                    Faire de la publicité
+
+                </button>
+
+            </div>
+
+            <div class="ad-slider" id="ad-slider">
+
+                <div
+
+                    class="ad-track"
+
+                    id="ad-track"
+
+                >
+
+                    <div class="ad-slide">
+
+                        <div class="ad-placeholder">
+
+                            Chargement des publicités...
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div
+
+                    class="ad-controls"
+
+                    id="ad-controls"
+
+                    style="display:none"
+
+                >
+
+                    <button
+
+                        type="button"
+
+                        class="ad-control"
+
+                        id="ad-prev"
+
+                        aria-label="Publicité précédente"
+
+                    >‹</button>
+
+                    <button
+
+                        type="button"
+
+                        class="ad-control"
+
+                        id="ad-next"
+
+                        aria-label="Publicité suivante"
+
+                    >›</button>
+
+                </div>
+
+                <div
+
+                    class="ad-dots"
+
+                    id="ad-dots"
+
+                ></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PRODUITS MIS EN AVANT -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    🔥 Produits mis en avant
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    data-section-link="featured"
+
+                >
+
+                    Voir tout
+
+                </button>
+
+            </div>
+
+            <div
+
+                class="product-grid"
+
+                id="featured-products"
+
+            >
+
+                <div class="loading-state full-width">
+
+                    Chargement des produits...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- NOUVEAUTÉS -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    🆕 Nouveautés
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    data-section-link="new"
+
+                >
+
+                    Voir tout
+
+                </button>
+
+            </div>
+
+            <div
+
+                class="product-grid"
+
+                id="new-products"
+
+            >
+
+                <div class="loading-state full-width">
+
+                    Chargement des produits...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- POPULAIRES -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    ⭐ Produits populaires
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    data-section-link="popular"
+
+                >
+
+                    Voir tout
+
+                </button>
+
+            </div>
+
+            <div
+
+                class="product-grid"
+
+                id="popular-products"
+
+            >
+
+                <div class="loading-state full-width">
+
+                    Chargement des produits...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PROMOTIONS -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    🏷️ Promotions
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    data-section-link="promotions"
+
+                >
+
+                    Voir tout
+
+                </button>
+
+            </div>
+
+            <div
+
+                class="product-grid"
+
+                id="promotion-products"
+
+            >
+
+                <div class="loading-state full-width">
+
+                    Recherche des promotions...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- BOUTIQUES -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    🏪 Découvrez nos boutiques
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    id="all-shops-button"
+
+                >
+
+                    Voir tout
+
+                </button>
+
+            </div>
+
+            <div
+
+                class="shop-grid"
+
+                id="shops-container"
+
+            >
+
+                <div class="loading-state full-width">
+
+                    Chargement des boutiques...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- IMMOBILIER -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    🏠 Immobilier & Résidence
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    id="all-real-estate-button"
+
+                >
+
+                    Voir tout
+
+                </button>
+
+            </div>
+
+            <div
+
+                class="product-grid"
+
+                id="real-estate-products"
+
+            >
+
+                <div class="loading-state full-width">
+
+                    Chargement...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- INFORMATIONS -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    Market Bouaké
+
+                </h2>
+
+                <button
+
+                    type="button"
+
+                    class="section-link"
+
+                    id="how-it-works-button"
+
+                >
+
+                    Comment ça marche ?
+
+                </button>
+
+            </div>
+
+            <div class="info-grid">
+
+                <div class="info-card">
+
+                    <div class="info-card-icon">🔎</div>
+
+                    <h3>Trouvez facilement</h3>
+
+                    <p>
+
+                        Recherchez des produits, boutiques et biens
+
+                        disponibles à Bouaké.
+
+                    </p>
+
+                </div>
+
+                <div class="info-card">
+
+                    <div class="info-card-icon">🛒</div>
+
+                    <h3>Ajoutez au panier</h3>
+
+                    <p>
+
+                        Gardez vos produits dans votre panier et préparez
+
+                        votre commande.
+
+                    </p>
+
+                </div>
+
+                <div class="info-card">
+
+                    <div class="info-card-icon">💬</div>
+
+                    <h3>Échangez avec les vendeurs</h3>
+
+                    <p>
+
+                        Contactez les vendeurs via Market Bouaké ou WhatsApp.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- =========================================================
+
+     FOOTER
+
+========================================================= -->
+
+<footer class="site-footer">
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+            <div class="footer-brand">
+
+                <h2>
+
+                    🛒 Market Bouaké
+
+                </h2>
+
+                <p>
+
+                    Marketplace locale de Bouaké.
+
+                    Trouvez des produits, boutiques, vendeurs
+
+                    et offres immobilières.
+
+                </p>
+
+                <p style="margin-top:12px;">
+
+                    📞 WhatsApp :
+
+                    <strong>0596266649</strong>
+
+                </p>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>Contact</h3>
+
+                <button
+
+                    type="button"
+
+                    data-action="contact"
+
+                >
+
+                    Nous contacter
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="footer-ad-button"
+
+                >
+
+                    Faire de la publicité
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="footer-help-button"
+
+                >
+
+                    Aide
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="footer-report-button"
+
+                >
+
+                    Signaler un problème
+
+                </button>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>Acheteurs</h3>
+
+                <button
+
+                    type="button"
+
+                    id="footer-how-buy"
+
+                >
+
+                    Comment acheter ?
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    data-auth-action="orders"
+
+                >
+
+                    Mes commandes
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    data-auth-action="favorites"
+
+                >
+
+                    Mes favoris
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    data-auth-action="reviews"
+
+                >
+
+                    Mes avis
+
+                </button>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>Vendeurs</h3>
+
+                <button
+
+                    type="button"
+
+                    id="footer-seller-button"
+
+                >
+
+                    Devenir vendeur
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="footer-seller-space"
+
+                >
+
+                    Espace vendeur
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="footer-shops-button"
+
+                >
+
+                    Nos boutiques
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    id="footer-categories-button"
+
+                >
+
+                    Nos catégories
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <span>
+
+                © <span id="current-year"></span>
+
+                Market Bouaké — Tous droits réservés.
+
+            </span>
+
+            <div style="margin-top:8px;">
+
+                <button
+
+                    type="button"
+
+                    data-action="terms"
+
+                    style="border:0;background:none;color:#9ca3af;margin:0 7px;"
+
+                >
+
+                    Conditions générales
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    data-action="privacy"
+
+                    style="border:0;background:none;color:#9ca3af;margin:0 7px;"
+
+                >
+
+                    Confidentialité
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    data-action="returns"
+
+                    style="border:0;background:none;color:#9ca3af;margin:0 7px;"
+
+                >
+
+                    Politique de retour
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    data-action="cookies"
+
+                    style="border:0;background:none;color:#9ca3af;margin:0 7px;"
+
+                >
+
+                    Cookies
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<!-- =========================================================
+
+     MOBILE NAVIGATION
+
+========================================================= -->
+
+<nav
+
+    class="mobile-bottom-nav"
+
+    aria-label="Navigation mobile"
+
+>
+
+    <button
+
+        type="button"
+
+        class="mobile-nav-item active"
+
+        id="mobile-home"
+
+    >
+
+        <span class="mobile-nav-icon">🏠</span>
+
+        <span>Accueil</span>
+
+    </button>
+
+    <button
+
+        type="button"
+
+        class="mobile-nav-item"
+
+        id="mobile-ads"
+
+    >
+
+        <span class="mobile-nav-icon">📢</span>
+
+        <span>Publicités</span>
+
+    </button>
+
+    <button
+
+        type="button"
+
+        class="mobile-nav-item"
+
+        id="mobile-cart"
+
+    >
+
+        <span class="mobile-nav-icon">🛒</span>
+
+        <span>Panier</span>
+
+    </button>
+
+    <button
+
+        type="button"
+
+        class="mobile-nav-item"
+
+        id="mobile-account"
+
+    >
+
+        <span class="mobile-nav-icon">👤</span>
+
+        <span>Compte</span>
+
+    </button>
+
+</nav>
+
+<!-- =========================================================
+
+     MENU
+
+========================================================= -->
+
+<div
+
+    class="menu-backdrop"
+
+    id="menu-backdrop"
+
+></div>
+
+<aside
+
+    class="side-menu"
+
+    id="side-menu"
+
+    aria-label="Menu principal"
+
+>
+
+    <div class="menu-head">
+
+        <div class="menu-title">
+
+            Market Bouaké
+
+        </div>
+
+        <button
+
+            type="button"
+
+            class="close-menu"
+
+            id="close-menu"
+
+            aria-label="Fermer le menu"
+
+        >
+
+            ✕
+
+        </button>
+
+    </div>
+
+    <div class="menu-body">
+
+        <div class="menu-section">
+
+            <div class="menu-section-title">
+
+                Navigation
+
+            </div>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="home"
+
+            >
+
+                🏠 Accueil
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="categories"
+
+            >
+
+                🗂️ Catégories
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="browse"
+
+            >
+
+                🔎 Parcourir
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="new"
+
+            >
+
+                🆕 Nouveautés
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="popular"
+
+            >
+
+                ⭐ Produits populaires
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="promotions"
+
+            >
+
+                🏷️ Promotions
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="shops"
+
+            >
+
+                🏪 Boutiques
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="ads"
+
+            >
+
+                📢 Publicités
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="real-estate"
+
+            >
+
+                🏠 Immobilier & Résidence
+
+            </button>
+
+        </div>
+
+        <div class="menu-section">
+
+            <div class="menu-section-title">
+
+                Mon espace
+
+            </div>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-auth-action="orders"
+
+            >
+
+                📦 Mes commandes
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-auth-action="favorites"
+
+            >
+
+                ❤️ Mes favoris
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-auth-action="delivery"
+
+            >
+
+                🚚 Mes informations de livraison
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-auth-action="reviews"
+
+            >
+
+                ⭐ Mes avis
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-auth-action="notifications"
+
+            >
+
+                🔔 Notifications
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-auth-action="problems"
+
+            >
+
+                ⚠️ Mes problèmes
+
+            </button>
+
+        </div>
+
+        <div class="menu-section">
+
+            <div class="menu-section-title">
+
+                Vendeur
+
+            </div>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                id="menu-become-seller"
+
+            >
+
+                🏪 Devenir vendeur
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                id="menu-seller-space"
+
+            >
+
+                👑 Espace vendeur
+
+            </button>
+
+        </div>
+
+        <div class="menu-section">
+
+            <div class="menu-section-title">
+
+                Aide
+
+            </div>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="how"
+
+            >
+
+                ❓ Comment Market Bouaké marche ?
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="help"
+
+            >
+
+                🆘 Aide
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-menu-action="report"
+
+            >
+
+                ⚠️ Signaler un problème
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-action="contact"
+
+            >
+
+                📞 Nous contacter
+
+            </button>
+
+        </div>
+
+        <div class="menu-section">
+
+            <div class="menu-section-title">
+
+                Compte
+
+            </div>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                id="menu-account"
+
+            >
+
+                👤 Mon compte
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item"
+
+                data-auth-action="settings"
+
+            >
+
+                ⚙️ Paramètres
+
+            </button>
+
+            <button
+
+                type="button"
+
+                class="menu-item danger hidden"
+
+                id="menu-logout"
+
+            >
+
+                🚪 Déconnexion
+
+            </button>
+
+        </div>
+
+    </div>
+
+</aside>
+
+<!-- =========================================================
+
+     MODAL SIGNALEMENT HORS CONNEXION
+
+========================================================= -->
+
+<div
+
+    class="modal-backdrop"
+
+    id="guest-report-modal"
+
+>
+
+    <div
+
+        class="modal"
+
+        role="dialog"
+
+        aria-modal="true"
+
+        aria-labelledby="guest-report-title"
+
+    >
+
+        <div class="modal-head">
+
+            <h2
+
+                class="modal-title"
+
+                id="guest-report-title"
+
+            >
+
+                Signaler un problème
+
+            </h2>
+
+            <button
+
+                type="button"
+
+                class="modal-close"
+
+                data-close-modal="guest-report-modal"
+
+            >
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <p
+
+                style="
+
+                    color:#6b7280;
+
+                    font-size:13px;
+
+                    margin-bottom:15px;
+
+                "
+
+            >
+
+                Vous n’êtes pas connecté. Utilisez ce formulaire pour
+
+                signaler un problème concernant la connexion, l’accès au
+
+                site ou tout autre problème rencontré avant votre connexion.
+
+            </p>
+
+            <form id="guest-report-form">
+
+                <div class="form-group">
+
+                    <label for="guest-report-name">
+
+                        Nom / prénom
+
+                    </label>
+
+                    <input
+
+                        id="guest-report-name"
+
+                        class="form-control"
+
+                        type="text"
+
+                        required
+
+                        maxlength="120"
+
+                        placeholder="Votre nom"
+
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="guest-report-contact">
+
+                        Téléphone / WhatsApp / Email
+
+                    </label>
+
+                    <input
+
+                        id="guest-report-contact"
+
+                        class="form-control"
+
+                        type="text"
+
+                        required
+
+                        maxlength="150"
+
+                        placeholder="Comment pouvons-nous vous contacter ?"
+
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="guest-report-type">
+
+                        Type de problème
+
+                    </label>
+
+                    <select
+
+                        id="guest-report-type"
+
+                        class="form-control"
+
+                        required
+
+                    >
+
+                        <option value="">
+
+                            Sélectionner
+
+                        </option>
+
+                        <option value="connexion">
+
+                            Problème de connexion
+
+                        </option>
+
+                        <option value="inscription">
+
+                            Problème d'inscription
+
+                        </option>
+
+                        <option value="site">
+
+                            Problème sur le site
+
+                        </option>
+
+                        <option value="produit">
+
+                            Problème avec un produit
+
+                        </option>
+
+                        <option value="autre">
+
+                            Autre
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="guest-report-description">
+
+                        Description
+
+                    </label>
+
+                    <textarea
+
+                        id="guest-report-description"
+
+                        class="form-control"
+
+                        required
+
+                        maxlength="3000"
+
+                        placeholder="Décrivez précisément le problème..."
+
+                    ></textarea>
+
+                </div>
+
+                <div class="form-actions">
+
+                    <button
+
+                        type="button"
+
+                        class="form-button"
+
+                        data-close-modal="guest-report-modal"
+
+                    >
+
+                        Annuler
+
+                    </button>
+
+                    <button
+
+                        type="submit"
+
+                        class="form-button primary"
+
+                    >
+
+                        Envoyer le signalement
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+
+     MODAL CONTACT / WHATSAPP
+
+========================================================= -->
+
+<div
+
+    class="modal-backdrop"
+
+    id="contact-modal"
+
+>
+
+    <div class="modal">
+
+        <div class="modal-head">
+
+            <h2 class="modal-title">
+
+                Nous contacter
+
+            </h2>
+
+            <button
+
+                type="button"
+
+                class="modal-close"
+
+                data-close-modal="contact-modal"
+
+            >
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <p
+
+                style="
+
+                    color:#6b7280;
+
+                    font-size:13px;
+
+                    margin-bottom:15px;
+
+                "
+
+            >
+
+                Pour toute question concernant Market Bouaké,
+
+                vous pouvez nous contacter directement.
+
+            </p>
+
+            <button
+
+                type="button"
+
+                class="form-button primary"
+
+                id="contact-whatsapp-button"
+
+                style="width:100%;"
+
+            >
+
+                💬 Contacter Market Bouaké sur WhatsApp
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+
+     TOAST
+
+========================================================= -->
+
+<div
+
+    class="market-toast"
+
+    id="market-toast"
+
+    role="status"
+
+    aria-live="polite"
+
+></div>
+
+<!-- =========================================================
+
+     SUPABASE
+
+     Le projet peut fournir son client dans js/supabase.js.
+
+     Aucun faux identifiant Supabase n'est intégré ici.
+
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+
+<!--
+
+    Fichier déjà prévu dans le projet.
+
+    Il est chargé après Supabase afin que ses fonctions restent
+
+    disponibles pour les fiches produits et les fonctionnalités
+
+    déjà existantes.
+
+-->
+
+<script src="js/produit.js"></script>
+
+<script>
+
+/* ============================================================
+
+   MARKET BOUAKÉ
+
+   INDEX.HTML DÉFINITIF
+
+   LOGIQUE PRINCIPALE DE L'ACCUEIL
+
+============================================================ */
+
+(function(){
+
+"use strict";
+
+/* ============================================================
+
+   CONFIGURATION GÉNÉRALE
+
+============================================================ */
+
+const MARKET_CONFIG = {
+
+    whatsapp:
+
+        "2250596266649",
+
+    normalTheme: {
+
+        primary:"#075c3a",
+
+        primaryDark:"#043c27",
+
+        primaryLight:"#eaf7f1",
+
+        accent:"#f59e0b",
+
+        text:"#111827",
+
+        muted:"#6b7280",
+
+        border:"#e5e7eb",
+
+        background:"#f7f8fa",
+
+        card:"#ffffff",
+
+        header:"#ffffff",
+
+        logoText:"Market Bouaké",
+
+        heroEyebrow:"Marketplace locale de Bouaké",
+
+        heroTitle:"Trouvez ce qu’il vous faut à Bouaké.",
+
+        heroDescription:
+
+            "Produits, boutiques, vendeurs et offres immobilières réunis au même endroit."
+
+    },
+
+    tables: {
+
+        products:"products",
+
+        categories:"categories",
+
+        themes:"site_themes",
+
+        advertisements:"advertisements",
+
+        profiles:"profiles",
+
+        shops:"shops",
+
+        reports:"reports",
+
+        guestReports:"guest_reports"
+
+    }
+
+};
+
+/* ============================================================
+
+   ÉTAT GLOBAL
+
+============================================================ */
+
+let marketClient = null;
+
+let currentUser = null;
+
+let currentSession = null;
+
+let currentProducts = [];
+
+let currentCategories = [];
+
+let currentAdvertisements = [];
+
+let currentTheme = null;
+
+let adIndex = 0;
+
+let adTimer = null;
+
+/* ============================================================
+
+   OUTILS
+
+============================================================ */
+
+function byId(id){
+
+    return document.getElementById(id);
+
+}
+
+function safeText(value){
+
+    if(
+
+        value === null ||
+
+        value === undefined
+
+    ){
+
+        return "";
+
+    }
+
+    return String(value);
+
+}
+
+function escapeHTML(value){
+
+    return safeText(value)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+function formatPrice(value){
+
+    if(
+
+        value === null ||
+
+        value === undefined ||
+
+        value === ""
+
+    ){
+
+        return "Prix sur demande";
+
+    }
+
+    const number =
+
+        Number(value);
+
+    if(!Number.isFinite(number)){
+
+        return "Prix sur demande";
+
+    }
+
+    return (
+
+        new Intl.NumberFormat(
+
+            "fr-FR"
+
+        ).format(number)
+
+        + " FCFA"
+
+    );
+
+}
+
+function normalizeText(value){
+
+    return safeText(value)
+
+        .toLowerCase()
+
+        .normalize("NFD")
+
+        .replace(/[\u0300-\u036f]/g,"");
+
+}
+
+function showToast(message){
+
+    const toast =
+
+        byId("market-toast");
+
+    if(!toast) return;
+
+    toast.textContent =
+
+        message;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+
+        toast._timer
+
+    );
+
+    toast._timer =
+
+        setTimeout(
+
+            function(){
+
+                toast.classList.remove(
+
+                    "show"
+
+                );
+
+            },
+
+            2600
+
+        );
+
+}
+
+function isValidHttpUrl(value){
+
+    if(!value) return false;
+
+    try{
+
+        const url =
+
+            new URL(value);
+
+        return (
+
+            url.protocol === "http:" ||
+
+            url.protocol === "https:"
+
+        );
+
+    }catch(error){
+
+        return false;
+
+    }
+
+}
+
+/* ============================================================
+
+   CLIENT SUPABASE
+
+============================================================ */
+
+function findSupabaseClient(){
+
+    if(
+
+        window.marketSupabase &&
+
+        typeof window.marketSupabase.from === "function"
+
+    ){
+
+        return window.marketSupabase;
+
+    }
+
+    if(
+
+        window.supabaseClient &&
+
+        typeof window.supabaseClient.from === "function"
+
+    ){
+
+        return window.supabaseClient;
+
+    }
+
+    if(
+
+        window.supabase &&
+
+        typeof window.supabase.from === "function"
+
+    ){
+
+        return window.supabase;
+
+    }
+
+    return null;
+
+}
+
+async function waitForSupabaseClient(){
+
+    for(
+
+        let i = 0;
+
+        i < 30;
+
+        i++
+
+    ){
+
+        marketClient =
+
+            findSupabaseClient();
+
+        if(marketClient){
+
+            return marketClient;
+
+        }
+
+        await new Promise(
+
+            resolve =>
+
+                setTimeout(
+
+                    resolve,
+
+                    150
+
+                )
+
+        );
+
+    }
+
+    return null;
+
+}
+
+/* ============================================================
+
+   NAVIGATION SÉCURISÉE
+
+============================================================ */
+
+function goToPage(
+
+    page,
+
+    params
+
+){
+
+    const safePages = [
+
+        "index.html",
+
+        "connexion.html",
+
+        "inscription.html",
+
+        "produit.html",
+
+        "boutique.html",
+
+        "categories.html",
+
+        "parcourir.html",
+
+        "publicite.html",
+
+        "publicites.html",
+
+        "immobilier.html",
+
+        "compte.html",
+
+        "profil.html",
+
+        "commandes.html",
+
+        "favoris.html",
+
+        "livraison.html",
+
+        "avis.html",
+
+        "notifications.html",
+
+        "problemes.html",
+
+        "parametres.html",
+
+        "aide.html",
+
+        "comment-ca-marche.html",
+
+        "devenir-vendeur.html",
+
+        "vendeur.html",
+
+        "espace-vendeur.html",
+
+        "discussions.html",
+
+        "panier.html",
+
+        "conditions.html",
+
+        "confidentialite.html",
+
+        "retours.html",
+
+        "cookies.html"
+
+    ];
+
+    if(
+
+        !safePages.includes(page)
+
+    ){
+
+        showToast(
+
+            "Cette page n'est pas encore disponible."
+
+        );
+
+        return;
+
+    }
+
+    let url =
+
+        page;
+
+    if(params){
+
+        const query =
+
+            new URLSearchParams();
+
+        Object.keys(params)
+
+            .forEach(
+
+                key => {
+
+                    if(
+
+                        params[key] !== null &&
+
+                        params[key] !== undefined &&
+
+                        params[key] !== ""
+
+                    ){
+
+                        query.set(
+
+                            key,
+
+                            params[key]
+
+                        );
+
+                    }
+
+                }
+
+            );
+
+        const result =
+
+            query.toString();
+
+        if(result){
+
+            url +=
+
+                "?" + result;
+
+        }
+
+    }
+
+    window.location.href =
+
+        url;
+
+}
+
+/* ============================================================
+
+   AUTHENTIFICATION
+
+============================================================ */
+
+async function getCurrentUser(){
+
+    if(!marketClient){
+
+        return null;
+
+    }
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await marketClient.auth.getUser();
+
+        if(error){
+
+            return null;
+
+        }
+
+        return data?.user || null;
+
+    }catch(error){
+
+        console.warn(
+
+            "Impossible de récupérer l'utilisateur.",
+
+            error
+
+        );
+
+        return null;
+
+    }
+
+}
+
+async function refreshAuthState(){
+
+    currentUser =
+
+        await getCurrentUser();
+
+    updateAuthInterface();
+
+}
+
+function updateAuthInterface(){
+
+    const connected =
+
+        Boolean(currentUser);
+
+    const desktopAuth =
+
+        byId(
+
+            "desktop-auth-actions"
+
+        );
+
+    const authStatus =
+
+        byId(
+
+            "auth-status"
+
+        );
+
+    const authWelcome =
+
+        byId(
+
+            "auth-welcome"
+
+        );
+
+    const statusActions =
+
+        document.querySelector(
+
+            ".auth-status-actions"
+
+        );
+
+    const logoutButton =
+
+        byId("menu-logout");
+
+    const sellerSpace =
+
+        byId("menu-seller-space");
+
+    const footerSellerSpace =
+
+        byId("footer-seller-space");
+
+    if(desktopAuth){
+
+        desktopAuth.classList.toggle(
+
+            "hidden",
+
+            connected
+
+        );
+
+    }
+
+    if(authStatus){
+
+        authStatus.classList.toggle(
+
+            "hidden",
+
+            connected
+
+        );
+
+    }
+
+    if(statusActions){
+
+        statusActions.classList.toggle(
+
+            "hidden",
+
+            connected
+
+        );
+
+    }
+
+    if(authWelcome){
+
+        if(connected){
+
+            const name =
+
+                currentUser.user_metadata?.full_name ||
+
+                currentUser.user_metadata?.name ||
+
+                currentUser.email ||
+
+                "Utilisateur";
+
+            authWelcome.textContent =
+
+                "Bienvenue, " + name + ".";
+
+        }else{
+
+            authWelcome.textContent =
+
+                "Vous pouvez consulter Market Bouaké librement.";
+
+        }
+
+    }
+
+    if(logoutButton){
+
+        logoutButton.classList.toggle(
+
+            "hidden",
+
+            !connected
+
+        );
+
+    }
+
+    if(sellerSpace){
+
+        sellerSpace.classList.toggle(
+
+            "hidden",
+
+            !connected
+
+        );
+
+    }
+
+    if(footerSellerSpace){
+
+        footerSellerSpace.classList.toggle(
+
+            "hidden",
+
+            !connected
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   AUTH ACTION
+
+============================================================ */
+
+function requireAuth(
+
+    callback
+
+){
+
+    if(currentUser){
+
+        callback();
+
+        return true;
+
+    }
+
+    goToPage(
+
+        "connexion.html",
+
+        {
+
+            redirect:"index.html"
+
+        }
+
+    );
+
+    return false;
+
+}
+
+/* ============================================================
+
+   DÉCONNEXION
+
+============================================================ */
+
+async function logout(){
+
+    if(!marketClient){
+
+        goToPage(
+
+            "connexion.html"
+
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const {
+
+            error
+
+        } =
+
+            await marketClient.auth.signOut();
+
+        if(error){
+
+            console.error(
+
+                "Erreur déconnexion:",
+
+                error
+
+            );
+
+            showToast(
+
+                "Impossible de vous déconnecter."
+
+            );
+
+            return;
+
+        }
+
+        currentUser =
+
+            null;
+
+        currentSession =
+
+            null;
+
+        updateAuthInterface();
+
+        showToast(
+
+            "Vous êtes maintenant déconnecté."
+
+        );
+
+        closeMenu();
+
+    }catch(error){
+
+        console.error(
+
+            error
+
+        );
+
+        showToast(
+
+            "Une erreur est survenue."
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   PANIER
+
+============================================================ */
+
+function getCart(){
+
+    try{
+
+        const raw =
+
+            localStorage.getItem(
+
+                "market_bouake_cart"
+
+            );
+
+        if(!raw){
+
+            return [];
+
+        }
+
+        const parsed =
+
+            JSON.parse(raw);
+
+        return Array.isArray(parsed)
+
+            ? parsed
+
+            : [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+function saveCart(cart){
+
+    localStorage.setItem(
+
+        "market_bouake_cart",
+
+        JSON.stringify(cart)
+
+    );
+
+    localStorage.setItem(
+
+        "cart",
+
+        JSON.stringify(cart)
+
+    );
+
+    updateCartCounter();
+
+}
+
+function updateCartCounter(){
+
+    const cart =
+
+        getCart();
+
+    const quantity =
+
+        cart.reduce(
+
+            function(
+
+                total,
+
+                item
+
+            ){
+
+                return total +
+
+                    Number(
+
+                        item.quantity || 1
+
+                    );
+
+            },
+
+            0
+
+        );
+
+    document
+
+        .querySelectorAll(
+
+            "#cart-count,.cart-count,[data-cart-count]"
+
+        )
+
+        .forEach(
+
+            element => {
+
+                element.textContent =
+
+                    quantity;
+
+                element.style.display =
+
+                    quantity > 0
+
+                        ? "inline-flex"
+
+                        : "none";
+
+            }
+
+        );
+
+}
+
+function productInCart(
+
+    productId
+
+){
+
+    if(!productId){
+
+        return false;
+
+    }
+
+    return getCart()
+
+        .some(
+
+            item =>
+
+                String(item.id) ===
+
+                String(productId)
+
+        );
+
+}
+
+/* ============================================================
+
+   FAVORIS
+
+============================================================ */
+
+function getLocalFavorites(){
+
+    try{
+
+        const raw =
+
+            localStorage.getItem(
+
+                "market_bouake_favorites"
+
+            );
+
+        if(!raw){
+
+            return [];
+
+        }
+
+        const parsed =
+
+            JSON.parse(raw);
+
+        return Array.isArray(parsed)
+
+            ? parsed.map(String)
+
+            : [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+function saveLocalFavorites(
+
+    favorites
+
+){
+
+    localStorage.setItem(
+
+        "market_bouake_favorites",
+
+        JSON.stringify(
+
+            favorites
+
+        )
+
+    );
+
+}
+
+function isFavorite(
+
+    productId
+
+){
+
+    return getLocalFavorites()
+
+        .includes(
+
+            String(productId)
+
+        );
+
+}
+
+async function toggleFavorite(
+
+    product
+
+){
+
+    if(!product?.id){
+
+        return;
+
+    }
+
+    if(!currentUser){
+
+        showToast(
+
+            "Connectez-vous pour gérer vos favoris."
+
+        );
+
+        goToPage(
+
+            "connexion.html",
+
+            {
+
+                redirect:
+
+                    "index.html"
+
+            }
+
+        );
+
+        return;
+
+    }
+
+    const favorites =
+
+        getLocalFavorites();
+
+    const id =
+
+        String(product.id);
+
+    const index =
+
+        favorites.indexOf(id);
+
+    if(index >= 0){
+
+        favorites.splice(
+
+            index,
+
+            1
+
+        );
+
+        saveLocalFavorites(
+
+            favorites
+
+        );
+
+        showToast(
+
+            "Produit retiré des favoris."
+
+        );
+
+        return;
+
+    }
+
+    favorites.push(id);
+
+    saveLocalFavorites(
+
+        favorites
+
+    );
+
+    showToast(
+
+        "Produit ajouté aux favoris ✓"
+
+    );
+
+}
+
+/* ============================================================
+
+   IMMOBILIER
+
+============================================================ */
+
+function isRealEstate(
+
+    product
+
+){
+
+    const category =
+
+        product?.categories;
+
+    const name =
+
+        normalizeText(
+
+            category?.name
+
+        );
+
+    if(
+
+        name.includes("immobilier") ||
+
+        name.includes("residence") ||
+
+        name.includes("maison") ||
+
+        name.includes("appartement") ||
+
+        name.includes("studio") ||
+
+        name.includes("terrain")
+
+    ){
+
+        return true;
+
+    }
+
+    const fields = [
+
+        product?.property_type,
+
+        product?.real_estate_type,
+
+        product?.type,
+
+        product?.listing_type
+
+    ];
+
+    return fields.some(
+
+        field =>
+
+            normalizeText(
+
+                field
+
+            ).includes(
+
+                "immobilier"
+
+            ) ||
+
+            normalizeText(
+
+                field
+
+            ).includes(
+
+                "maison"
+
+            ) ||
+
+            normalizeText(
+
+                field
+
+            ).includes(
+
+                "appartement"
+
+            ) ||
+
+            normalizeText(
+
+                field
+
+            ).includes(
+
+                "residence"
+
+            ) ||
+
+            normalizeText(
+
+                field
+
+            ).includes(
+
+                "studio"
+
+            )
+
+    );
+
+}
+
+/* ============================================================
+
+   PROMOTION
+
+============================================================ */
+
+function getOldPrice(
+
+    product
+
+){
+
+    const candidates = [
+
+        product?.old_price,
+
+        product?.original_price,
+
+        product?.previous_price,
+
+        product?.compare_at_price
+
+    ];
+
+    for(
+
+        const value of candidates
+
+    ){
+
+        const number =
+
+            Number(value);
+
+        if(
+
+            Number.isFinite(number) &&
+
+            number > Number(product?.price || 0)
+
+        ){
+
+            return number;
+
+        }
+
+    }
+
+    return null;
+
+}
+
+function getPromotionPercent(
+
+    product
+
+){
+
+    const oldPrice =
+
+        getOldPrice(
+
+            product
+
+        );
+
+    const price =
+
+        Number(
+
+            product?.price
+
+        );
+
+    if(
+
+        oldPrice &&
+
+        price >= 0 &&
+
+        oldPrice > price
+
+    ){
+
+        return Math.round(
+
+            (
+
+                (
+
+                    oldPrice -
+
+                    price
+
+                ) /
+
+                oldPrice
+
+            ) *
+
+            100
+
+        );
+
+    }
+
+    const existing =
+
+        Number(
+
+            product?.discount_percentage
+
+        );
+
+    if(
+
+        Number.isFinite(existing) &&
+
+        existing > 0
+
+    ){
+
+        return Math.round(
+
+            existing
+
+        );
+
+    }
+
+    return null;
+
+}
+
+/* ============================================================
+
+   IMAGE PRODUIT
+
+============================================================ */
+
+function getProductImage(
+
+    product
+
+){
+
+    return (
+
+        product?.image_url ||
+
+        product?.main_image_url ||
+
+        product?.image_url_1 ||
+
+        product?.image ||
+
+        "https://placehold.co/700x700/png?text=Market+Bouake"
+
+    );
+
+}
+
+/* ============================================================
+
+   CARTE PRODUIT
+
+============================================================ */
+
+function createProductCard(
+
+    product
+
+){
+
+    const article =
+
+        document.createElement(
+
+            "article"
+
+        );
+
+    article.className =
+
+        "product-card";
+
+    const realEstate =
+
+        isRealEstate(
+
+            product
+
+        );
+
+    const image =
+
+        getProductImage(
+
+            product
+
+        );
+
+    const name =
+
+        product?.name ||
+
+        "Produit";
+
+    const price =
+
+        formatPrice(
+
+            product?.price
+
+        );
+
+    const oldPrice =
+
+        getOldPrice(
+
+            product
+
+        );
+
+    const promotion =
+
+        getPromotionPercent(
+
+            product
+
+        );
+
+    const stock =
+
+        Number(
+
+            product?.stock || 0
+
+        );
+
+    const favorite =
+
+        isFavorite(
+
+            product?.id
+
+        );
+
+    const inCart =
+
+        productInCart(
+
+            product?.id
+
+        );
+
+    const rating =
+
+        product?.rating ??
+
+        product?.average_rating ??
+
+        null;
+
+    const sellerName =
+
+        product?.seller_name ||
+
+        product?.seller?.shop_name ||
+
+        product?.seller?.name ||
+
+        "";
+
+    const location =
+
+        product?.location ||
+
+        product?.neighborhood ||
+
+        product?.city ||
+
+        "";
+
+    const sizes =
+
+        Array.isArray(
+
+            product?.sizes
+
+        )
+
+            ? product.sizes
+
+            : (
+
+                typeof product?.sizes === "string"
+
+                    ? product.sizes
+
+                    : ""
+
+            );
+
+    const available =
+
+        realEstate ||
+
+        stock > 0;
+
+    article.innerHTML = `
+
+        <div class="product-image-wrapper">
+
+            <img
+
+                class="product-image"
+
+                src="${escapeHTML(image)}"
+
+                alt="${escapeHTML(name)}"
+
+                loading="lazy"
+
+                onerror="this.onerror=null;this.src='https://placehold.co/700x700/png?text=Market+Bouake';"
+
+            >
+
+            ${
+
+                promotion
+
+                    ? `
+
+                        <span class="product-badge">
+
+                            -${promotion}%
+
+                        </span>
+
+                    `
+
+                    : ""
+
+            }
+
+            <button
+
+                type="button"
+
+                class="product-favorite ${
+
+                    favorite ? "active" : ""
+
+                }"
+
+                data-favorite-id="${escapeHTML(product.id)}"
+
+                aria-label="${
+
+                    favorite
+
+                        ? "Retirer des favoris"
+
+                        : "Ajouter aux favoris"
+
+                }"
+
+            >
+
+                ${favorite ? "♥" : "♡"}
+
+            </button>
+
+        </div>
+
+        <div class="product-card-content">
+
+            <div class="product-name">
+
+                ${escapeHTML(name)}
+
+            </div>
+
+            ${
+
+                realEstate
+
+                    ? `
+
+                        <div class="product-price">
+
+                            ${escapeHTML(price)}
+
+                        </div>
+
+                        ${
+
+                            location
+
+                                ? `
+
+                                    <div class="product-location">
+
+                                        📍 ${escapeHTML(location)}
+
+                                    </div>
+
+                                `
+
+                                : ""
+
+                        }
+
+                    `
+
+                    : `
+
+                        <div class="product-price">
+
+                            ${escapeHTML(price)}
+
+                            ${
+
+                                oldPrice
+
+                                    ? `
+
+                                        <span class="product-old-price">
+
+                                            ${escapeHTML(
+
+                                                formatPrice(
+
+                                                    oldPrice
+
+                                                )
+
+                                            )}
+
+                                        </span>
+
+                                    `
+
+                                    : ""
+
+                            }
+
+                        </div>
+
+                        ${
+
+                            promotion
+
+                                ? `
+
+                                    <div class="product-promo">
+
+                                        ${promotion}% de réduction
+
+                                    </div>
+
+                                `
+
+                                : ""
+
+                        }
+
+                        <div class="product-meta">
+
+                            ${
+
+                                rating !== null &&
+
+                                rating !== undefined &&
+
+                                rating !== ""
+
+                                    ? `
+
+                                        <span class="product-rating">
+
+                                            ⭐ ${escapeHTML(
+
+                                                Number(rating).toFixed(1)
+
+                                            )}
+
+                                        </span>
+
+                                    `
+
+                                    : ""
+
+                            }
+
+                            ${
+
+                                sellerName
+
+                                    ? `
+
+                                        <span class="product-seller">
+
+                                            🏪 ${escapeHTML(
+
+                                                sellerName
+
+                                            )}
+
+                                        </span>
+
+                                    `
+
+                                    : ""
+
+                            }
+
+                            ${
+
+                                sizes
+
+                                    ? `
+
+                                        <span class="product-size">
+
+                                            Taille disponible
+
+                                        </span>
+
+                                    `
+
+                                    : ""
+
+                            }
+
+                        </div>
+
+                        ${
+
+                            stock > 0
+
+                                ? `
+
+                                    <div class="product-stock">
+
+                                        ${stock} disponible(s)
+
+                                    </div>
+
+                                `
+
+                                : `
+
+                                    <div class="product-stock out">
+
+                                        Rupture de stock
+
+                                    </div>
+
+                                `
+
+                        }
+
+                    `
+
+            }
+
+            <div class="product-actions">
+
+                <button
+
+                    type="button"
+
+                    class="product-button ${
+
+                        realEstate
+
+                            ? ""
+
+                            : "cart"
+
+                    } ${
+
+                        inCart
+
+                            ? "in-cart"
+
+                            : ""
+
+                    }"
+
+                    data-cart-id="${escapeHTML(product.id)}"
+
+                    ${
+
+                        !realEstate && !available
+
+                            ? "disabled"
+
+                            : ""
+
+                    }
+
+                >
+
+                    ${
+
+                        realEstate
+
+                            ? "❤️ Voir plus"
+
+                            : (
+
+                                inCart
+
+                                    ? "✓ Retirer du panier"
+
+                                    : "🛒 Ajouter au panier"
+
+                            )
+
+                    }
+
+                </button>
+
+                <button
+
+                    type="button"
+
+                    class="product-button"
+
+                    data-view-id="${escapeHTML(product.id)}"
+
+                >
+
+                    👁️ ${
+
+                        realEstate
+
+                            ? "Voir plus"
+
+                            : "Voir plus"
+
+                    }
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+    const favoriteButton =
+
+        article.querySelector(
+
+            "[data-favorite-id]"
+
+        );
+
+    if(favoriteButton){
+
+        favoriteButton.addEventListener(
+
+            "click",
+
+            function(event){
+
+                event.stopPropagation();
+
+                toggleFavorite(
+
+                    product
+
+                )
+
+                .then(
+
+                    () => {
+
+                        const state =
+
+                            isFavorite(
+
+                                product.id
+
+                            );
+
+                        favoriteButton.classList.toggle(
+
+                            "active",
+
+                            state
+
+                        );
+
+                        favoriteButton.textContent =
+
+                            state
+
+                                ? "♥"
+
+                                : "♡";
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    }
+
+    const cartButton =
+
+        article.querySelector(
+
+            "[data-cart-id]"
+
+        );
+
+    if(cartButton){
+
+        cartButton.addEventListener(
+
+            "click",
+
+            function(){
+
+                if(realEstate){
+
+                    openProduct(
+
+                        product.id
+
+                    );
+
+                    return;
+
+                }
+
+                toggleCartProduct(
+
+                    product
+
+                );
+
+            }
+
+        );
+
+    }
+
+    const viewButton =
+
+        article.querySelector(
+
+            "[data-view-id]"
+
+        );
+
+    if(viewButton){
+
+        viewButton.addEventListener(
+
+            "click",
+
+            function(){
+
+                openProduct(
+
+                    product.id
+
+                );
+
+            }
+
+        );
+
+    }
+
+    return article;
+
+}
+
+/* ============================================================
+
+   PANIER TOGGLE
+
+============================================================ */
+
+async function toggleCartProduct(
+
+    product
+
+){
+
+    if(!product?.id){
+
+        return;
+
+    }
+
+    const cart =
+
+        getCart();
+
+    const index =
+
+        cart.findIndex(
+
+            item =>
+
+                String(item.id) ===
+
+                String(product.id)
+
+        );
+
+    if(index !== -1){
+
+        cart.splice(
+
+            index,
+
+            1
+
+        );
+
+        saveCart(
+
+            cart
+
+        );
+
+        refreshProductCards();
+
+        showToast(
+
+            "Produit retiré du panier ✓"
+
+        );
+
+        return;
+
+    }
+
+    if(
+
+        Number(
+
+            product.stock || 0
+
+        ) <= 0
+
+    ){
+
+        showToast(
+
+            "Ce produit est en rupture de stock."
+
+        );
+
+        return;
+
+    }
+
+    const item = {
+
+        id:
+
+            product.id,
+
+        product_id:
+
+            product.id,
+
+        name:
+
+            product.name,
+
+        product_name:
+
+            product.name,
+
+        price:
+
+            Number(
+
+                product.price || 0
+
+            ),
+
+        quantity:
+
+            1,
+
+        stock:
+
+            Number(
+
+                product.stock || 0
+
+            ),
+
+        seller_id:
+
+            product.seller_id ||
+
+            null,
+
+        shop_id:
+
+            product.shop_id ||
+
+            null,
+
+        image_url:
+
+            getProductImage(
+
+                product
+
+            ),
+
+        category_id:
+
+            product.category_id ||
+
+            null,
+
+        size:
+
+            null
+
+    };
+
+    cart.push(
+
+        item
+
+    );
+
+    saveCart(
+
+        cart
+
+    );
+
+    refreshProductCards();
+
+    showToast(
+
+        "Produit ajouté au panier ✓"
+
+    );
+
+}
+
+/* ============================================================
+
+   ACTUALISER LES CARTES
+
+============================================================ */
+
+function refreshProductCards(){
+
+    const containers = [
+
+        "featured-products",
+
+        "new-products",
+
+        "popular-products",
+
+        "promotion-products",
+
+        "real-estate-products"
+
+    ];
+
+    containers.forEach(
+
+        id => {
+
+            const container =
+
+                byId(id);
+
+            if(!container) return;
+
+            Array.from(
+
+                container.querySelectorAll(
+
+                    "[data-cart-id]"
+
+                )
+
+            ).forEach(
+
+                button => {
+
+                    const id =
+
+                        button.dataset.cartId;
+
+                    if(!id) return;
+
+                    const inCart =
+
+                        productInCart(
+
+                            id
+
+                        );
+
+                    const product =
+
+                        currentProducts.find(
+
+                            item =>
+
+                                String(
+
+                                    item.id
+
+                                ) ===
+
+                                String(id)
+
+                        );
+
+                    if(
+
+                        !product ||
+
+                        isRealEstate(product)
+
+                    ){
+
+                        return;
+
+                    }
+
+                    button.textContent =
+
+                        inCart
+
+                            ? "✓ Retirer du panier"
+
+                            : "🛒 Ajouter au panier";
+
+                    button.classList.toggle(
+
+                        "in-cart",
+
+                        inCart
+
+                    );
+
+                }
+
+            );
+
+        }
+
+    );
+
+    updateCartCounter();
+
+}
+
+/* ============================================================
+
+   OUVRIR PRODUIT
+
+============================================================ */
+
+function openProduct(
+
+    productId
+
+){
+
+    if(!productId){
+
+        return;
+
+    }
+
+    goToPage(
+
+        "produit.html",
+
+        {
+
+            id:
+
+                productId
+
+        }
+
+    );
+
+}
+
+/* ============================================================
+
+   CHARGEMENT PRODUITS
+
+============================================================ */
+
+async function loadProducts(){
+
+    const containers = [
+
+        byId("featured-products"),
+
+        byId("new-products"),
+
+        byId("popular-products"),
+
+        byId("promotion-products"),
+
+        byId("real-estate-products")
+
+    ];
+
+    if(!marketClient){
+
+        containers.forEach(
+
+            container => {
+
+                if(container){
+
+                    container.innerHTML =
+
+                        `
+
+                            <div class="empty-state full-width">
+
+                                <div>
+
+                                    <strong>
+
+                                        Connexion aux données indisponible.
+
+                                    </strong>
+
+                                    <br>
+
+                                    <span>
+
+                                        Vérifiez la configuration Supabase.
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                }
+
+            }
+
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await marketClient
+
+                .from(
+
+                    MARKET_CONFIG.tables.products
+
+                )
+
+                .select(
+
+                    `
+
+                        *,
+
+                        categories (
+
+                            id,
+
+                            name,
+
+                            parent_id
+
+                        )
+
+                    `
+
+                )
+
+                .eq(
+
+                    "is_active",
+
+                    true
+
+                )
+
+                .order(
+
+                    "created_at",
+
+                    {
+
+                        ascending:false
+
+                    }
+
+                );
+
+        if(error){
+
+            console.error(
+
+                "Erreur produits Supabase:",
+
+                error
+
+            );
+
+            containers.forEach(
+
+                container => {
+
+                    if(container){
+
+                        container.innerHTML =
+
+                            `
+
+                                <div class="empty-state full-width">
+
+                                    Impossible de charger les produits.
+
+                                </div>
+
+                            `;
+
+                    }
+
+                }
+
+            );
+
+            return;
+
+        }
+
+        currentProducts =
+
+            Array.isArray(data)
+
+                ? data
+
+                : [];
+
+        renderProductSections();
+
+    }catch(error){
+
+        console.error(
+
+            "Erreur chargement produits:",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   RENDU DES PRODUITS
+
+============================================================ */
+
+function renderProducts(
+
+    container,
+
+    products,
+
+    limit
+
+){
+
+    if(!container){
+
+        return;
+
+    }
+
+    container.innerHTML =
+
+        "";
+
+    if(
+
+        !products ||
+
+        products.length === 0
+
+    ){
+
+        container.innerHTML =
+
+            `
+
+                <div class="empty-state full-width">
+
+                    Aucun produit disponible dans cette section.
+
+                </div>
+
+            `;
+
+        return;
+
+    }
+
+    const list =
+
+        limit
+
+            ? products.slice(
+
+                0,
+
+                limit
+
+            )
+
+            : products;
+
+    list.forEach(
+
+        product => {
+
+            container.appendChild(
+
+                createProductCard(
+
+                    product
+
+                )
+
+            );
+
+        }
+
+    );
+
+}
+
+function renderProductSections(){
+
+    const normalProducts =
+
+        currentProducts.filter(
+
+            product =>
+
+                !isRealEstate(
+
+                    product
+
+                )
+
+        );
+
+    const realEstate =
+
+        currentProducts.filter(
+
+            product =>
+
+                isRealEstate(
+
+                    product
+
+                )
+
+        );
+
+    const newest =
+
+        [
+
+            ...currentProducts
+
+        ];
+
+    const popular =
+
+        [
+
+            ...normalProducts
+
+        ]
+
+        .sort(
+
+            (
+
+                a,
+
+                b
+
+            ) => {
+
+                const ratingA =
+
+                    Number(
+
+                        a.rating ??
+
+                        a.average_rating ??
+
+                        0
+
+                    );
+
+                const ratingB =
+
+                    Number(
+
+                        b.rating ??
+
+                        b.average_rating ??
+
+                        0
+
+                    );
+
+                return ratingB -
+
+                    ratingA;
+
+            }
+
+        );
+
+    const promotions =
+
+        normalProducts.filter(
+
+            product =>
+
+                Boolean(
+
+                    getOldPrice(
+
+                        product
+
+                    )
+
+                ) ||
+
+                Boolean(
+
+                    getPromotionPercent(
+
+                        product
+
+                    )
+
+                )
+
+        );
+
+    renderProducts(
+
+        byId("featured-products"),
+
+        normalProducts,
+
+        5
+
+    );
+
+    renderProducts(
+
+        byId("new-products"),
+
+        newest,
+
+        5
+
+    );
+
+    renderProducts(
+
+        byId("popular-products"),
+
+        popular,
+
+        5
+
+    );
+
+    renderProducts(
+
+        byId("promotion-products"),
+
+        promotions,
+
+        5
+
+    );
+
+    renderProducts(
+
+        byId("real-estate-products"),
+
+        realEstate,
+
+        5
+
+    );
+
+}
+
+/* ============================================================
+
+   CATÉGORIES
+
+============================================================ */
+
+async function loadCategories(){
+
+    const container =
+
+        byId(
+
+            "categories-container"
+
+        );
+
+    if(!container){
+
+        return;
+
+    }
+
+    if(!marketClient){
+
+        container.innerHTML =
+
+            `
+
+                <button
+
+                    type="button"
+
+                    class="category-chip active"
+
+                    data-category-id=""
+
+                >
+
+                    Voir tout
+
+                </button>
+
+            `;
+
+        return;
+
+    }
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await marketClient
+
+                .from(
+
+                    MARKET_CONFIG.tables.categories
+
+                )
+
+                .select(
+
+                    "id,name,parent_id"
+
+                )
+
+                .order(
+
+                    "name",
+
+                    {
+
+                        ascending:true
+
+                    }
+
+                );
+
+        if(error){
+
+            console.warn(
+
+                "Catégories indisponibles:",
+
+                error
+
+            );
+
+            container.innerHTML =
+
+                `
+
+                    <button
+
+                        type="button"
+
+                        class="category-chip active"
+
+                        data-category-id=""
+
+                    >
+
+                        Voir tout
+
+                    </button>
+
+                `;
+
+            bindCategoryButtons();
+
+            return;
+
+        }
+
+        currentCategories =
+
+            Array.isArray(data)
+
+                ? data
+
+                : [];
+
+        renderCategories();
+
+    }catch(error){
+
+        console.warn(
+
+            error
+
+        );
+
+    }
+
+}
+
+function renderCategories(){
+
+    const container =
+
+        byId(
+
+            "categories-container"
+
+        );
+
+    if(!container) return;
+
+    container.innerHTML =
+
+        `
+
+            <button
+
+                type="button"
+
+                class="category-chip active"
+
+                data-category-id=""
+
+            >
+
+                Voir tout
+
+            </button>
+
+        `;
+
+    currentCategories.forEach(
+
+        category => {
+
+            if(!category?.id) return;
+
+            const button =
+
+                document.createElement(
+
+                    "button"
+
+                );
+
+            button.type =
+
+                "button";
+
+            button.className =
+
+                "category-chip";
+
+            button.dataset.categoryId =
+
+                category.id;
+
+            button.textContent =
+
+                category.name ||
+
+                "Catégorie";
+
+            container.appendChild(
+
+                button
+
+            );
+
+        }
+
+    );
+
+    bindCategoryButtons();
+
+}
+
+function bindCategoryButtons(){
+
+    document
+
+        .querySelectorAll(
+
+            "[data-category-id]"
+
+        )
+
+        .forEach(
+
+            button => {
+
+                button.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        const id =
+
+                            button.dataset.categoryId;
+
+                        document
+
+                            .querySelectorAll(
+
+                                "[data-category-id]"
+
+                            )
+
+                            .forEach(
+
+                                item =>
+
+                                    item.classList.remove(
+
+                                        "active"
+
+                                    )
+
+                            );
+
+                        button.classList.add(
+
+                            "active"
+
+                        );
+
+                        if(!id){
+
+                            renderProductSections();
+
+                            window.scrollTo({
+
+                                top:
+
+                                    document
+
+                                        .getElementById(
+
+                                            "featured-products"
+
+                                        )
+
+                                        ?.closest(
+
+                                            ".section"
+
+                                        )
+
+                                        ?.offsetTop ||
+
+                                    0,
+
+                                behavior:
+
+                                    "smooth"
+
+                            });
+
+                            return;
+
+                        }
+
+                        const products =
+
+                            currentProducts.filter(
+
+                                product =>
+
+                                    String(
+
+                                        product.category_id
+
+                                    ) ===
+
+                                    String(id)
+
+                            );
+
+                        const section =
+
+                            byId(
+
+                                "featured-products"
+
+                            )?.closest(
+
+                                ".section"
+
+                            );
+
+                        if(section){
+
+                            section.scrollIntoView({
+
+                                behavior:"smooth",
+
+                                block:"start"
+
+                            });
+
+                        }
+
+                        renderProducts(
+
+                            byId(
+
+                                "featured-products"
+
+                            ),
+
+                            products,
+
+                            null
+
+                        );
+
+                        showToast(
+
+                            "Catégorie : " +
+
+                            (
+
+                                currentCategories.find(
+
+                                    item =>
+
+                                        String(
+
+                                            item.id
+
+                                        ) ===
+
+                                        String(id)
+
+                                )?.name ||
+
+                                "sélection"
+
+                            )
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+}
+
+/* ============================================================
+
+   RECHERCHE
+
+============================================================ */
+
+function performSearch(
+
+    term
+
+){
+
+    const query =
+
+        normalizeText(
+
+            term
+
+        );
+
+    if(!query){
+
+        return;
+
+    }
+
+    const matchingProducts =
+
+        currentProducts.filter(
+
+            product => {
+
+                const category =
+
+                    product.categories?.name ||
+
+                    "";
+
+                const values = [
+
+                    product.name,
+
+                    product.description,
+
+                    category,
+
+                    product.brand,
+
+                    product.model,
+
+                    product.location,
+
+                    product.neighborhood,
+
+                    product.city,
+
+                    product.seller_name,
+
+                    product.property_type,
+
+                    product.real_estate_type
+
+                ];
+
+                return values.some(
+
+                    value =>
+
+                        normalizeText(
+
+                            value
+
+                        ).includes(
+
+                            query
+
+                        )
+
+                );
+
+            }
+
+        );
+
+    if(
+
+        matchingProducts.length === 0
+
+    ){
+
+        showToast(
+
+            "Aucun résultat trouvé pour « " +
+
+            term +
+
+            " »."
+
+        );
+
+        return;
+
+    }
+
+    renderProducts(
+
+        byId("featured-products"),
+
+        matchingProducts,
+
+        null
+
+    );
+
+    const section =
+
+        byId(
+
+            "featured-products"
+
+        )?.closest(
+
+            ".section"
+
+        );
+
+    if(section){
+
+        section.scrollIntoView({
+
+            behavior:"smooth",
+
+            block:"start"
+
+        });
+
+    }
+
+    showToast(
+
+        matchingProducts.length +
+
+        " résultat(s) trouvé(s)."
+
+    );
+
+}
+
+/* ============================================================
+
+   PUBLICITÉS
+
+============================================================ */
+
+async function loadAdvertisements(){
+
+    const track =
+
+        byId(
+
+            "ad-track"
+
+        );
+
+    if(!track){
+
+        return;
+
+    }
+
+    if(!marketClient){
+
+        renderNoAdvertisements();
+
+        return;
+
+    }
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await marketClient
+
+                .from(
+
+                    MARKET_CONFIG.tables.advertisements
+
+                )
+
+                .select("*");
+
+        if(error){
+
+            console.warn(
+
+                "Publicités non disponibles:",
+
+                error
+
+            );
+
+            renderNoAdvertisements();
+
+            return;
+
+        }
+
+        const now =
+
+            new Date();
+
+        currentAdvertisements =
+
+            (
+
+                Array.isArray(data)
+
+                    ? data
+
+                    : []
+
+            )
+
+            .filter(
+
+                ad => {
+
+                    if(
+
+                        ad.is_active === false
+
+                    ){
+
+                        return false;
+
+                    }
+
+                    const start =
+
+                        ad.start_date ||
+
+                        ad.starts_at ||
+
+                        null;
+
+                    const end =
+
+                        ad.end_date ||
+
+                        ad.ends_at ||
+
+                        null;
+
+                    if(start){
+
+                        const startDate =
+
+                            new Date(
+
+                                start
+
+                            );
+
+                        if(
+
+                            !Number.isNaN(
+
+                                startDate.getTime()
+
+                            ) &&
+
+                            now < startDate
+
+                        ){
+
+                            return false;
+
+                        }
+
+                    }
+
+                    if(end){
+
+                        const endDate =
+
+                            new Date(
+
+                                end
+
+                            );
+
+                        if(
+
+                            !Number.isNaN(
+
+                                endDate.getTime()
+
+                            ) &&
+
+                            now > endDate
+
+                        ){
+
+                            return false;
+
+                        }
+
+                    }
+
+                    return true;
+
+                }
+
+            );
+
+        renderAdvertisements();
+
+    }catch(error){
+
+        console.warn(
+
+            error
+
+        );
+
+        renderNoAdvertisements();
+
+    }
+
+}
+
+function renderNoAdvertisements(){
+
+    const track =
+
+        byId("ad-track");
+
+    const controls =
+
+        byId("ad-controls");
+
+    const dots =
+
+        byId("ad-dots");
+
+    if(track){
+
+        track.innerHTML =
+
+            `
+
+                <div class="ad-slide">
+
+                    <div class="ad-placeholder">
+
+                        <div>
+
+                            <strong>
+
+                                Espace publicitaire
+
+                            </strong>
+
+                            <br>
+
+                            <span>
+
+                                Votre publicité peut apparaître ici.
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+    }
+
+    if(controls){
+
+        controls.style.display =
+
+            "none";
+
+    }
+
+    if(dots){
+
+        dots.innerHTML =
+
+            "";
+
+    }
+
+}
+
+function getAdvertisementImage(
+
+    ad
+
+){
+
+    return (
+
+        ad.image_url ||
+
+        ad.image ||
+
+        ad.banner_url ||
+
+        ad.cover_url ||
+
+        ""
+
+    );
+
+}
+
+function getAdvertisementDestination(
+
+    ad
+
+){
+
+    return (
+
+        ad.destination_url ||
+
+        ad.link_url ||
+
+        ad.url ||
+
+        ""
+
+    );
+
+}
+
+function renderAdvertisements(){
+
+    const track =
+
+        byId("ad-track");
+
+    const controls =
+
+        byId("ad-controls");
+
+    const dots =
+
+        byId("ad-dots");
+
+    if(!track){
+
+        return;
+
+    }
+
+    if(
+
+        currentAdvertisements.length === 0
+
+    ){
+
+        renderNoAdvertisements();
+
+        return;
+
+    }
+
+    track.innerHTML =
+
+        "";
+
+    currentAdvertisements.forEach(
+
+        ad => {
+
+            const slide =
+
+                document.createElement(
+
+                    "div"
+
+                );
+
+            slide.className =
+
+                "ad-slide";
+
+            const image =
+
+                getAdvertisementImage(
+
+                    ad
+
+                );
+
+            const title =
+
+                ad.title ||
+
+                ad.name ||
+
+                "";
+
+            const description =
+
+                ad.description ||
+
+                "";
+
+            if(image){
+
+                slide.innerHTML =
+
+                    `
+
+                        <img
+
+                            src="${escapeHTML(image)}"
+
+                            alt="${escapeHTML(title || "Publicité")}"
+
+                            loading="lazy"
+
+                            onerror="this.onerror=null;this.style.display='none';"
+
+                        >
+
+                        ${
+
+                            title || description
+
+                                ? `
+
+                                    <div class="ad-overlay">
+
+                                        ${
+
+                                            title
+
+                                                ? `
+
+                                                    <h3>
+
+                                                        ${escapeHTML(title)}
+
+                                                    </h3>
+
+                                                `
+
+                                                : ""
+
+                                        }
+
+                                        ${
+
+                                            description
+
+                                                ? `
+
+                                                    <p>
+
+                                                        ${escapeHTML(description)}
+
+                                                    </p>
+
+                                                `
+
+                                                : ""
+
+                                        }
+
+                                    </div>
+
+                                `
+
+                                : ""
+
+                        }
+
+                    `;
+
+            }else{
+
+                slide.innerHTML =
+
+                    `
+
+                        <div class="ad-placeholder">
+
+                            <div>
+
+                                <strong>
+
+                                    ${escapeHTML(
+
+                                        title ||
+
+                                        "Publicité Market Bouaké"
+
+                                    )}
+
+                                </strong>
+
+                                ${
+
+                                    description
+
+                                        ? `
+
+                                            <br>
+
+                                            <span>
+
+                                                ${escapeHTML(
+
+                                                    description
+
+                                                )}
+
+                                            </span>
+
+                                        `
+
+                                        : ""
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+            }
+
+            slide.addEventListener(
+
+                "click",
+
+                function(){
+
+                    handleAdvertisementClick(
+
+                        ad
+
+                    );
+
+                }
+
+            );
+
+            slide.style.cursor =
+
+                "pointer";
+
+            track.appendChild(
+
+                slide
+
+            );
+
+        }
+
+    );
+
+    if(
+
+        currentAdvertisements.length > 1
+
+    ){
+
+        if(controls){
+
+            controls.style.display =
+
+                "flex";
+
+        }
+
+        if(dots){
+
+            dots.innerHTML =
+
+                "";
+
+            currentAdvertisements.forEach(
+
+                (
+
+                    ad,
+
+                    index
+
+                ) => {
+
+                    const dot =
+
+                        document.createElement(
+
+                            "button"
+
+                        );
+
+                    dot.type =
+
+                        "button";
+
+                    dot.className =
+
+                        "ad-dot";
+
+                    dot.addEventListener(
+
+                        "click",
+
+                        function(event){
+
+                            event.stopPropagation();
+
+                            showAd(
+
+                                index
+
+                            );
+
+                        }
+
+                    );
+
+                    dots.appendChild(
+
+                        dot
+
+                    );
+
+                }
+
+            );
+
+        }
+
+        showAd(
+
+            0
+
+        );
+
+        startAdTimer();
+
+    }else{
+
+        if(controls){
+
+            controls.style.display =
+
+                "none";
+
+        }
+
+        if(dots){
+
+            dots.innerHTML =
+
+                "";
+
+        }
+
+        adIndex =
+
+            0;
+
+        track.style.transform =
+
+            "translateX(0)";
+
+    }
+
+}
+
+function showAd(
+
+    index
+
+){
+
+    if(
+
+        currentAdvertisements.length === 0
+
+    ){
+
+        return;
+
+    }
+
+    adIndex =
+
+        (
+
+            index +
+
+            currentAdvertisements.length
+
+        ) %
+
+        currentAdvertisements.length;
+
+    const track =
+
+        byId(
+
+            "ad-track"
+
+        );
+
+    if(track){
+
+        track.style.transform =
+
+            "translateX(-" +
+
+            (
+
+                adIndex * 100
+
+            ) +
+
+            "%)";
+
+    }
+
+    document
+
+        .querySelectorAll(
+
+            ".ad-dot"
+
+        )
+
+        .forEach(
+
+            (
+
+                dot,
+
+                index
+
+            ) => {
+
+                dot.classList.toggle(
+
+                    "active",
+
+                    index === adIndex
+
+                );
+
+            }
+
+        );
+
+}
+
+function startAdTimer(){
+
+    clearInterval(
+
+        adTimer
+
+    );
+
+    if(
+
+        currentAdvertisements.length <= 1
+
+    ){
+
+        return;
+
+    }
+
+    adTimer =
+
+        setInterval(
+
+            function(){
+
+                showAd(
+
+                    adIndex + 1
+
+                );
+
+            },
+
+            5000
+
+        );
+
+}
+
+function handleAdvertisementClick(
+
+    ad
+
+){
+
+    const productId =
+
+        ad.product_id ||
+
+        ad.productId;
+
+    if(productId){
+
+        openProduct(
+
+            productId
+
+        );
+
+        return;
+
+    }
+
+    const shopId =
+
+        ad.shop_id ||
+
+        ad.shopId;
+
+    if(shopId){
+
+        goToPage(
+
+            "boutique.html",
+
+            {
+
+                id:
+
+                    shopId
+
+            }
+
+        );
+
+        return;
+
+    }
+
+    const destination =
+
+        getAdvertisementDestination(
+
+            ad
+
+        );
+
+    if(
+
+        isValidHttpUrl(
+
+            destination
+
+        )
+
+    ){
+
+        window.location.href =
+
+            destination;
+
+        return;
+
+    }
+
+    if(
+
+        ad.destination_page
+
+    ){
+
+        goToPage(
+
+            String(
+
+                ad.destination_page
+
+            )
+
+        );
+
+        return;
+
+    }
+
+    goToPage(
+
+        "publicite.html"
+
+    );
+
+}
+
+/* ============================================================
+
+   BOUTIQUES
+
+============================================================ */
+
+async function loadShops(){
+
+    const container =
+
+        byId(
+
+            "shops-container"
+
+        );
+
+    if(!container){
+
+        return;
+
+    }
+
+    if(!marketClient){
+
+        renderNoShops();
+
+        return;
+
+    }
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await marketClient
+
+                .from(
+
+                    MARKET_CONFIG.tables.shops
+
+                )
+
+                .select("*")
+
+                .limit(8);
+
+        if(error){
+
+            console.warn(
+
+                "Boutiques non disponibles:",
+
+                error
+
+            );
+
+            /*
+
+              Si la table shops n'est pas encore créée,
+
+              on ne casse pas l'accueil.
+
+            */
+
+            renderShopsFromProducts();
+
+            return;
+
+        }
+
+        const shops =
+
+            Array.isArray(data)
+
+                ? data
+
+                : [];
+
+        if(
+
+            shops.length === 0
+
+        ){
+
+            renderShopsFromProducts();
+
+            return;
+
+        }
+
+        renderShops(
+
+            shops
+
+        );
+
+    }catch(error){
+
+        console.warn(
+
+            error
+
+        );
+
+        renderShopsFromProducts();
+
+    }
+
+}
+
+function renderShopsFromProducts(){
+
+    const map =
+
+        new Map();
+
+    currentProducts.forEach(
+
+        product => {
+
+            const sellerId =
+
+                product.seller_id;
+
+            if(!sellerId){
+
+                return;
+
+            }
+
+            if(
+
+                !map.has(
+
+                    String(
+
+                        sellerId
+
+                    )
+
+                )
+
+            ){
+
+                map.set(
+
+                    String(
+
+                        sellerId
+
+                    ),
+
+                    {
+
+                        id:
+
+                            sellerId,
+
+                        name:
+
+                            product.seller_name ||
+
+                            "Boutique",
+
+                        image_url:
+
+                            product.seller_image_url ||
+
+                            product.shop_image_url ||
+
+                            "",
+
+                        location:
+
+                            product.location ||
+
+                            product.city ||
+
+                            "Bouaké",
+
+                        products:0
+
+                    }
+
+                );
+
+            }
+
+            map.get(
+
+                String(
+
+                    sellerId
+
+                )
+
+            ).products++;
+
+        }
+
+    );
+
+    const shops =
+
+        Array.from(
+
+            map.values()
+
+        )
+
+        .slice(
+
+            0,
+
+            8
+
+        );
+
+    renderShops(
+
+        shops
+
+    );
+
+}
+
+function renderNoShops(){
+
+    const container =
+
+        byId(
+
+            "shops-container"
+
+        );
+
+    if(!container) return;
+
+    container.innerHTML =
+
+        `
+
+            <div class="empty-state full-width">
+
+                Les boutiques seront affichées ici.
+
+            </div>
+
+        `;
+
+}
+
+function renderShops(
+
+    shops
+
+){
+
+    const container =
+
+        byId(
+
+            "shops-container"
+
+        );
+
+    if(!container) return;
+
+    container.innerHTML =
+
+        "";
+
+    if(
+
+        !shops ||
+
+        shops.length === 0
+
+    ){
+
+        renderNoShops();
+
+        return;
+
+    }
+
+    shops.forEach(
+
+        shop => {
+
+            const card =
+
+                document.createElement(
+
+                    "article"
+
+                );
+
+            card.className =
+
+                "shop-card";
+
+            const image =
+
+                shop.image_url ||
+
+                shop.logo_url ||
+
+                shop.logo ||
+
+                "https://placehold.co/200x200/png?text=Boutique";
+
+            const name =
+
+                shop.name ||
+
+                shop.shop_name ||
+
+                "Boutique";
+
+            const location =
+
+                shop.location ||
+
+                shop.city ||
+
+                shop.neighborhood ||
+
+                "Bouaké";
+
+            const rating =
+
+                shop.rating ||
+
+                shop.average_rating ||
+
+                null;
+
+            const productsCount =
+
+                shop.products_count ??
+
+                shop.product_count ??
+
+                shop.products ??
+
+                "";
+
+            card.innerHTML =
+
+                `
+
+                    <div class="shop-top">
+
+                        <img
+
+                            class="shop-logo"
+
+                            src="${escapeHTML(image)}"
+
+                            alt="${escapeHTML(name)}"
+
+                            loading="lazy"
+
+                            onerror="this.onerror=null;this.src='https://placehold.co/200x200/png?text=Boutique';"
+
+                        >
+
+                        <div>
+
+                            <div class="shop-name">
+
+                                ${escapeHTML(name)}
+
+                            </div>
+
+                            ${
+
+                                rating !== null &&
+
+                                rating !== undefined &&
+
+                                rating !== ""
+
+                                    ? `
+
+                                        <div
+
+                                            class="shop-info"
+
+                                            style="color:#b7791f;"
+
+                                        >
+
+                                            ⭐ ${escapeHTML(
+
+                                                Number(rating).toFixed(1)
+
+                                            )}
+
+                                        </div>
+
+                                    `
+
+                                    : ""
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <div class="shop-info">
+
+                        📍 ${escapeHTML(
+
+                            location
+
+                        )}
+
+                        ${
+
+                            productsCount !== ""
+
+                                ? `
+
+                                    · ${escapeHTML(
+
+                                        productsCount
+
+                                    )} produit(s)
+
+                                `
+
+                                : ""
+
+                        }
+
+                    </div>
+
+                    <button
+
+                        type="button"
+
+                        class="shop-button"
+
+                        data-shop-id="${escapeHTML(
+
+                            shop.id || ""
+
+                        )}"
+
+                    >
+
+                        Voir la boutique
+
+                    </button>
+
+                `;
+
+            const button =
+
+                card.querySelector(
+
+                    "[data-shop-id]"
+
+                );
+
+            if(button){
+
+                button.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        const id =
+
+                            button.dataset.shopId;
+
+                        if(id){
+
+                            goToPage(
+
+                                "boutique.html",
+
+                                {
+
+                                    id:id
+
+                                }
+
+                            );
+
+                            return;
+
+                        }
+
+                        showToast(
+
+                            "Cette boutique n'a pas encore d'identifiant public."
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+            container.appendChild(
+
+                card
+
+            );
+
+        }
+
+    );
+
+}
+
+/* ============================================================
+
+   THÈME DYNAMIQUE
+
+============================================================ */
+
+function applyTheme(
+
+    theme
+
+){
+
+    const root =
+
+        document.documentElement;
+
+    const normal =
+
+        MARKET_CONFIG.normalTheme;
+
+    const values = {
+
+        primary:
+
+            theme?.primary_color ||
+
+            theme?.primary ||
+
+            normal.primary,
+
+        primaryDark:
+
+            theme?.primary_dark ||
+
+            theme?.primary_dark_color ||
+
+            normal.primaryDark,
+
+        primaryLight:
+
+            theme?.primary_light ||
+
+            theme?.primary_light_color ||
+
+            normal.primaryLight,
+
+        accent:
+
+            theme?.accent_color ||
+
+            theme?.accent ||
+
+            normal.accent,
+
+        text:
+
+            theme?.text_color ||
+
+            theme?.text ||
+
+            normal.text,
+
+        muted:
+
+            theme?.muted_color ||
+
+            theme?.muted ||
+
+            normal.muted,
+
+        border:
+
+            theme?.border_color ||
+
+            theme?.border ||
+
+            normal.border,
+
+        background:
+
+            theme?.background_color ||
+
+            theme?.background ||
+
+            normal.background,
+
+        card:
+
+            theme?.card_color ||
+
+            theme?.card ||
+
+            normal.card,
+
+        header:
+
+            theme?.header_color ||
+
+            theme?.header ||
+
+            normal.header
+
+    };
+
+    root.style.setProperty(
+
+        "--primary",
+
+        values.primary
+
+    );
+
+    root.style.setProperty(
+
+        "--primary-dark",
+
+        values.primaryDark
+
+    );
+
+    root.style.setProperty(
+
+        "--primary-light",
+
+        values.primaryLight
+
+    );
+
+    root.style.setProperty(
+
+        "--accent",
+
+        values.accent
+
+    );
+
+    root.style.setProperty(
+
+        "--text",
+
+        values.text
+
+    );
+
+    root.style.setProperty(
+
+        "--muted",
+
+        values.muted
+
+    );
+
+    root.style.setProperty(
+
+        "--border",
+
+        values.border
+
+    );
+
+    root.style.setProperty(
+
+        "--bg",
+
+        values.background
+
+    );
+
+    root.style.setProperty(
+
+        "--card",
+
+        values.card
+
+    );
+
+    root.style.setProperty(
+
+        "--header",
+
+        values.header
+
+    );
+
+    const logoText =
+
+        theme?.logo_text ||
+
+        theme?.site_name ||
+
+        normal.logoText;
+
+    const logo =
+
+        byId(
+
+            "site-logo-text"
+
+        );
+
+    if(logo){
+
+        logo.textContent =
+
+            logoText;
+
+    }
+
+    const eyebrow =
+
+        byId(
+
+            "hero-eyebrow"
+
+        );
+
+    const heroTitle =
+
+        byId(
+
+            "hero-title"
+
+        );
+
+    const heroDescription =
+
+        byId(
+
+            "hero-description"
+
+        );
+
+    if(eyebrow){
+
+        eyebrow.textContent =
+
+            theme?.hero_eyebrow ||
+
+            normal.heroEyebrow;
+
+    }
+
+    if(heroTitle){
+
+        heroTitle.textContent =
+
+            theme?.hero_title ||
+
+            normal.heroTitle;
+
+    }
+
+    if(heroDescription){
+
+        heroDescription.textContent =
+
+            theme?.hero_description ||
+
+            normal.heroDescription;
+
+    }
+
+    if(theme?.logo_url){
+
+        const logoElement =
+
+            document.querySelector(
+
+                ".logo"
+
+            );
+
+        if(
+
+            logoElement &&
+
+            isValidHttpUrl(
+
+                theme.logo_url
+
+            )
+
+        ){
+
+            logoElement.innerHTML =
+
+                `
+
+                    <img
+
+                        src="${escapeHTML(
+
+                            theme.logo_url
+
+                        )}"
+
+                        alt="${escapeHTML(
+
+                            logoText
+
+                        )}"
+
+                        style="
+
+                            width:38px;
+
+                            height:38px;
+
+                            border-radius:11px;
+
+                            object-fit:cover;
+
+                        "
+
+                    >
+
+                    <span>
+
+                        ${escapeHTML(
+
+                            logoText
+
+                        )}
+
+                    </span>
+
+                `;
+
+        }
+
+    }
+
+    currentTheme =
+
+        theme || null;
+
+}
+
+function themeIsActive(
+
+    theme
+
+){
+
+    if(!theme){
+
+        return false;
+
+    }
+
+    if(
+
+        theme.is_active === false
+
+    ){
+
+        return false;
+
+    }
+
+    const now =
+
+        new Date();
+
+    const start =
+
+        theme.start_date ||
+
+        theme.starts_at ||
+
+        theme.valid_from ||
+
+        null;
+
+    const end =
+
+        theme.end_date ||
+
+        theme.ends_at ||
+
+        theme.valid_until ||
+
+        null;
+
+    if(start){
+
+        const startDate =
+
+            new Date(
+
+                start
+
+            );
+
+        if(
+
+            !Number.isNaN(
+
+                startDate.getTime()
+
+            ) &&
+
+            now < startDate
+
+        ){
+
+            return false;
+
+        }
+
+    }
+
+    if(end){
+
+        const endDate =
+
+            new Date(
+
+                end
+
+            );
+
+        if(
+
+            !Number.isNaN(
+
+                endDate.getTime()
+
+            ) &&
+
+            now > endDate
+
+        ){
+
+            return false;
+
+        }
+
+    }
+
+    return true;
+
+}
+
+async function loadActiveTheme(){
+
+    applyTheme(
+
+        null
+
+    );
+
+    if(!marketClient){
+
+        return;
+
+    }
+
+    try{
+
+        const {
+
+            data,
+
+            error
+
+        } =
+
+            await marketClient
+
+                .from(
+
+                    MARKET_CONFIG.tables.themes
+
+                )
+
+                .select("*")
+
+                .limit(50);
+
+        if(error){
+
+            /*
+
+              La table des thèmes peut être ajoutée plus tard.
+
+              Dans ce cas l'index utilise automatiquement le thème normal.
+
+            */
+
+            return;
+
+        }
+
+        const themes =
+
+            Array.isArray(data)
+
+                ? data
+
+                : [];
+
+        const active =
+
+            themes.find(
+
+                theme =>
+
+                    themeIsActive(
+
+                        theme
+
+                    )
+
+            );
+
+        if(active){
+
+            applyTheme(
+
+                active
+
+            );
+
+        }else{
+
+            applyTheme(
+
+                null
+
+            );
+
+        }
+
+    }catch(error){
+
+        console.warn(
+
+            "Thème dynamique indisponible:",
+
+            error
+
+        );
+
+        applyTheme(
+
+            null
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   SIGNALEMENT HORS CONNEXION
+
+============================================================ */
+
+function openGuestReport(){
+
+    if(currentUser){
+
+        goToPage(
+
+            "problemes.html"
+
+        );
+
+        return;
+
+    }
+
+    const modal =
+
+        byId(
+
+            "guest-report-modal"
+
+        );
+
+    if(modal){
+
+        modal.classList.add(
+
+            "open"
+
+        );
+
+    }
+
+}
+
+async function submitGuestReport(
+
+event
+
+){
+
+    event.preventDefault();
+
+    const name =
+
+        byId(
+
+            "guest-report-name"
+
+        )?.value.trim();
+
+    const contact =
+
+        byId(
+
+            "guest-report-contact"
+
+        )?.value.trim();
+
+    const type =
+
+        byId(
+
+            "guest-report-type"
+
+        )?.value;
+
+    const description =
+
+        byId(
+
+            "guest-report-description"
+
+        )?.value.trim();
+
+    if(
+
+        !name ||
+
+        !contact ||
+
+        !type ||
+
+        !description
+
+    ){
+
+        showToast(
+
+            "Veuillez remplir tous les champs."
+
+        );
+
+        return;
+
+    }
+
+    const report = {
+
+        name:
+
+            name,
+
+        contact:
+
+            contact,
+
+        type:
+
+            type,
+
+        description:
+
+            description,
+
+        source:
+
+            "guest",
+
+        status:
+
+            "pending",
+
+        created_at:
+
+            new Date().toISOString()
+
+    };
+
+    /*
+
+      Si la table guest_reports existe, le signalement est
+
+      directement envoyé à Supabase.
+
+      Si elle n'existe pas encore, l'index ne plante pas.
+
+      On conserve temporairement le signalement localement
+
+      afin que le formulaire reste fonctionnel en attendant
+
+      le fichier/table dédié qui sera ajouté sans toucher à l'index.
+
+    */
+
+    if(marketClient){
+
+        try{
+
+            const {
+
+                error
+
+            } =
+
+                await marketClient
+
+                    .from(
+
+                        MARKET_CONFIG.tables.guestReports
+
+                    )
+
+                    .insert(
+
+                        report
+
+                    );
+
+            if(!error){
+
+                closeModal(
+
+                    "guest-report-modal"
+
+                );
+
+                byId(
+
+                    "guest-report-form"
+
+                )?.reset();
+
+                showToast(
+
+                    "Votre signalement a bien été envoyé à l'administration."
+
+                );
+
+                return;
+
+            }
+
+            console.warn(
+
+                "Table guest_reports indisponible:",
+
+                error
+
+            );
+
+        }catch(error){
+
+            console.warn(
+
+                error
+
+            );
+
+        }
+
+    }
+
+    try{
+
+        const existing =
+
+            JSON.parse(
+
+                localStorage.getItem(
+
+                    "market_bouake_guest_reports"
+
+                ) || "[]"
+
+            );
+
+        existing.push(
+
+            report
+
+        );
+
+        localStorage.setItem(
+
+            "market_bouake_guest_reports",
+
+            JSON.stringify(
+
+                existing
+
+            )
+
+        );
+
+        closeModal(
+
+            "guest-report-modal"
+
+        );
+
+        byId(
+
+            "guest-report-form"
+
+        )?.reset();
+
+        showToast(
+
+            "Votre signalement a été enregistré."
+
+        );
+
+    }catch(error){
+
+        showToast(
+
+            "Impossible d'enregistrer le signalement."
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   CONTACT
+
+============================================================ */
+
+function openContact(){
+
+    const modal =
+
+        byId(
+
+            "contact-modal"
+
+        );
+
+    if(modal){
+
+        modal.classList.add(
+
+            "open"
+
+        );
+
+    }
+
+}
+
+function contactViaWhatsApp(){
+
+    const message =
+
+        encodeURIComponent(
+
+            "Bonjour Market Bouaké, je souhaite vous contacter."
+
+        );
+
+    window.location.href =
+
+        "https://wa.me/" +
+
+        MARKET_CONFIG.whatsapp +
+
+        "?text=" +
+
+        message;
+
+}
+
+/* ============================================================
+
+   MENU
+
+============================================================ */
+
+function openMenu(){
+
+    byId(
+
+        "side-menu"
+
+    )?.classList.add(
+
+        "open"
+
+    );
+
+    byId(
+
+        "menu-backdrop"
+
+    )?.classList.add(
+
+        "open"
+
+    );
+
+}
+
+function closeMenu(){
+
+    byId(
+
+        "side-menu"
+
+    )?.classList.remove(
+
+        "open"
+
+    );
+
+    byId(
+
+        "menu-backdrop"
+
+    )?.classList.remove(
+
+        "open"
+
+    );
+
+}
+
+/* ============================================================
+
+   MODALES
+
+============================================================ */
+
+function closeModal(
+
+    id
+
+){
+
+    byId(
+
+        id
+
+    )?.classList.remove(
+
+        "open"
+
+    );
+
+}
+
+document.addEventListener(
+
+    "click",
+
+    function(event){
+
+        const closeButton =
+
+            event.target.closest(
+
+                "[data-close-modal]"
+
+            );
+
+        if(closeButton){
+
+            closeModal(
+
+                closeButton.dataset.closeModal
+
+            );
+
+        }
+
+    }
+
+);
+
+/* ============================================================
+
+   MENU ACTIONS
+
+============================================================ */
+
+function menuAction(
+
+action
+
+){
+
+    closeMenu();
+
+    switch(action){
+
+        case "home":
+
+            window.scrollTo({
+
+                top:0,
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "categories":
+
+            byId(
+
+                "categories-container"
+
+            )?.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "browse":
+
+            goToPage(
+
+                "parcourir.html"
+
+            );
+
+            break;
+
+        case "new":
+
+            byId(
+
+                "new-products"
+
+            )?.closest(
+
+                ".section"
+
+            )?.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "popular":
+
+            byId(
+
+                "popular-products"
+
+            )?.closest(
+
+                ".section"
+
+            )?.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "promotions":
+
+            byId(
+
+                "promotion-products"
+
+            )?.closest(
+
+                ".section"
+
+            )?.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "shops":
+
+            byId(
+
+                "shops-container"
+
+            )?.closest(
+
+                ".section"
+
+            )?.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "ads":
+
+            byId(
+
+                "advertising-section"
+
+            )?.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "real-estate":
+
+            byId(
+
+                "real-estate-products"
+
+            )?.closest(
+
+                ".section"
+
+            )?.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+            break;
+
+        case "how":
+
+            goToPage(
+
+                "comment-ca-marche.html"
+
+            );
+
+            break;
+
+        case "help":
+
+            goToPage(
+
+                "aide.html"
+
+            );
+
+            break;
+
+        case "report":
+
+            openGuestReport();
+
+            break;
+
+    }
+
+}
+
+/* ============================================================
+
+   AUTH MENU ACTIONS
+
+============================================================ */
+
+function authAction(
+
+action
+
+){
+
+    if(
+
+        !requireAuth(
+
+            function(){}
+
+        )
+
+    ){
+
+        closeMenu();
+
+        return;
+
+    }
+
+    closeMenu();
+
+    const pages = {
+
+        orders:
+
+            "commandes.html",
+
+        favorites:
+
+            "favoris.html",
+
+        delivery:
+
+            "livraison.html",
+
+        reviews:
+
+            "avis.html",
+
+        notifications:
+
+            "notifications.html",
+
+        problems:
+
+            "problemes.html",
+
+        settings:
+
+            "parametres.html"
+
+    };
+
+    const page =
+
+        pages[action];
+
+    if(page){
+
+        goToPage(
+
+            page
+
+        );
+
+        return;
+
+    }
+
+    if(action === "account"){
+
+        goToPage(
+
+            "compte.html"
+
+        );
+
+    }
+
+}
+
+/* ============================================================
+
+   VENDEUR
+
+============================================================ */
+
+function becomeSeller(){
+
+    if(!currentUser){
+
+        goToPage(
+
+            "inscription.html",
+
+            {
+
+                type:
+
+                    "seller"
+
+            }
+
+        );
+
+        return;
+
+    }
+
+    /*
+
+      L'utilisateur garde son compte acheteur.
+
+      La page dédiée gère la demande vendeur.
+
+    */
+
+    goToPage(
+
+        "devenir-vendeur.html"
+
+    );
+
+}
+
+/* ============================================================
+
+   SECTION "VOIR TOUT"
+
+============================================================ */
+
+function openSection(
+
+section
+
+){
+
+    switch(section){
+
+        case "featured":
+
+        case "new":
+
+        case "popular":
+
+        case "promotions":
+
+            goToPage(
+
+                "parcourir.html",
+
+                {
+
+                    section:
+
+                        section
+
+                }
+
+            );
+
+            break;
+
+    }
+
+}
+
+/* ============================================================
+
+   ÉVÉNEMENTS
+
+============================================================ */
+
+function bindEvents(){
+
+    byId(
+
+        "menu-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        openMenu
+
+    );
+
+    byId(
+
+        "close-menu"
+
+    )?.addEventListener(
+
+        "click",
+
+        closeMenu
+
+    );
+
+    byId(
+
+        "menu-backdrop"
+
+    )?.addEventListener(
+
+        "click",
+
+        closeMenu
+
+    );
+
+    byId(
+
+        "login-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "connexion.html",
+
+                {
+
+                    redirect:
+
+                        "index.html"
+
+                }
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "signup-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "inscription.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "status-login-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "connexion.html",
+
+                {
+
+                    redirect:
+
+                        "index.html"
+
+                }
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "status-signup-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "inscription.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "account-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            if(currentUser){
+
+                goToPage(
+
+                    "compte.html"
+
+                );
+
+            }else{
+
+                goToPage(
+
+                    "connexion.html",
+
+                    {
+
+                        redirect:
+
+                            "index.html"
+
+                    }
+
+                );
+
+            }
+
+        }
+
+    );
+
+    byId(
+
+        "mobile-account"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            if(currentUser){
+
+                goToPage(
+
+                    "compte.html"
+
+                );
+
+            }else{
+
+                goToPage(
+
+                    "connexion.html",
+
+                    {
+
+                        redirect:
+
+                            "index.html"
+
+                    }
+
+                );
+
+            }
+
+        }
+
+    );
+
+    byId(
+
+        "cart-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "panier.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "mobile-cart"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "panier.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "mobile-home"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            window.scrollTo({
+
+                top:0,
+
+                behavior:"smooth"
+
+            });
+
+        }
+
+    );
+
+    byId(
+
+        "mobile-ads"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            byId(
+
+                "advertising-section"
+
+            )?.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+        }
+
+    );
+
+    byId(
+
+        "discussion-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            if(currentUser){
+
+                goToPage(
+
+                    "discussions.html"
+
+                );
+
+            }else{
+
+                goToPage(
+
+                    "connexion.html",
+
+                    {
+
+                        redirect:
+
+                            "discussions.html"
+
+                    }
+
+                );
+
+            }
+
+        }
+
+    );
+
+    byId(
+
+        "hero-browse-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "parcourir.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "hero-seller-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        becomeSeller
+
+    );
+
+    byId(
+
+        "all-categories-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "categories.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "all-shops-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "boutique.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "all-real-estate-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "immobilier.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "advertising-more-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "publicite.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "how-it-works-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "comment-ca-marche.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "ad-prev"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            showAd(
+
+                adIndex - 1
+
+            );
+
+            startAdTimer();
+
+        }
+
+    );
+
+    byId(
+
+        "ad-next"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            showAd(
+
+                adIndex + 1
+
+            );
+
+            startAdTimer();
+
+        }
+
+    );
+
+    byId(
+
+        "menu-account"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            closeMenu();
+
+            if(currentUser){
+
+                goToPage(
+
+                    "compte.html"
+
+                );
+
+            }else{
+
+                goToPage(
+
+                    "connexion.html",
+
+                    {
+
+                        redirect:
+
+                            "index.html"
+
+                    }
+
+                );
+
+            }
+
+        }
+
+    );
+
+    byId(
+
+        "menu-logout"
+
+    )?.addEventListener(
+
+        "click",
+
+        logout
+
+    );
+
+    byId(
+
+        "menu-become-seller"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            closeMenu();
+
+            becomeSeller();
+
+        }
+
+    );
+
+    byId(
+
+        "menu-seller-space"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            if(!currentUser){
+
+                goToPage(
+
+                    "connexion.html",
+
+                    {
+
+                        redirect:
+
+                            "espace-vendeur.html"
+
+                    }
+
+                );
+
+                return;
+
+            }
+
+            goToPage(
+
+                "espace-vendeur.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "footer-seller-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        becomeSeller
+
+    );
+
+    byId(
+
+        "footer-seller-space"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            if(currentUser){
+
+                goToPage(
+
+                    "espace-vendeur.html"
+
+                );
+
+            }else{
+
+                goToPage(
+
+                    "connexion.html",
+
+                    {
+
+                        redirect:
+
+                            "espace-vendeur.html"
+
+                    }
+
+                );
+
+            }
+
+        }
+
+    );
+
+    byId(
+
+        "footer-shops-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "boutique.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "footer-categories-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "categories.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "footer-ad-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "publicite.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "footer-help-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "aide.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "footer-report-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        openGuestReport
+
+    );
+
+    byId(
+
+        "footer-how-buy"
+
+    )?.addEventListener(
+
+        "click",
+
+        function(){
+
+            goToPage(
+
+                "comment-ca-marche.html"
+
+            );
+
+        }
+
+    );
+
+    byId(
+
+        "contact-whatsapp-button"
+
+    )?.addEventListener(
+
+        "click",
+
+        contactViaWhatsApp
+
+    );
+
+    byId(
+
+        "search-form"
+
+    )?.addEventListener(
+
+        "submit",
+
+        function(event){
+
+            event.preventDefault();
+
+            const input =
+
+                byId(
+
+                    "global-search"
+
+                );
+
+            performSearch(
+
+                input?.value ||
+
+                ""
+
+            );
+
+        }
+
+    );
+
+    document
+
+        .querySelectorAll(
+
+            "[data-menu-action]"
+
+        )
+
+        .forEach(
+
+            button => {
+
+                button.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        menuAction(
+
+                            button.dataset.menuAction
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    document
+
+        .querySelectorAll(
+
+            "[data-auth-action]"
+
+        )
+
+        .forEach(
+
+            button => {
+
+                button.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        authAction(
+
+                            button.dataset.authAction
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    document
+
+        .querySelectorAll(
+
+            "[data-action]"
+
+        )
+
+        .forEach(
+
+            button => {
+
+                button.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        const action =
+
+                            button.dataset.action;
+
+                        switch(action){
+
+                            case "contact":
+
+                                openContact();
+
+                                break;
+
+                            case "terms":
+
+                                goToPage(
+
+                                    "conditions.html"
+
+                                );
+
+                                break;
+
+                            case "privacy":
+
+                                goToPage(
+
+                                    "confidentialite.html"
+
+                                );
+
+                                break;
+
+                            case "returns":
+
+                                goToPage(
+
+                                    "retours.html"
+
+                                );
+
+                                break;
+
+                            case "cookies":
+
+                                goToPage(
+
+                                    "cookies.html"
+
+                                );
+
+                                break;
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    document
+
+        .querySelectorAll(
+
+            "[data-close-modal]"
+
+        )
+
+        .forEach(
+
+            button => {
+
+                button.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        closeModal(
+
+                            button.dataset.closeModal
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    document
+
+        .querySelectorAll(
+
+            "[data-section-link]"
+
+        )
+
+        .forEach(
+
+            button => {
+
+                button.addEventListener(
+
+                    "click",
+
+                    function(){
+
+                        openSection(
+
+                            button.dataset.sectionLink
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    byId(
+
+        "guest-report-form"
+
+    )?.addEventListener(
+
+        "submit",
+
+        submitGuestReport
+
+    );
+
+}
+
+/* ============================================================
+
+   INITIALISATION
+
+============================================================ */
+
+async function initializeMarket(){
+
+    byId(
+
+        "current-year"
+
+    ).textContent =
+
+        new Date().getFullYear();
+
+    updateCartCounter();
+
+    bindEvents();
+
+    /*
+
+      On applique immédiatement le thème normal.
+
+      Ainsi la page reste utilisable même si la table
+
+      des thèmes n'existe pas encore.
+
+    */
+
+    applyTheme(
+
+        null
+
+    );
+
+    marketClient =
+
+        await waitForSupabaseClient();
+
+    if(marketClient){
+
+        try{
+
+            const {
+
+                data
+
+            } =
+
+                await marketClient.auth.getSession();
+
+            currentSession =
+
+                data?.session ||
+
+                null;
+
+        }catch(error){
+
+            currentSession =
+
+                null;
+
+        }
+
+        await refreshAuthState();
+
+        /*
+
+          L'écouteur permet que :
+
+          connexion -> boutons connexion/inscription disparaissent
+
+          déconnexion -> boutons réapparaissent immédiatement.
+
+        */
+
+        try{
+
+            marketClient.auth.onAuthStateChange(
+
+                function(
+
+                    event,
+
+                    session
+
+                ){
+
+                    currentSession =
+
+                        session ||
+
+                        null;
+
+                    currentUser =
+
+                        session?.user ||
+
+                        null;
+
+                    updateAuthInterface();
+
+                }
+
+            );
+
+        }catch(error){
+
+            console.warn(
+
+                "Écouteur Auth indisponible:",
+
+                error
+
+            );
+
+        }
+
+    }else{
+
+        updateAuthInterface();
+
+    }
+
+    await loadActiveTheme();
+
+    await loadCategories();
+
+    await loadProducts();
+
+    await loadAdvertisements();
+
+    await loadShops();
+
+    updateCartCounter();
+
+    refreshProductCards();
+
+}
+
+/* ============================================================
+
+   DÉMARRAGE
+
+============================================================ */
+
+if(
+
+    document.readyState ===
+
+    "loading"
+
+){
+
+    document.addEventListener(
+
+        "DOMContentLoaded",
+
+        initializeMarket,
+
+        {
+
+            once:true
+
+        }
+
+    );
+
+}else{
+
+    initializeMarket();
+
+}
+
+})();
+
+</script>
+
+</body>
+
+</html>
