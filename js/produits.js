@@ -144,6 +144,118 @@ function estImmobilier(produit) {
 
 /* ============================================================
 
+   RÉCUPÉRER LE PANIER
+
+   ============================================================ */
+
+function recupererPanier() {
+
+    try {
+
+        const sauvegarde =
+
+            localStorage.getItem(
+
+                "market_bouake_cart"
+
+            );
+
+        if (!sauvegarde) {
+
+            return [];
+
+        }
+
+        const donnees =
+
+            JSON.parse(sauvegarde);
+
+        return Array.isArray(donnees)
+
+            ? donnees
+
+            : [];
+
+    } catch (error) {
+
+        console.warn(
+
+            "Panier local invalide :",
+
+            error
+
+        );
+
+        return [];
+
+    }
+
+}
+
+/* ============================================================
+
+   SAUVEGARDER LE PANIER
+
+   ============================================================ */
+
+function sauvegarderPanier(panier) {
+
+    localStorage.setItem(
+
+        "market_bouake_cart",
+
+        JSON.stringify(panier)
+
+    );
+
+    /*
+
+       Synchronisation avec l'ancienne clé
+
+       utilisée éventuellement par le projet.
+
+    */
+
+    localStorage.setItem(
+
+        "cart",
+
+        JSON.stringify(panier)
+
+    );
+
+    mettreAJourCompteurPanier();
+
+}
+
+/* ============================================================
+
+   VÉRIFIER SI UN PRODUIT EST DANS LE PANIER
+
+   ============================================================ */
+
+function produitEstDansPanier(productId) {
+
+    if (!productId) return false;
+
+    const panier =
+
+        recupererPanier();
+
+    return panier.some(
+
+        article =>
+
+            String(article.id) ===
+
+            String(productId)
+
+    );
+
+}
+
+/* ============================================================
+
    CRÉER UNE CARTE PRODUIT
 
    ============================================================ */
@@ -168,6 +280,8 @@ function creerCarteProduit(produit) {
 
         produit.main_image_url ||
 
+        produit.image_url_1 ||
+
         "https://placehold.co/600x600/png?text=Market+Bouake";
 
     const prix =
@@ -188,13 +302,17 @@ function creerCarteProduit(produit) {
 
         immobilier || stock > 0;
 
+    const dejaDansPanier =
+
+        produitEstDansPanier(produit.id);
+
     carte.innerHTML = `
 
         <div class="product-image-wrapper">
 
             <img
 
-                src="${image}"
+                src="${escapeHtml(image)}"
 
                 alt="${escapeHtml(
 
@@ -310,7 +428,17 @@ function creerCarteProduit(produit) {
 
                                 type="button"
 
-                                class="product-cart-button"
+                                class="product-cart-button ${
+
+                                    dejaDansPanier
+
+                                        ? "in-cart"
+
+                                        : ""
+
+                                }"
+
+                                data-product-id="${produit.id}"
 
                                 ${
 
@@ -322,11 +450,7 @@ function creerCarteProduit(produit) {
 
                                 }
 
-                                onclick="ajouterProduitAuPanier(
-
-                                    '${produit.id}'
-
-                                )"
+                                onclick="toggleProduitPanier('${produit.id}')"
 
                             >
 
@@ -334,7 +458,15 @@ function creerCarteProduit(produit) {
 
                                     disponible
 
-                                        ? "🛒 Ajouter au panier"
+                                        ? (
+
+                                            dejaDansPanier
+
+                                                ? "✓ Retirer du panier"
+
+                                                : "🛒 Ajouter au panier"
+
+                                        )
 
                                         : "Indisponible"
 
@@ -378,7 +510,89 @@ function ouvrirProduit(productId) {
 
 /* ============================================================
 
-   AJOUTER UN PRODUIT AU PANIER
+   TOGGLE PANIER
+
+   1er clic = ajouter
+
+   2e clic = retirer
+
+   3e clic = ajouter
+
+   ============================================================ */
+
+async function toggleProduitPanier(productId) {
+
+    if (!productId) return;
+
+    const panier =
+
+        recupererPanier();
+
+    const index =
+
+        panier.findIndex(
+
+            article =>
+
+                String(article.id) ===
+
+                String(productId)
+
+        );
+
+    /*
+
+       SI LE PRODUIT EST DÉJÀ DANS LE PANIER
+
+       → ON LE RETIRE COMPLÈTEMENT
+
+    */
+
+    if (index !== -1) {
+
+        panier.splice(
+
+            index,
+
+            1
+
+        );
+
+        sauvegarderPanier(
+
+            panier
+
+        );
+
+        mettreAJourBoutonsPanier();
+
+        afficherMessagePanier(
+
+            "Produit retiré du panier ✓"
+
+        );
+
+        return;
+
+    }
+
+    /*
+
+       SINON → ON AJOUTE LE PRODUIT
+
+    */
+
+    await ajouterProduitDepuisSupabase(
+
+        productId
+
+    );
+
+}
+
+/* ============================================================
+
+   ANCIENNE FONCTION CONSERVÉE
 
    ============================================================ */
 
@@ -386,17 +600,7 @@ function ajouterProduitAuPanier(productId) {
 
     if (!productId) return;
 
-    /*
-
-       On récupère directement le produit
-
-       depuis Supabase pour avoir toutes
-
-       les informations nécessaires.
-
-    */
-
-    ajouterProduitDepuisSupabase(
+    toggleProduitPanier(
 
         productId
 
@@ -482,6 +686,24 @@ async function ajouterProduitDepuisSupabase(
 
         }
 
+        /*
+
+           L'immobilier ne va pas dans le panier.
+
+        */
+
+        if (estImmobilier(produit)) {
+
+            afficherMessagePanier(
+
+                "Les biens immobiliers ne peuvent pas être ajoutés au panier."
+
+            );
+
+            return;
+
+        }
+
         const stock =
 
             Number(produit.stock || 0);
@@ -498,153 +720,51 @@ async function ajouterProduitDepuisSupabase(
 
         }
 
-        ajouterProduitDansLocalStorage(
+        const panier =
 
-            produit
+            recupererPanier();
 
-        );
+        /*
 
-        afficherMessagePanier(
+           Sécurité supplémentaire :
 
-            "Produit ajouté au panier ✓"
+           si le produit a déjà été ajouté entre-temps,
 
-        );
+           on ne crée pas de doublon.
 
-    } catch (error) {
+        */
 
-        console.error(
+        const existe =
 
-            "Erreur ajout panier :",
+            panier.some(
 
-            error
+                article =>
 
-        );
+                    String(article.id) ===
 
-        afficherMessagePanier(
-
-            "Une erreur est survenue."
-
-        );
-
-    }
-
-}
-
-/* ============================================================
-
-   AJOUTER DANS LOCALSTORAGE
-
-   ============================================================ */
-
-function ajouterProduitDansLocalStorage(
-
-    produit
-
-) {
-
-    let panier = [];
-
-    try {
-
-        const sauvegarde =
-
-            localStorage.getItem(
-
-                "market_bouake_cart"
+                    String(produit.id)
 
             );
 
-        if (sauvegarde) {
+        if (existe) {
 
-            const donnees =
-
-                JSON.parse(
-
-                    sauvegarde
-
-                );
-
-            if (Array.isArray(donnees)) {
-
-                panier = donnees;
-
-            }
-
-        }
-
-    } catch (error) {
-
-        console.warn(
-
-            "Panier local invalide :",
-
-            error
-
-        );
-
-        panier = [];
-
-    }
-
-    /*
-
-       Si le produit existe déjà,
-
-       on augmente simplement la quantité.
-
-    */
-
-    const index =
-
-        panier.findIndex(
-
-            article =>
-
-                article.id === produit.id
-
-        );
-
-    if (index !== -1) {
-
-        const ancienneQuantite =
-
-            Number(
-
-                panier[index].quantity || 1
-
-            );
-
-        const stock =
-
-            Number(
-
-                produit.stock || 0
-
-            );
-
-        if (
-
-            ancienneQuantite >= stock
-
-        ) {
-
-            afficherMessagePanier(
-
-                "Vous avez déjà atteint le stock disponible."
-
-            );
+            mettreAJourBoutonsPanier();
 
             return;
 
         }
 
-        panier[index].quantity =
+        /*
 
-            ancienneQuantite + 1;
+           Ajout avec quantité = 1.
 
-    }
+           Un clic supplémentaire sur le bouton
 
-    else {
+           retirera le produit au lieu d'augmenter
+
+           la quantité.
+
+        */
 
         panier.push({
 
@@ -678,11 +798,7 @@ function ajouterProduitDansLocalStorage(
 
             stock:
 
-                Number(
-
-                    produit.stock || 0
-
-                ),
+                stock,
 
             seller_id:
 
@@ -698,6 +814,8 @@ function ajouterProduitDansLocalStorage(
 
                 produit.main_image_url ||
 
+                produit.image_url_1 ||
+
                 null,
 
             category_id:
@@ -712,41 +830,103 @@ function ajouterProduitDansLocalStorage(
 
         });
 
+        sauvegarderPanier(
+
+            panier
+
+        );
+
+        mettreAJourBoutonsPanier();
+
+        afficherMessagePanier(
+
+            "Produit ajouté au panier ✓"
+
+        );
+
+    } catch (error) {
+
+        console.error(
+
+            "Erreur ajout panier :",
+
+            error
+
+        );
+
+        afficherMessagePanier(
+
+            "Une erreur est survenue."
+
+        );
+
     }
 
-    localStorage.setItem(
+}
 
-        "market_bouake_cart",
+/* ============================================================
 
-        JSON.stringify(
+   METTRE À JOUR LES BOUTONS PANIER
 
-            panier
+   ============================================================ */
 
-        )
+function mettreAJourBoutonsPanier() {
+
+    const boutons =
+
+        document.querySelectorAll(
+
+            ".product-cart-button[data-product-id]"
+
+        );
+
+    boutons.forEach(
+
+        bouton => {
+
+            const productId =
+
+                bouton.dataset.productId;
+
+            if (!productId) return;
+
+            const dansPanier =
+
+                produitEstDansPanier(
+
+                    productId
+
+                );
+
+            if (dansPanier) {
+
+                bouton.textContent =
+
+                    "✓ Retirer du panier";
+
+                bouton.classList.add(
+
+                    "in-cart"
+
+                );
+
+            } else {
+
+                bouton.textContent =
+
+                    "🛒 Ajouter au panier";
+
+                bouton.classList.remove(
+
+                    "in-cart"
+
+                );
+
+            }
+
+        }
 
     );
-
-    /*
-
-       Synchronisation avec les anciennes
-
-       clés éventuelles du projet.
-
-    */
-
-    localStorage.setItem(
-
-        "cart",
-
-        JSON.stringify(
-
-            panier
-
-        )
-
-    );
-
-    mettreAJourCompteurPanier();
 
 }
 
@@ -758,47 +938,21 @@ function ajouterProduitDansLocalStorage(
 
 function mettreAJourCompteurPanier() {
 
-    let panier = [];
+    const panier =
 
-    try {
-
-        const sauvegarde =
-
-            localStorage.getItem(
-
-                "market_bouake_cart"
-
-            );
-
-        if (sauvegarde) {
-
-            const donnees =
-
-                JSON.parse(
-
-                    sauvegarde
-
-                );
-
-            if (Array.isArray(donnees)) {
-
-                panier = donnees;
-
-            }
-
-        }
-
-    } catch (error) {
-
-        panier = [];
-
-    }
+        recupererPanier();
 
     const quantiteTotale =
 
         panier.reduce(
 
-            (total, article) => {
+            (
+
+                total,
+
+                article
+
+            ) => {
 
                 return total +
 
@@ -846,7 +1000,7 @@ function mettreAJourCompteurPanier() {
 
 /* ============================================================
 
-   MESSAGE AJOUT PANIER
+   MESSAGE PANIER
 
    ============================================================ */
 
@@ -1053,6 +1207,8 @@ document.addEventListener(
         }
 
         mettreAJourCompteurPanier();
+
+        mettreAJourBoutonsPanier();
 
     }
 
