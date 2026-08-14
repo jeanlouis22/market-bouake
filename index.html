@@ -6402,6 +6402,46 @@ function updateCartCount(){
 
 }
 
+function updateAllCartButtons(){
+
+    $all(
+
+        "[data-cart-product-id]"
+
+    ).forEach(button=>{
+
+        const id =
+
+            String(
+
+                button.dataset.cartProductId
+
+            );
+
+        const inCart =
+
+            isInCart(id);
+
+        button.classList.toggle(
+
+            "in-cart",
+
+            inCart
+
+        );
+
+        button.textContent =
+
+            inCart
+
+                ? "Retirer du panier"
+
+                : "Ajouter au panier";
+
+    });
+
+}
+
 /* ============================================================
 
    FAVORIS
