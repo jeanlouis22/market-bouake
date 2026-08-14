@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Catégories | Market Bouaké</title>
+
+    <meta name="description"
+
+          content="Découvrez toutes les catégories disponibles sur Market Bouaké.">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        :root {
+
+            --green: #0f6b45;
+
+            --green-dark: #08452d;
+
+            --green-light: #eaf7f0;
+
+            --orange: #f59e0b;
+
+            --orange-dark: #d97706;
+
+            --white: #ffffff;
+
+            --black: #17201b;
+
+            --gray: #68736d;
+
+            --light: #f5f7f6;
+
+            --border: #e3e9e5;
+
+            --shadow: 0 8px 25px rgba(0,0,0,.07);
+
+            --radius: 18px;
+
+        }
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        body {
+
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+
+                         Roboto, Arial, sans-serif;
+
+            background: var(--light);
+
+            color: var(--black);
+
+            min-height: 100vh;
+
+        }
+
+        button,
+
+        input {
+
+            font: inherit;
+
+        }
+
+        a {
+
+            text-decoration: none;
+
+            color: inherit;
+
+        }
+
+        /* =========================
+
+           HEADER
+
+        ========================= */
+
+        header {
+
+            background: var(--white);
+
+            border-bottom: 1px solid var(--border);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+        }
+
+        .header-inner {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            min-height: 70px;
+
+            padding: 12px 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+
+        }
+
+        .logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            min-width: max-content;
+
+        }
+
+        .logo-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 13px;
+
+            background: var(--green);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+        }
+
+        .logo-text {
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            color: var(--green-dark);
+
+        }
+
+        .search-box {
+
+            flex: 1;
+
+            position: relative;
+
+        }
+
+        .search-box input {
+
+            width: 100%;
+
+            height: 44px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 13px;
+
+            padding: 0 48px 0 16px;
+
+            outline: none;
+
+            background: #fafcfb;
+
+        }
+
+        .search-box input:focus {
+
+            border-color: var(--green);
+
+        }
+
+        .search-button {
+
+            position: absolute;
+
+            right: 5px;
+
+            top: 5px;
+
+            width: 34px;
+
+            height: 34px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background: var(--green);
+
+            color: white;
+
+            cursor: pointer;
+
+        }
+
+        .header-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+        .header-button {
+
+            border: 1px solid var(--border);
+
+            background: white;
+
+            height: 42px;
+
+            padding: 0 13px;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            color: var(--black);
+
+        }
+
+        .header-button:hover {
+
+            border-color: var(--green);
+
+            color: var(--green);
+
+        }
+
+        /* =========================
+
+           MAIN
+
+        ========================= */
+
+        main {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 28px 20px 100px;
+
+        }
+
+        .breadcrumb {
+
+            color: var(--gray);
+
+            font-size: 14px;
+
+            margin-bottom: 18px;
+
+        }
+
+        .breadcrumb a {
+
+            color: var(--green);
+
+            font-weight: 600;
+
+        }
+
+        .hero {
+
+            background: linear-gradient(
+
+                135deg,
+
+                var(--green-dark),
+
+                var(--green)
+
+            );
+
+            color: white;
+
+            border-radius: 24px;
+
+            padding: 30px;
+
+            margin-bottom: 25px;
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+
+            height: 180px;
+
+            border-radius: 50%;
+
+            background: rgba(255,255,255,.08);
+
+            right: -50px;
+
+            top: -50px;
+
+        }
+
+        .hero h1 {
+
+            font-size: clamp(27px, 4vw, 40px);
+
+            margin-bottom: 10px;
+
+        }
+
+        .hero p {
+
+            max-width: 680px;
+
+            color: rgba(255,255,255,.86);
+
+            line-height: 1.6;
+
+        }
+
+        .hero-count {
+
+            display: inline-flex;
+
+            margin-top: 18px;
+
+            background: rgba(255,255,255,.13);
+
+            padding: 9px 14px;
+
+            border-radius: 999px;
+
+            font-size: 14px;
+
+        }
+
+        /* =========================
+
+           CONTROLS
+
+        ========================= */
+
+        .controls {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            padding: 15px;
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-bottom: 22px;
+
+            box-shadow: var(--shadow);
+
+        }
+
+        .category-search {
+
+            flex: 1;
+
+            height: 45px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            padding: 0 15px;
+
+            outline: none;
+
+        }
+
+        .category-search:focus {
+
+            border-color: var(--green);
+
+        }
+
+        .reset-button {
+
+            height: 45px;
+
+            border: 0;
+
+            border-radius: 12px;
+
+            padding: 0 18px;
+
+            background: var(--green);
+
+            color: white;
+
+            cursor: pointer;
+
+            font-weight: 700;
+
+        }
+
+        .reset-button:hover {
+
+            background: var(--green-dark);
+
+        }
+
+        /* =========================
+
+           CATEGORY GRID
+
+        ========================= */
+
+        .section-title {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 16px;
+
+        }
+
+        .section-title h2 {
+
+            font-size: 23px;
+
+        }
+
+        .result-count {
+
+            color: var(--gray);
+
+            font-size: 14px;
+
+        }
+
+        .categories-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+            gap: 16px;
+
+        }
+
+        .category-card {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            overflow: hidden;
+
+            cursor: pointer;
+
+            transition: .2s ease;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,.04);
+
+        }
+
+        .category-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow: var(--shadow);
+
+            border-color: rgba(15,107,69,.25);
+
+        }
+
+        .category-image {
+
+            width: 100%;
+
+            aspect-ratio: 1.5 / 1;
+
+            background: var(--green-light);
+
+            overflow: hidden;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+        .category-image img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+        }
+
+        .category-placeholder {
+
+            font-size: 40px;
+
+        }
+
+        .category-content {
+
+            padding: 15px;
+
+        }
+
+        .category-name {
+
+            font-size: 17px;
+
+            font-weight: 800;
+
+            margin-bottom: 5px;
+
+            color: var(--green-dark);
+
+        }
+
+        .category-description {
+
+            color: var(--gray);
+
+            font-size: 13px;
+
+            line-height: 1.45;
+
+            min-height: 38px;
+
+        }
+
+        .category-action {
+
+            margin-top: 12px;
+
+            color: var(--green);
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+        }
+
+        /* =========================
+
+           LOADING / ERROR / EMPTY
+
+        ========================= */
+
+        .status-box {
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            padding: 40px 20px;
+
+            text-align: center;
+
+            color: var(--gray);
+
+        }
+
+        .loader {
+
+            width: 40px;
+
+            height: 40px;
+
+            border: 4px solid #dfe9e3;
+
+            border-top-color: var(--green);
+
+            border-radius: 50%;
+
+            animation: spin .8s linear infinite;
+
+            margin: 0 auto 15px;
+
+        }
+
+        @keyframes spin {
+
+            to {
+
+                transform: rotate(360deg);
+
+            }
+
+        }
+
+        .error-box {
+
+            border-color: #f0caca;
+
+            background: #fff7f7;
+
+            color: #a33a3a;
+
+        }
+
+        .empty-box {
+
+            background: white;
+
+        }
+
+        .back-button {
+
+            display: inline-flex;
+
+            margin-top: 18px;
+
+            background: var(--green);
+
+            color: white;
+
+            padding: 11px 18px;
+
+            border-radius: 11px;
+
+            font-weight: 700;
+
+        }
+
+        /* =========================
+
+           MOBILE BOTTOM NAV
+
+        ========================= */
+
+        .bottom-nav {
+
+            display: none;
+
+        }
+
+        /* =========================
+
+           RESPONSIVE
+
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .categories-grid {
+
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .header-inner {
+
+                min-height: auto;
+
+                padding: 11px 14px;
+
+                flex-wrap: wrap;
+
+            }
+
+            .logo {
+
+                flex: 1;
+
+            }
+
+            .logo-text {
+
+                font-size: 18px;
+
+            }
+
+            .header-actions {
+
+                display: none;
+
+            }
+
+            .search-box {
+
+                order: 3;
+
+                flex-basis: 100%;
+
+            }
+
+            main {
+
+                padding: 20px 13px 90px;
+
+            }
+
+            .hero {
+
+                padding: 23px 20px;
+
+                border-radius: 20px;
+
+            }
+
+            .hero h1 {
+
+                font-size: 27px;
+
+            }
+
+            .controls {
+
+                padding: 11px;
+
+            }
+
+            .categories-grid {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+
+                gap: 11px;
+
+            }
+
+            .category-content {
+
+                padding: 12px;
+
+            }
+
+            .category-name {
+
+                font-size: 15px;
+
+            }
+
+            .category-description {
+
+                font-size: 12px;
+
+            }
+
+            .bottom-nav {
+
+                display: flex;
+
+                position: fixed;
+
+                left: 0;
+
+                right: 0;
+
+                bottom: 0;
+
+                height: 65px;
+
+                background: white;
+
+                border-top: 1px solid var(--border);
+
+                z-index: 200;
+
+                justify-content: space-around;
+
+            }
+
+            .bottom-nav a {
+
+                flex: 1;
+
+                display: flex;
+
+                flex-direction: column;
+
+                align-items: center;
+
+                justify-content: center;
+
+                gap: 4px;
+
+                color: var(--gray);
+
+                font-size: 11px;
+
+            }
+
+            .bottom-nav a.active {
+
+                color: var(--green);
+
+                font-weight: 800;
+
+            }
+
+            .bottom-icon {
+
+                font-size: 21px;
+
+            }
+
+        }
+
+        @media (max-width: 380px) {
+
+            .categories-grid {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            }
+
+            .hero {
+
+                padding: 20px 16px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-inner">
+
+        <a href="index.html" class="logo">
+
+            <div class="logo-icon">🛒</div>
+
+            <div class="logo-text">Market Bouaké</div>
+
+        </a>
+
+        <form class="search-box" id="searchForm">
+
+            <input
+
+                type="search"
+
+                id="headerSearch"
+
+                placeholder="Rechercher un produit..."
+
+                autocomplete="off"
+
+            >
+
+            <button class="search-button" type="submit">⌕</button>
+
+        </form>
+
+        <div class="header-actions">
+
+            <button
+
+                class="header-button"
+
+                type="button"
+
+                onclick="window.location.href='panier.html'">
+
+                🛒 Panier
+
+            </button>
+
+            <button
+
+                class="header-button"
+
+                type="button"
+
+                onclick="window.location.href='compte.html'">
+
+                👤 Compte
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main>
+
+    <div class="breadcrumb">
+
+        <a href="index.html">Accueil</a>
+
+        <span> › </span>
+
+        <strong>Catégories</strong>
+
+    </div>
+
+    <section class="hero">
+
+        <h1>Toutes les catégories</h1>
+
+        <p>
+
+            Explorez les différentes catégories disponibles sur
+
+            Market Bouaké et trouvez rapidement les produits qui vous intéressent.
+
+        </p>
+
+        <div class="hero-count" id="heroCount">
+
+            Chargement des catégories...
+
+        </div>
+
+    </section>
+
+    <section class="controls">
+
+        <input
+
+            type="search"
+
+            id="categorySearch"
+
+            class="category-search"
+
+            placeholder="Rechercher une catégorie..."
+
+            autocomplete="off"
+
+        >
+
+        <button
+
+            type="button"
+
+            class="reset-button"
+
+            id="resetButton">
+
+            Réinitialiser
+
+        </button>
+
+    </section>
+
+    <div class="section-title">
+
+        <h2>Catégories disponibles</h2>
+
+        <span
+
+            class="result-count"
+
+            id="resultCount">
+
+            Chargement...
+
+        </span>
+
+    </div>
+
+    <section id="categoriesContainer">
+
+        <div class="status-box">
+
+            <div class="loader"></div>
+
+            <p>
+
+                Chargement des catégories...
+
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- NAVIGATION MOBILE -->
+
+<nav class="bottom-nav">
+
+    <a href="index.html">
+
+        <span class="bottom-icon">⌂</span>
+
+        <span>Accueil</span>
+
+    </a>
+
+    <a href="panier.html">
+
+        <span class="bottom-icon">🛒</span>
+
+        <span>Panier</span>
+
+    </a>
+
+    <a href="publicites.html">
+
+        <span class="bottom-icon">📢</span>
+
+        <span>Publicité</span>
+
+    </a>
+
+    <a href="compte.html">
+
+        <span class="bottom-icon">👤</span>
+
+        <span>Compte</span>
+
+    </a>
+
+</nav>
+
+<script>
+
+    /* ============================================================
+
+       MARKET BOUAKÉ
+
+       CONFIGURATION SUPABASE
+
+    ============================================================ */
+
+    const SUPABASE_URL =
+
+        'https://qgdxxrnsiyzbacxxfdrg.supabase.co';
+
+    /*
+
+       IMPORTANT :
+
+       Remplace uniquement la valeur ci-dessous par TA clé
+
+       anon/public déjà utilisée dans ton projet.
+
+       Ne mets JAMAIS une service_role key dans ce fichier.
+
+    */
+
+    const SUPABASE_ANON_KEY =
+
+        'VOTRE_CLE_ANON_SUPABASE';
+
+    const { createClient } = window.supabase;
+
+    const db = createClient(
+
+        SUPABASE_URL,
+
+        SUPABASE_ANON_KEY
+
+    );
+
+    /* ============================================================
+
+       ÉLÉMENTS
+
+    ============================================================ */
+
+    const categoriesContainer =
+
+        document.getElementById('categoriesContainer');
+
+    const categorySearch =
+
+        document.getElementById('categorySearch');
+
+    const resultCount =
+
+        document.getElementById('resultCount');
+
+    const heroCount =
+
+        document.getElementById('heroCount');
+
+    const resetButton =
+
+        document.getElementById('resetButton');
+
+    const searchForm =
+
+        document.getElementById('searchForm');
+
+    const headerSearch =
+
+        document.getElementById('headerSearch');
+
+    let allCategories = [];
+
+    /* ============================================================
+
+       CHARGEMENT DES CATÉGORIES
+
+    ============================================================ */
+
+    async function loadCategories() {
+
+        showLoading();
+
+        const { data, error } = await db
+
+            .from('categories')
+
+            .select(`
+
+                id,
+
+                name,
+
+                description,
+
+                image_url,
+
+                is_active,
+
+                parent_id,
+
+                created_at,
+
+                updated_at
+
+            `)
+
+            .eq('is_active', true)
+
+            .order('name', { ascending: true });
+
+        if (error) {
+
+            console.error(
+
+                'Erreur Supabase catégories :',
+
+                error
+
+            );
+
+            showError(
+
+                'Impossible de charger les catégories pour le moment.'
+
+            );
+
+            return;
+
+        }
+
+        allCategories = Array.isArray(data)
+
+            ? data
+
+            : [];
+
+        heroCount.textContent =
+
+            `${allCategories.length} catégorie${
+
+                allCategories.length > 1 ? 's' : ''
+
+            } disponible${
+
+                allCategories.length > 1 ? 's' : ''
+
+            }`;
+
+        renderCategories(allCategories);
+
+    }
+
+    /* ============================================================
+
+       AFFICHAGE
+
+    ============================================================ */
+
+    function renderCategories(categories) {
+
+        resultCount.textContent =
+
+            `${categories.length} résultat${
+
+                categories.length > 1 ? 's' : ''
+
+            }`;
+
+        if (!categories.length) {
+
+            categoriesContainer.innerHTML = `
+
+                <div class="status-box empty-box">
+
+                    <div style="font-size:42px;margin-bottom:12px;">
+
+                        🔎
+
+                    </div>
+
+                    <h3 style="margin-bottom:8px;color:#17201b;">
+
+                        Aucune catégorie trouvée
+
+                    </h3>
+
+                    <p>
+
+                        Essayez avec un autre nom de catégorie.
+
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        const grid = document.createElement('div');
+
+        grid.className = 'categories-grid';
+
+        categories.forEach(category => {
+
+            const card =
+
+                document.createElement('article');
+
+            card.className = 'category-card';
+
+            const image =
+
+                category.image_url
+
+                    ? `
+
+                        <img
+
+                            src="${escapeAttribute(category.image_url)}"
+
+                            alt="${escapeAttribute(category.name || 'Catégorie')}"
+
+                            loading="lazy"
+
+                            onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=&quot;category-placeholder&quot;>🛍️</div>';"
+
+                        >
+
+                    `
+
+                    : `
+
+                        <div class="category-placeholder">
+
+                            🛍️
+
+                        </div>
+
+                    `;
+
+            const description =
+
+                category.description
+
+                    ? escapeHTML(category.description)
+
+                    : 'Découvrez les produits disponibles dans cette catégorie.';
+
+            card.innerHTML = `
+
+                <div class="category-image">
+
+                    ${image}
+
+                </div>
+
+                <div class="category-content">
+
+                    <div class="category-name">
+
+                        ${escapeHTML(category.name || 'Sans nom')}
+
+                    </div>
+
+                    <div class="category-description">
+
+                        ${description}
+
+                    </div>
+
+                    <div class="category-action">
+
+                        Voir les produits →
+
+                    </div>
+
+                </div>
+
+            `;
+
+            card.addEventListener(
+
+                'click',
+
+                () => openCategory(category)
+
+            );
+
+            grid.appendChild(card);
+
+        });
+
+        categoriesContainer.innerHTML = '';
+
+        categoriesContainer.appendChild(grid);
+
+    }
+
+    /* ============================================================
+
+       OUVRIR UNE CATÉGORIE
+
+    ============================================================ */
+
+    function openCategory(category) {
+
+        if (!category || !category.id) {
+
+            return;
+
+        }
+
+        const params = new URLSearchParams();
+
+        params.set('category', category.id);
+
+        if (category.name) {
+
+            params.set('name', category.name);
+
+        }
+
+        window.location.href =
+
+            `categorie.html?${params.toString()}`;
+
+    }
+
+    /* ============================================================
+
+       RECHERCHE DE CATÉGORIE
+
+    ============================================================ */
+
+    function filterCategories() {
+
+        const search =
+
+            categorySearch.value
+
+                .trim()
+
+                .toLowerCase();
+
+        if (!search) {
+
+            renderCategories(allCategories);
+
+            return;
+
+        }
+
+        const filtered =
+
+            allCategories.filter(category => {
+
+                const name =
+
+                    String(category.name || '')
+
+                        .toLowerCase();
+
+                const description =
+
+                    String(category.description || '')
+
+                        .toLowerCase();
+
+                return (
+
+                    name.includes(search) ||
+
+                    description.includes(search)
+
+                );
+
+            });
+
+        renderCategories(filtered);
+
+    }
+
+    categorySearch.addEventListener(
+
+        'input',
+
+        filterCategories
+
+    );
+
+    resetButton.addEventListener(
+
+        'click',
+
+        () => {
+
+            categorySearch.value = '';
+
+            renderCategories(allCategories);
+
+            categorySearch.focus();
+
+        }
+
+    );
+
+    /* ============================================================
+
+       RECHERCHE PRINCIPALE
+
+    ============================================================ */
+
+    searchForm.addEventListener(
+
+        'submit',
+
+        event => {
+
+            event.preventDefault();
+
+            const query =
+
+                headerSearch.value.trim();
+
+            if (!query) {
+
+                return;
+
+            }
+
+            window.location.href =
+
+                `recherche.html?q=${encodeURIComponent(query)}`;
+
+        }
+
+    );
+
+    /* ============================================================
+
+       ÉTATS
+
+    ============================================================ */
+
+    function showLoading() {
+
+        categoriesContainer.innerHTML = `
+
+            <div class="status-box">
+
+                <div class="loader"></div>
+
+                <p>
+
+                    Chargement des catégories...
+
+                </p>
+
+            </div>
+
+        `;
+
+        resultCount.textContent =
+
+            'Chargement...';
+
+        heroCount.textContent =
+
+            'Chargement des catégories...';
+
+    }
+
+    function showError(message) {
+
+        categoriesContainer.innerHTML = `
+
+            <div class="status-box error-box">
+
+                <div style="font-size:42px;margin-bottom:12px;">
+
+                    ⚠️
+
+                </div>
+
+                <h3 style="margin-bottom:8px;">
+
+                    Une erreur est survenue
+
+                </h3>
+
+                <p>
+
+                    ${escapeHTML(message)}
+
+                </p>
+
+                <button
+
+                    class="back-button"
+
+                    type="button"
+
+                    onclick="loadCategories()">
+
+                    Réessayer
+
+                </button>
+
+            </div>
+
+        `;
+
+        resultCount.textContent =
+
+            'Erreur';
+
+        heroCount.textContent =
+
+            'Impossible de charger';
+
+    }
+
+    /* ============================================================
+
+       SÉCURITÉ AFFICHAGE TEXTE
+
+    ============================================================ */
+
+    function escapeHTML(value) {
+
+        return String(value)
+
+            .replace(/&/g, '&amp;')
+
+            .replace(/</g, '&lt;')
+
+            .replace(/>/g, '&gt;')
+
+            .replace(/"/g, '&quot;')
+
+            .replace(/'/g, '&#039;');
+
+    }
+
+    function escapeAttribute(value) {
+
+        return escapeHTML(value);
+
+    }
+
+    /* ============================================================
+
+       DÉMARRAGE
+
+    ============================================================ */
+
+    loadCategories();
+
+</script>
+
+</body>
+
+</html>
