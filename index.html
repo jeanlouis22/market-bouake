@@ -6302,9 +6302,9 @@ function addOrRemoveCart(productId){
 
         cart.push({
 
-            product_id:productId,
+            product_id: productId,
 
-            quantity:1
+            quantity: 1
 
         });
 
@@ -6317,6 +6317,10 @@ function addOrRemoveCart(productId){
     }
 
     saveCart();
+
+    updateCartCount();
+
+    updateAllCartButtons();
 
 }
 
