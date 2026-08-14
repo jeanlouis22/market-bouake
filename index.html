@@ -7398,6 +7398,8 @@ function productImage(product){
 
             [
 
+                "image_url_1",
+
                 "image_url",
 
                 "image",
@@ -7414,9 +7416,71 @@ function productImage(product){
 
         );
 
-    if(direct){
+    if(
 
-        return direct;
+        typeof direct === "string" &&
+
+        direct.trim()
+
+    ){
+
+        return direct.trim();
+
+    }
+
+    const image2 =
+
+        getFirst(
+
+            product,
+
+            [
+
+                "image_url_2"
+
+            ],
+
+            ""
+
+        );
+
+    if(
+
+        typeof image2 === "string" &&
+
+        image2.trim()
+
+    ){
+
+        return image2.trim();
+
+    }
+
+    const image3 =
+
+        getFirst(
+
+            product,
+
+            [
+
+                "image_url_3"
+
+            ],
+
+            ""
+
+        );
+
+    if(
+
+        typeof image3 === "string" &&
+
+        image3.trim()
+
+    ){
+
+        return image3.trim();
 
     }
 
@@ -7452,11 +7516,27 @@ function productImage(product){
 
             images[0];
 
-        return typeof first === "string"
+        if(
 
-            ? first
+            typeof first === "string" &&
 
-            : getFirst(
+            first.trim()
+
+        ){
+
+            return first.trim();
+
+        }
+
+        if(
+
+            first &&
+
+            typeof first === "object"
+
+        ){
+
+            return getFirst(
 
                 first,
 
@@ -7473,6 +7553,8 @@ function productImage(product){
                 ""
 
             );
+
+        }
 
     }
 
