@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Catégories | Market Bouaké</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+      margin: 0;
+
+      padding: 0;
+
+    }
+
+    body {
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      background: #f7f8f6;
+
+      color: #17221b;
+
+    }
+
+    a {
+
+      color: inherit;
+
+      text-decoration: none;
+
+    }
+
+    button {
+
+      font: inherit;
+
+      cursor: pointer;
+
+    }
+
+    .header {
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 100;
+
+      background: #ffffff;
+
+      border-bottom: 1px solid #e5e8e5;
+
+    }
+
+    .header-inner {
+
+      max-width: 1200px;
+
+      margin: auto;
+
+      padding: 14px 18px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 14px;
+
+    }
+
+    .logo {
+
+      font-size: 21px;
+
+      font-weight: 800;
+
+      color: #126b3a;
+
+      white-space: nowrap;
+
+    }
+
+    .logo span {
+
+      color: #f39a20;
+
+    }
+
+    .search-box {
+
+      flex: 1;
+
+      display: flex;
+
+      align-items: center;
+
+      background: #f3f5f3;
+
+      border-radius: 12px;
+
+      padding: 0 13px;
+
+      height: 44px;
+
+    }
+
+    .search-box input {
+
+      width: 100%;
+
+      border: 0;
+
+      outline: none;
+
+      background: transparent;
+
+      font-size: 15px;
+
+    }
+
+    .back-btn {
+
+      border: 0;
+
+      background: transparent;
+
+      color: #126b3a;
+
+      font-weight: 700;
+
+      padding: 8px;
+
+      white-space: nowrap;
+
+    }
+
+    main {
+
+      max-width: 1200px;
+
+      margin: auto;
+
+      padding: 24px 18px 100px;
+
+    }
+
+    .page-title {
+
+      margin-bottom: 18px;
+
+    }
+
+    .page-title h1 {
+
+      font-size: 28px;
+
+      margin-bottom: 7px;
+
+    }
+
+    .page-title p {
+
+      color: #68716b;
+
+      font-size: 14px;
+
+    }
+
+    .category-tabs {
+
+      display: flex;
+
+      gap: 9px;
+
+      overflow-x: auto;
+
+      padding-bottom: 10px;
+
+      margin-bottom: 22px;
+
+      scrollbar-width: none;
+
+    }
+
+    .category-tabs::-webkit-scrollbar {
+
+      display: none;
+
+    }
+
+    .category-btn {
+
+      flex: 0 0 auto;
+
+      border: 1px solid #dfe4df;
+
+      background: #ffffff;
+
+      color: #26332b;
+
+      border-radius: 22px;
+
+      padding: 10px 16px;
+
+      font-weight: 700;
+
+      transition: .2s;
+
+    }
+
+    .category-btn.active {
+
+      background: #126b3a;
+
+      color: #ffffff;
+
+      border-color: #126b3a;
+
+    }
+
+    .section-head {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 12px;
+
+      margin-bottom: 15px;
+
+    }
+
+    .section-head h2 {
+
+      font-size: 21px;
+
+    }
+
+    .count {
+
+      color: #6d756f;
+
+      font-size: 14px;
+
+    }
+
+    .products-grid {
+
+      display: grid;
+
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      gap: 14px;
+
+    }
+
+    .product-card {
+
+      background: #ffffff;
+
+      border: 1px solid #e5e8e5;
+
+      border-radius: 15px;
+
+      overflow: hidden;
+
+      transition: transform .2s, box-shadow .2s;
+
+    }
+
+    .product-card:hover {
+
+      transform: translateY(-2px);
+
+      box-shadow: 0 8px 24px rgba(0,0,0,.07);
+
+    }
+
+    .product-image {
+
+      width: 100%;
+
+      aspect-ratio: 1 / 1;
+
+      background: #eef1ee;
+
+      object-fit: cover;
+
+      display: block;
+
+    }
+
+    .product-info {
+
+      padding: 12px;
+
+    }
+
+    .product-name {
+
+      font-size: 15px;
+
+      font-weight: 700;
+
+      margin-bottom: 7px;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+
+    }
+
+    .product-price {
+
+      font-size: 18px;
+
+      font-weight: 800;
+
+      color: #126b3a;
+
+      margin-bottom: 8px;
+
+    }
+
+    .product-stock {
+
+      font-size: 12px;
+
+      color: #68716b;
+
+      margin-bottom: 10px;
+
+    }
+
+    .product-btn {
+
+      width: 100%;
+
+      border: 0;
+
+      background: #126b3a;
+
+      color: #ffffff;
+
+      border-radius: 9px;
+
+      padding: 10px;
+
+      font-weight: 700;
+
+    }
+
+    .empty {
+
+      background: #ffffff;
+
+      border: 1px dashed #d5dbd6;
+
+      border-radius: 15px;
+
+      padding: 35px 20px;
+
+      text-align: center;
+
+      color: #69736d;
+
+      grid-column: 1 / -1;
+
+    }
+
+    .empty strong {
+
+      display: block;
+
+      color: #26332b;
+
+      margin-bottom: 7px;
+
+      font-size: 17px;
+
+    }
+
+    .loading {
+
+      background: #ffffff;
+
+      border-radius: 15px;
+
+      padding: 35px;
+
+      text-align: center;
+
+      color: #69736d;
+
+      grid-column: 1 / -1;
+
+    }
+
+    .error-box {
+
+      background: #fff5f3;
+
+      border: 1px solid #f0c7bf;
+
+      color: #8d3023;
+
+      border-radius: 12px;
+
+      padding: 15px;
+
+      grid-column: 1 / -1;
+
+    }
+
+    .bottom-nav {
+
+      position: fixed;
+
+      bottom: 0;
+
+      left: 0;
+
+      right: 0;
+
+      z-index: 200;
+
+      height: 65px;
+
+      background: #ffffff;
+
+      border-top: 1px solid #e1e5e1;
+
+      display: flex;
+
+      justify-content: space-around;
+
+      align-items: center;
+
+    }
+
+    .bottom-nav a {
+
+      text-align: center;
+
+      font-size: 11px;
+
+      color: #657069;
+
+      font-weight: 600;
+
+    }
+
+    .bottom-nav a.active {
+
+      color: #126b3a;
+
+    }
+
+    .bottom-icon {
+
+      display: block;
+
+      font-size: 20px;
+
+      margin-bottom: 2px;
+
+    }
+
+    @media (min-width: 700px) {
+
+      .products-grid {
+
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+      }
+
+      .bottom-nav {
+
+        display: none;
+
+      }
+
+    }
+
+    @media (min-width: 1000px) {
+
+      .products-grid {
+
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <a href="index.html" class="logo">
+
+      Market <span>Bouaké</span>
+
+    </a>
+
+    <div class="search-box">
+
+      <input
+
+        type="search"
+
+        id="searchInput"
+
+        placeholder="Rechercher un produit..."
+
+        autocomplete="off"
+
+      >
+
+    </div>
+
+    <button class="back-btn" onclick="goHome()">
+
+      Accueil
+
+    </button>
+
+  </div>
+
+</header>
+
+<main>
+
+  <div class="page-title">
+
+    <h1>Catégories</h1>
+
+    <p>Découvrez les produits disponibles sur Market Bouaké.</p>
+
+  </div>
+
+  <div id="categoryTabs" class="category-tabs">
+
+    <button
+
+      class="category-btn active"
+
+      data-category-id="all"
+
+      onclick="selectCategory('all', 'Tous')"
+
+    >
+
+      Tous
+
+    </button>
+
+  </div>
+
+  <div class="section-head">
+
+    <h2 id="productsTitle">Tous les produits</h2>
+
+    <span id="productsCount" class="count"></span>
+
+  </div>
+
+  <div id="productsGrid" class="products-grid">
+
+    <div class="loading">
+
+      Chargement des produits...
+
+    </div>
+
+  </div>
+
+</main>
+
+<nav class="bottom-nav">
+
+  <a href="index.html">
+
+    <span class="bottom-icon">⌂</span>
+
+    Accueil
+
+  </a>
+
+  <a href="panier.html">
+
+    <span class="bottom-icon">🛒</span>
+
+    Panier
+
+  </a>
+
+  <a href="publicites.html">
+
+    <span class="bottom-icon">▣</span>
+
+    Publicités
+
+  </a>
+
+  <a href="compte.html">
+
+    <span class="bottom-icon">●</span>
+
+    Compte
+
+  </a>
+
+</nav>
+
+<script>
+
+  /*
+
+   * ============================================================
+
+   * CONFIGURATION SUPABASE
+
+   * ============================================================
+
+   */
+
+  const SUPABASE_URL =
+
+    'https://qgdxxrnsiyzbacxxfdrg.supabase.co';
+
+  /*
+
+   * Clé publique Supabase.
+
+   * Cette clé est destinée à être utilisée côté navigateur.
+
+   */
+
+  const SUPABASE_ANON_KEY =
+
+    'sb_publishable_QE2in_ocTQQDEt0HW9wSCg_PKSzqo7N';
+
+  const supabaseClient =
+
+    window.supabase.createClient(
+
+      SUPABASE_URL,
+
+      SUPABASE_ANON_KEY
+
+    );
+
+  /*
+
+   * ============================================================
+
+   * ÉLÉMENTS
+
+   * ============================================================
+
+   */
+
+  const categoryTabs =
+
+    document.getElementById('categoryTabs');
+
+  const productsGrid =
+
+    document.getElementById('productsGrid');
+
+  const productsTitle =
+
+    document.getElementById('productsTitle');
+
+  const productsCount =
+
+    document.getElementById('productsCount');
+
+  const searchInput =
+
+    document.getElementById('searchInput');
+
+  /*
+
+   * ============================================================
+
+   * ÉTAT
+
+   * ============================================================
+
+   */
+
+  let categories = [];
+
+  let products = [];
+
+  let selectedCategoryId = 'all';
+
+  let selectedCategoryName = 'Tous';
+
+  /*
+
+   * ============================================================
+
+   * INITIALISATION
+
+   * ============================================================
+
+   */
+
+  document.addEventListener('DOMContentLoaded', async () => {
+
+    await loadCategories();
+
+    await loadProducts();
+
+    setupSearch();
+
+  });
+
+  /*
+
+   * ============================================================
+
+   * CHARGER LES CATÉGORIES
+
+   * ============================================================
+
+   */
+
+  async function loadCategories() {
+
+    try {
+
+      const { data, error } = await supabaseClient
+
+        .from('categories')
+
+        .select('id, name')
+
+        .order('name', { ascending: true });
+
+      if (error) {
+
+        console.error('Erreur catégories:', error);
+
+        return;
+
+      }
+
+      categories = Array.isArray(data) ? data : [];
+
+      renderCategoryButtons();
+
+      /*
+
+       * Si l'URL contient ?category=ID,
+
+       * on sélectionne automatiquement cette catégorie.
+
+       */
+
+      const params = new URLSearchParams(
+
+        window.location.search
+
+      );
+
+      const urlCategoryId =
+
+        params.get('category');
+
+      if (urlCategoryId) {
+
+        const found =
+
+          categories.find(
+
+            category =>
+
+              String(category.id) === String(urlCategoryId)
+
+          );
+
+        if (found) {
+
+          selectCategory(
+
+            found.id,
+
+            found.name
+
+          );
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.error(
+
+        'Erreur chargement catégories:',
+
+        error
+
+      );
+
+    }
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * AFFICHER LES BOUTONS DE CATÉGORIES
+
+   * ============================================================
+
+   */
+
+  function renderCategoryButtons() {
+
+    categoryTabs.innerHTML = '';
+
+    const allButton =
+
+      document.createElement('button');
+
+    allButton.className =
+
+      'category-btn active';
+
+    allButton.dataset.categoryId =
+
+      'all';
+
+    allButton.textContent =
+
+      'Tous';
+
+    allButton.addEventListener(
+
+      'click',
+
+      () => selectCategory('all', 'Tous')
+
+    );
+
+    categoryTabs.appendChild(allButton);
+
+    categories.forEach(category => {
+
+      const button =
+
+        document.createElement('button');
+
+      button.className =
+
+        'category-btn';
+
+      button.dataset.categoryId =
+
+        category.id;
+
+      button.textContent =
+
+        category.name;
+
+      button.addEventListener(
+
+        'click',
+
+        () => selectCategory(
+
+          category.id,
+
+          category.name
+
+        )
+
+      );
+
+      categoryTabs.appendChild(button);
+
+    });
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * SÉLECTIONNER UNE CATÉGORIE
+
+   * ============================================================
+
+   */
+
+  async function selectCategory(
+
+    categoryId,
+
+    categoryName
+
+  ) {
+
+    selectedCategoryId =
+
+      String(categoryId);
+
+    selectedCategoryName =
+
+      categoryName;
+
+    /*
+
+     * Mettre à jour le bouton actif.
+
+     */
+
+    document
+
+      .querySelectorAll('.category-btn')
+
+      .forEach(button => {
+
+        button.classList.toggle(
+
+          'active',
+
+          String(button.dataset.categoryId) ===
+
+          String(categoryId)
+
+        );
+
+      });
+
+    productsTitle.textContent =
+
+      categoryId === 'all'
+
+        ? 'Tous les produits'
+
+        : categoryName;
+
+    /*
+
+     * Affichage immédiat du chargement.
+
+     */
+
+    productsGrid.innerHTML = `
+
+      <div class="loading">
+
+        Chargement des produits...
+
+      </div>
+
+    `;
+
+    /*
+
+     * Charger uniquement les produits
+
+     * de cette catégorie.
+
+     */
+
+    await loadProducts(categoryId);
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * CHARGER LES PRODUITS
+
+   * ============================================================
+
+   */
+
+  async function loadProducts(
+
+    categoryId = 'all'
+
+  ) {
+
+    try {
+
+      let query = supabaseClient
+
+        .from('products')
+
+        .select(`
+
+          id,
+
+          name,
+
+          description,
+
+          price,
+
+          stock,
+
+          sizes,
+
+          image_url_1,
+
+          image_url_2,
+
+          image_url_3,
+
+          category_id,
+
+          seller_id,
+
+          is_active,
+
+          created_at
+
+        `)
+
+        .eq('is_active', true);
+
+      /*
+
+       * IMPORTANT :
+
+       * On filtre directement avec category_id.
+
+       */
+
+      if (
+
+        categoryId &&
+
+        categoryId !== 'all'
+
+      ) {
+
+        query = query.eq(
+
+          'category_id',
+
+          categoryId
+
+        );
+
+      }
+
+      const { data, error } =
+
+        await query.order(
+
+          'created_at',
+
+          { ascending: false }
+
+        );
+
+      if (error) {
+
+        console.error(
+
+          'Erreur produits:',
+
+          error
+
+        );
+
+        productsGrid.innerHTML = `
+
+          <div class="error-box">
+
+            <strong>Impossible de charger les produits.</strong>
+
+            Une erreur est survenue lors de la connexion à Market Bouaké.
+
+          </div>
+
+        `;
+
+        productsCount.textContent = '';
+
+        return;
+
+      }
+
+      products =
+
+        Array.isArray(data)
+
+          ? data
+
+          : [];
+
+      /*
+
+       * Affichage.
+
+       */
+
+      renderProducts(products);
+
+    } catch (error) {
+
+      console.error(
+
+        'Erreur générale produits:',
+
+        error
+
+      );
+
+      productsGrid.innerHTML = `
+
+        <div class="error-box">
+
+          <strong>Connexion impossible.</strong>
+
+          Vérifiez la configuration Supabase.
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * AFFICHER LES PRODUITS
+
+   * ============================================================
+
+   */
+
+  function renderProducts(
+
+    productList
+
+  ) {
+
+    /*
+
+     * Recherche locale éventuelle.
+
+     */
+
+    const search =
+
+      searchInput.value
+
+        .trim()
+
+        .toLowerCase();
+
+    let filteredProducts =
+
+      productList;
+
+    if (search) {
+
+      filteredProducts =
+
+        productList.filter(product => {
+
+          const name =
+
+            String(product.name || '')
+
+              .toLowerCase();
+
+          const description =
+
+            String(product.description || '')
+
+              .toLowerCase();
+
+          return (
+
+            name.includes(search) ||
+
+            description.includes(search)
+
+          );
+
+        });
+
+    }
+
+    productsCount.textContent =
+
+      `${filteredProducts.length} produit${
+
+        filteredProducts.length > 1
+
+          ? 's'
+
+          : ''
+
+      }`;
+
+    if (
+
+      filteredProducts.length === 0
+
+    ) {
+
+      productsGrid.innerHTML = `
+
+        <div class="empty">
+
+          <strong>Aucun produit trouvé</strong>
+
+          Aucun produit disponible dans cette catégorie pour le moment.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+    productsGrid.innerHTML =
+
+      filteredProducts
+
+        .map(product =>
+
+          createProductCard(product)
+
+        )
+
+        .join('');
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * CARTE PRODUIT
+
+   * ============================================================
+
+   */
+
+  function createProductCard(product) {
+
+    const image =
+
+      product.image_url_1 ||
+
+      product.image_url_2 ||
+
+      product.image_url_3 ||
+
+      '';
+
+    const price =
+
+      Number(product.price || 0)
+
+        .toLocaleString(
+
+          'fr-FR'
+
+        );
+
+    const stock =
+
+      Number(product.stock || 0);
+
+    return `
+
+      <article class="product-card">
+
+        ${
+
+          image
+
+            ? `
+
+              <img
+
+                class="product-image"
+
+                src="${escapeAttribute(image)}"
+
+                alt="${escapeAttribute(product.name || 'Produit')}"
+
+                loading="lazy"
+
+                onerror="this.style.display='none';"
+
+              >
+
+            `
+
+            : `
+
+              <div
+
+                class="product-image"
+
+                style="
+
+                  display:flex;
+
+                  align-items:center;
+
+                  justify-content:center;
+
+                  color:#69736d;
+
+                "
+
+              >
+
+                Pas d'image
+
+              </div>
+
+            `
+
+        }
+
+        <div class="product-info">
+
+          <div class="product-name">
+
+            ${escapeHtml(product.name || 'Produit')}
+
+          </div>
+
+          <div class="product-price">
+
+            ${price} FCFA
+
+          </div>
+
+          <div class="product-stock">
+
+            ${
+
+              stock > 0
+
+                ? `${stock} disponible${stock > 1 ? 's' : ''}`
+
+                : 'Rupture de stock'
+
+            }
+
+          </div>
+
+          <button
+
+            class="product-btn"
+
+            onclick="openProduct('${product.id}')"
+
+          >
+
+            Voir le produit
+
+          </button>
+
+        </div>
+
+      </article>
+
+    `;
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * RECHERCHE
+
+   * ============================================================
+
+   */
+
+  function setupSearch() {
+
+    searchInput.addEventListener(
+
+      'input',
+
+      () => {
+
+        renderProducts(products);
+
+      }
+
+    );
+
+    searchInput.addEventListener(
+
+      'keydown',
+
+      event => {
+
+        if (
+
+          event.key === 'Enter'
+
+        ) {
+
+          const query =
+
+            searchInput.value.trim();
+
+          if (query) {
+
+            window.location.href =
+
+              `recherche.html?q=${encodeURIComponent(query)}`;
+
+          }
+
+        }
+
+      }
+
+    );
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * OUVRIR UN PRODUIT
+
+   * ============================================================
+
+   */
+
+  function openProduct(productId) {
+
+    if (!productId) {
+
+      return;
+
+    }
+
+    window.location.href =
+
+      `produit.html?id=${encodeURIComponent(productId)}`;
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * RETOUR ACCUEIL
+
+   * ============================================================
+
+   */
+
+  function goHome() {
+
+    window.location.href =
+
+      'index.html';
+
+  }
+
+  /*
+
+   * ============================================================
+
+   * SÉCURISER L'AFFICHAGE HTML
+
+   * ============================================================
+
+   */
+
+  function escapeHtml(value) {
+
+    return String(value)
+
+      .replace(/&/g, '&amp;')
+
+      .replace(/</g, '&lt;')
+
+      .replace(/>/g, '&gt;')
+
+      .replace(/"/g, '&quot;')
+
+      .replace(/'/g, '&#039;');
+
+  }
+
+  function escapeAttribute(value) {
+
+    return escapeHtml(value);
+
+  }
+
+</script>
+
+</body>
+
+</html>
