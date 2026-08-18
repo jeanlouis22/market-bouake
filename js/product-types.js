@@ -1,625 +1,1061 @@
-/* =========================================================
+/* ============================================================
 
    MARKET BOUAKÉ
 
    product-types.js
 
-   JOUR 4 — FICHIER DESTINÉ À ÊTRE DÉFINITIF
+   JOUR 4 — FICHIER DÉFINITIF
+
+   ============================================================
 
    Rôle :
 
-   - déterminer le type de contenu ;
+   - Identifier le type réel d'une annonce/produit
 
-   - déterminer si le panier est pertinent ;
+   - Déterminer les actions pertinentes
 
-   - préparer les caractéristiques dynamiques ;
+   - Déterminer les caractéristiques pertinentes
 
-   - gérer les données immobilières ;
+   - Ne jamais inventer de données
 
-   - ne rien inventer lorsqu'une donnée n'existe pas.
+   - Préparer la fiche produit pour les futurs modules
 
-   ========================================================= */
+   IMPORTANT :
+
+   Ce fichier ne gère PAS :
+
+   - le panier complet       → Jour 5
+
+   - les favoris complets    → Jour 5
+
+   - la recherche            → Jour 6
+
+   - la réservation complète → Jour 8
+
+   - l'espace vendeur        → Jour 11
+
+   Il sert uniquement à déterminer le comportement d'affichage.
+
+============================================================ */
 
 (function () {
 
-  "use strict";
+    "use strict";
 
-  const PROPERTY_WORDS = [
+    const MarketBouakeProductTypes = {
 
-    "immobilier",
+        /* ======================================================
 
-    "immobilière",
+           TYPES PRINCIPAUX
 
-    "immobiliere",
+        ====================================================== */
 
-    "maison",
+        TYPES: Object.freeze({
 
-    "appartement",
+            STANDARD: "standard",
 
-    "studio",
+            PROPERTY: "property",
 
-    "terrain",
+            RESIDENCE: "residence",
 
-    "résidence",
+            SERVICE: "service",
 
-    "residence",
+            RESERVATION: "reservation"
 
-    "villa",
+        }),
 
-    "logement",
+        /* ======================================================
 
-    "location",
+           MODES D'ACTION
 
-    "terrain"
+        ====================================================== */
 
-  ];
+        ACTIONS: Object.freeze({
 
-  function normalize(value) {
+            CART: "cart",
 
-    return String(value || "")
+            INTEREST: "interest",
 
-      .normalize("NFD")
+            RESERVATION: "reservation",
 
-      .replace(/[\u0300-\u036f]/g, "")
+            CONTACT: "contact"
 
-      .toLowerCase()
+        }),
 
-      .trim();
+        /* ======================================================
 
-  }
+           TYPES IMMOBILIERS RECONNUS
 
-  function containsPropertyWord(value) {
+        ====================================================== */
 
-    const text = normalize(value);
+        PROPERTY_KEYWORDS: Object.freeze([
 
-    return PROPERTY_WORDS.some(word => text.includes(normalize(word)));
+            "immobilier",
 
-  }
+            "maison",
 
-  function isPropertyProduct(product, category) {
+            "appartement",
 
-    if (!product) return false;
+            "studio",
 
-    /*
+            "terrain",
 
-      La présence de données immobilières est un indicateur
+            "villa",
 
-      plus fiable qu'une simple catégorie.
+            "résidence",
 
-    */
+            "residence",
 
-    if (
+            "logement",
 
-      product.property_type ||
+            "location",
 
-      product.monthly_price !== null && product.monthly_price !== undefined ||
+            "propriété",
 
-      product.deposit_amount !== null && product.deposit_amount !== undefined ||
+            "propriete"
 
-      product.rooms_count !== null && product.rooms_count !== undefined ||
+        ]),
 
-      product.bedrooms_count !== null && product.bedrooms_count !== undefined ||
+        /* ======================================================
 
-      product.check_in_time ||
+           NORMALISATION
 
-      product.check_out_time ||
+        ====================================================== */
 
-      product.capacity ||
+        normalize(value) {
 
-      product.amenities
+            if (value === null || value === undefined) {
 
-    ) {
+                return "";
 
-      return true;
+            }
 
-    }
+            return String(value)
 
-    if (containsPropertyWord(category?.name)) return true;
+                .trim()
 
-    if (containsPropertyWord(product.name)) return true;
+                .toLowerCase()
 
-    return false;
+                .normalize("NFD")
 
-  }
+                .replace(/[\u0300-\u036f]/g, "");
 
-  function getProductType(product, category) {
+        },
 
-    if (isPropertyProduct(product, category)) {
+        /* ======================================================
 
-      const text = normalize(
+           TEST IMMOBILIER
 
-        [
+        ====================================================== */
 
-          product.property_type,
+        isProperty(product) {
 
-          category?.name,
+            if (!product || typeof product !== "object") {
 
-          product.name
+                return false;
 
-        ].join(" ")
+            }
 
-      );
+            /*
 
-      if (
+             * Les produits immobiliers possèdent actuellement
 
-        text.includes("residence") ||
+             * plusieurs colonnes spécifiques dans Supabase :
 
-        text.includes("studio") ||
+             *
 
-        text.includes("villa") ||
+             * property_type
 
-        product.check_in_time ||
+             * monthly_price
 
-        product.check_out_time ||
+             * deposit_amount
 
-        product.capacity
+             * location
 
-      ) {
+             * rooms_count
 
-        return "residence";
+             * bedrooms_count
 
-      }
+             * availability
 
-      return "property";
+             * conditions
 
-    }
+             * check_in_time
 
-    return "product";
+             * check_out_time
 
-  }
+             * capacity
 
-  function getTransactionMode(product, category) {
+             * amenities
 
-    const type = getProductType(product, category);
+             * pricing_type
 
-    /*
+             */
 
-      La colonne transaction_mode n'existe pas encore
+            const propertyFields = [
 
-      dans la structure products auditée.
+                product.property_type,
 
-      Si elle est ajoutée ultérieurement, ce module pourra
+                product.monthly_price,
 
-      immédiatement l'utiliser sans refaire la fiche.
+                product.deposit_amount,
 
-    */
+                product.rooms_count,
 
-    if (product?.transaction_mode) {
+                product.bedrooms_count,
 
-      return String(product.transaction_mode).toLowerCase();
+                product.check_in_time,
 
-    }
+                product.check_out_time,
 
-    if (type === "property") {
+                product.capacity,
 
-      return "interest";
+                product.amenities,
 
-    }
+                product.pricing_type
 
-    if (type === "residence") {
+            ];
 
-      return "reservation";
+            const hasPropertyData = propertyFields.some(value => {
 
-    }
+                return value !== null &&
 
-    return "cart";
+                       value !== undefined &&
 
-  }
+                       value !== "";
 
-  function getImages(product) {
+            });
 
-    if (!product) return [];
+            if (hasPropertyData) {
 
-    return [
+                return true;
 
-      product.image_url_1,
+            }
 
-      product.image_url_2,
+            /*
 
-      product.image_url_3
+             * Vérification complémentaire du nom.
 
-    ].filter(Boolean);
+             */
 
-  }
+            const name = this.normalize(product.name);
 
-  function getPrice(product) {
+            if (
 
-    if (!product) return 0;
+                name &&
 
-    const price = Number(product.price || 0);
+                this.PROPERTY_KEYWORDS.some(keyword => {
 
-    if (Number.isFinite(price)) {
+                    return name.includes(this.normalize(keyword));
 
-      return price;
+                })
 
-    }
+            ) {
 
-    return 0;
+                return true;
 
-  }
+            }
 
-  function getOldPrice(product) {
+            return false;
 
-    /*
+        },
 
-      La structure actuelle de products ne contient pas encore
+        /* ======================================================
 
-      explicitement old_price.
+           TYPE IMMOBILIER
 
-      Si une colonne old_price ou original_price est ajoutée,
+        ====================================================== */
 
-      elle sera automatiquement reconnue.
+        getPropertyType(product) {
 
-    */
+            if (!product) {
 
-    const possible = [
+                return null;
 
-      product?.old_price,
+            }
 
-      product?.original_price,
+            const type = this.normalize(product.property_type);
 
-      product?.previous_price
+            if (type) {
 
-    ];
+                return type;
 
-    for (const value of possible) {
+            }
 
-      if (value !== null && value !== undefined && Number(value) > 0) {
+            const name = this.normalize(product.name);
 
-        return Number(value);
+            if (name.includes("residence") ||
 
-      }
+                name.includes("studio meubl") ||
 
-    }
+                name.includes("appartement meubl")) {
 
-    return null;
+                return this.TYPES.RESIDENCE;
 
-  }
+            }
 
-  function getDiscount(product) {
+            return this.TYPES.PROPERTY;
 
-    const oldPrice = getOldPrice(product);
+        },
 
-    const currentPrice = getPrice(product);
+        /* ======================================================
 
-    if (!oldPrice || !currentPrice || oldPrice <= currentPrice) {
+           DÉTERMINATION DU TYPE
 
-      return null;
+        ====================================================== */
 
-    }
+        getType(product) {
 
-    return Math.round(((oldPrice - currentPrice) / oldPrice) * 100);
+            if (!product || typeof product !== "object") {
 
-  }
+                return this.TYPES.STANDARD;
 
-  function getAvailability(product) {
+            }
 
-    if (!product) {
+            if (this.isProperty(product)) {
 
-      return {
+                const propertyType = this.getPropertyType(product);
 
-        status: "unknown",
+                if (
 
-        label: "Disponibilité inconnue",
+                    propertyType === "residence" ||
 
-        canBuy: false
+                    propertyType === "residence meublee" ||
 
-      };
+                    propertyType === "residence meuble"
 
-    }
+                ) {
 
-    const stock = Number(product.stock ?? 0);
+                    return this.TYPES.RESIDENCE;
 
-    if (stock <= 0) {
+                }
 
-      return {
+                return this.TYPES.PROPERTY;
 
-        status: "out",
+            }
 
-        label: "Rupture de stock",
+            return this.TYPES.STANDARD;
 
-        canBuy: false,
+        },
 
-        stock: 0
+        /* ======================================================
 
-      };
+           MODE DE TRANSACTION
 
-    }
+        ====================================================== */
 
-    if (stock <= 5) {
+        getTransactionMode(product) {
 
-      return {
+            const type = this.getType(product);
 
-        status: "limited",
+            /*
 
-        label: `Plus que ${stock} disponible${stock > 1 ? "s" : ""}`,
+             * Immobilier :
 
-        canBuy: true,
+             * pas de panier commercial classique.
 
-        stock
+             */
 
-      };
+            if (type === this.TYPES.PROPERTY) {
 
-    }
+                return this.ACTIONS.INTEREST;
 
-    return {
+            }
 
-      status: "available",
+            /*
 
-      label: "Disponible",
+             * Résidence :
 
-      canBuy: true,
+             * réservation préparée.
 
-      stock
+             *
+
+             * La réservation complète sera développée
+
+             * au JOUR 8.
+
+             */
+
+            if (type === this.TYPES.RESIDENCE) {
+
+                return this.ACTIONS.RESERVATION;
+
+            }
+
+            /*
+
+             * Pour les produits standards, le comportement
+
+             * actuel est l'achat via panier.
+
+             */
+
+            return this.ACTIONS.CART;
+
+        },
+
+        /* ======================================================
+
+           ACTIONS DISPONIBLES
+
+        ====================================================== */
+
+        getAvailableActions(product) {
+
+            const mode = this.getTransactionMode(product);
+
+            switch (mode) {
+
+                case this.ACTIONS.INTEREST:
+
+                    return Object.freeze([
+
+                        this.ACTIONS.INTEREST,
+
+                        this.ACTIONS.CONTACT
+
+                    ]);
+
+                case this.ACTIONS.RESERVATION:
+
+                    return Object.freeze([
+
+                        this.ACTIONS.RESERVATION,
+
+                        this.ACTIONS.CONTACT
+
+                    ]);
+
+                case this.ACTIONS.CONTACT:
+
+                    return Object.freeze([
+
+                        this.ACTIONS.CONTACT
+
+                    ]);
+
+                case this.ACTIONS.CART:
+
+                default:
+
+                    return Object.freeze([
+
+                        this.ACTIONS.CART,
+
+                        this.ACTIONS.CONTACT
+
+                    ]);
+
+            }
+
+        },
+
+        /* ======================================================
+
+           PANIER AUTORISÉ ?
+
+        ====================================================== */
+
+        canUseCart(product) {
+
+            return this.getTransactionMode(product) === this.ACTIONS.CART;
+
+        },
+
+        /* ======================================================
+
+           RÉSERVATION AUTORISÉE ?
+
+        ====================================================== */
+
+        canReserve(product) {
+
+            return this.getTransactionMode(product) === this.ACTIONS.RESERVATION;
+
+        },
+
+        /* ======================================================
+
+           INTÉRESSÉ AUTORISÉ ?
+
+        ====================================================== */
+
+        canShowInterest(product) {
+
+            return this.getTransactionMode(product) === this.ACTIONS.INTEREST;
+
+        },
+
+        /* ======================================================
+
+           OPTIONS DE TAILLE
+
+        ====================================================== */
+
+        hasSizes(product) {
+
+            if (!product || !Array.isArray(product.sizes)) {
+
+                return false;
+
+            }
+
+            return product.sizes.some(size => {
+
+                return size !== null &&
+
+                       size !== undefined &&
+
+                       String(size).trim() !== "";
+
+            });
+
+        },
+
+        getSizes(product) {
+
+            if (!this.hasSizes(product)) {
+
+                return [];
+
+            }
+
+            return product.sizes
+
+                .map(size => String(size).trim())
+
+                .filter(Boolean);
+
+        },
+
+        /* ======================================================
+
+           STOCK
+
+        ====================================================== */
+
+        getStock(product) {
+
+            if (!product) {
+
+                return 0;
+
+            }
+
+            const stock = Number(product.stock);
+
+            if (!Number.isFinite(stock) || stock < 0) {
+
+                return 0;
+
+            }
+
+            return stock;
+
+        },
+
+        isOutOfStock(product) {
+
+            /*
+
+             * Le stock concerne principalement les produits
+
+             * commerciaux.
+
+             *
+
+             * Pour l'immobilier/résidence, on ne considère
+
+             * pas automatiquement stock = 0 comme une rupture
+
+             * commerciale.
+
+             */
+
+            if (!this.canUseCart(product)) {
+
+                return false;
+
+            }
+
+            return this.getStock(product) <= 0;
+
+        },
+
+        /* ======================================================
+
+           PROMOTION
+
+        ====================================================== */
+
+        getPrice(product) {
+
+            if (!product) {
+
+                return 0;
+
+            }
+
+            const price = Number(product.price);
+
+            return Number.isFinite(price) && price >= 0
+
+                ? price
+
+                : 0;
+
+        },
+
+        /*
+
+         * La table products actuelle ne contient pas encore
+
+         * de colonne "old_price".
+
+         *
+
+         * Nous ne fabriquons donc aucune promotion.
+
+         *
+
+         * Cette fonction est volontairement préparée pour
+
+         * accepter plus tard les vraies données de promotion.
+
+         */
+
+        getPromotion(product) {
+
+            if (!product || typeof product !== "object") {
+
+                return null;
+
+            }
+
+            const oldPrice = Number(
+
+                product.old_price ??
+
+                product.original_price ??
+
+                product.previous_price
+
+            );
+
+            const newPrice = Number(
+
+                product.new_price ??
+
+                product.sale_price
+
+            );
+
+            if (
+
+                Number.isFinite(oldPrice) &&
+
+                Number.isFinite(newPrice) &&
+
+                oldPrice > 0 &&
+
+                newPrice >= 0 &&
+
+                newPrice < oldPrice
+
+            ) {
+
+                const percentage = Math.round(
+
+                    ((oldPrice - newPrice) / oldPrice) * 100
+
+                );
+
+                return Object.freeze({
+
+                    active: true,
+
+                    oldPrice,
+
+                    newPrice,
+
+                    percentage
+
+                });
+
+            }
+
+            return Object.freeze({
+
+                active: false,
+
+                oldPrice: null,
+
+                newPrice: null,
+
+                percentage: null
+
+            });
+
+        },
+
+        /* ======================================================
+
+           CARACTÉRISTIQUES
+
+        ====================================================== */
+
+        getCharacteristics(product) {
+
+            if (!product) {
+
+                return [];
+
+            }
+
+            const characteristics = [];
+
+            /*
+
+             * Immobilier
+
+             */
+
+            if (this.isProperty(product)) {
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Type",
+
+                    product.property_type
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Localisation",
+
+                    product.location
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Pièces",
+
+                    product.rooms_count
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Chambres",
+
+                    product.bedrooms_count
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Disponibilité",
+
+                    product.availability
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Capacité",
+
+                    product.capacity
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Équipements",
+
+                    product.amenities
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Conditions",
+
+                    product.conditions
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Type de tarification",
+
+                    product.pricing_type
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Heure d'arrivée",
+
+                    product.check_in_time
+
+                );
+
+                this.addCharacteristic(
+
+                    characteristics,
+
+                    "Heure de départ",
+
+                    product.check_out_time
+
+                );
+
+                return characteristics;
+
+            }
+
+            /*
+
+             * Produit standard
+
+             *
+
+             * On n'invente aucune caractéristique.
+
+             * Les tailles existantes sont simplement récupérées.
+
+             */
+
+            if (this.hasSizes(product)) {
+
+                characteristics.push({
+
+                    key: "sizes",
+
+                    label: "Tailles disponibles",
+
+                    value: this.getSizes(product).join(", ")
+
+                });
+
+            }
+
+            return characteristics;
+
+        },
+
+        addCharacteristic(list, label, value) {
+
+            if (
+
+                value === null ||
+
+                value === undefined ||
+
+                String(value).trim() === ""
+
+            ) {
+
+                return;
+
+            }
+
+            list.push({
+
+                key: this.normalize(label).replace(/\s+/g, "_"),
+
+                label,
+
+                value
+
+            });
+
+        },
+
+        /* ======================================================
+
+           INFORMATIONS DE DISPONIBILITÉ
+
+        ====================================================== */
+
+        getAvailability(product) {
+
+            if (!product) {
+
+                return {
+
+                    available: false,
+
+                    label: "Indisponible"
+
+                };
+
+            }
+
+            if (this.isOutOfStock(product)) {
+
+                return {
+
+                    available: false,
+
+                    label: "Rupture de stock"
+
+                };
+
+            }
+
+            /*
+
+             * Pour les produits immobiliers, on utilise la
+
+             * disponibilité renseignée par le vendeur.
+
+             */
+
+            if (this.isProperty(product)) {
+
+                if (product.availability) {
+
+                    return {
+
+                        available: true,
+
+                        label: String(product.availability)
+
+                    };
+
+                }
+
+                return {
+
+                    available: true,
+
+                    label: "Disponible"
+
+                };
+
+            }
+
+            return {
+
+                available: true,
+
+                label: "Disponible"
+
+            };
+
+        },
+
+        /* ======================================================
+
+           RÉSUMÉ COMPLET POUR PRODUCT-DETAIL.JS
+
+        ====================================================== */
+
+        analyze(product) {
+
+            const type = this.getType(product);
+
+            const transactionMode = this.getTransactionMode(product);
+
+            return Object.freeze({
+
+                type,
+
+                transactionMode,
+
+                isProperty:
+
+                    type === this.TYPES.PROPERTY ||
+
+                    type === this.TYPES.RESIDENCE,
+
+                isResidence:
+
+                    type === this.TYPES.RESIDENCE,
+
+                canUseCart:
+
+                    this.canUseCart(product),
+
+                canReserve:
+
+                    this.canReserve(product),
+
+                canShowInterest:
+
+                    this.canShowInterest(product),
+
+                canContact: true,
+
+                hasSizes:
+
+                    this.hasSizes(product),
+
+                sizes:
+
+                    this.getSizes(product),
+
+                stock:
+
+                    this.getStock(product),
+
+                outOfStock:
+
+                    this.isOutOfStock(product),
+
+                availability:
+
+                    this.getAvailability(product),
+
+                promotion:
+
+                    this.getPromotion(product),
+
+                characteristics:
+
+                    this.getCharacteristics(product),
+
+                actions:
+
+                    this.getAvailableActions(product)
+
+            });
+
+        }
 
     };
 
-  }
+    /* ==========================================================
 
-  function getProductOptions(product) {
+       EXPOSITION GLOBALE
 
-    const options = [];
+    ========================================================== */
 
-    /*
+    window.MarketBouakeProductTypes =
 
-      La colonne sizes existe actuellement dans products.
-
-    */
-
-    if (Array.isArray(product?.sizes) && product.sizes.length) {
-
-      options.push({
-
-        key: "size",
-
-        label: "Taille",
-
-        values: product.sizes.filter(Boolean)
-
-      });
-
-    }
-
-    /*
-
-      Préparation pour de futures colonnes d'options.
-
-      Rien n'est affiché si elles n'existent pas.
-
-    */
-
-    const futureOptionColumns = [
-
-      ["color", "Couleur"],
-
-      ["colors", "Couleurs"],
-
-      ["storage", "Stockage"],
-
-      ["ram", "RAM"],
-
-      ["capacity_option", "Capacité"],
-
-      ["flavor", "Parfum"],
-
-      ["portion", "Portions"],
-
-      ["material", "Matière"],
-
-      ["shoe_size", "Pointure"]
-
-    ];
-
-    futureOptionColumns.forEach(([key, label]) => {
-
-      const value = product?.[key];
-
-      if (Array.isArray(value) && value.length) {
-
-        options.push({
-
-          key,
-
-          label,
-
-          values: value.filter(Boolean)
-
-        });
-
-      } else if (value !== null && value !== undefined && String(value).trim()) {
-
-        options.push({
-
-          key,
-
-          label,
-
-          values: [String(value)]
-
-        });
-
-      }
-
-    });
-
-    return options;
-
-  }
-
-  function getCharacteristics(product, category) {
-
-    if (!product) return [];
-
-    const characteristics = [];
-
-    function add(label, value, formatter = value => value) {
-
-      if (
-
-        value !== null &&
-
-        value !== undefined &&
-
-        String(value).trim() !== ""
-
-      ) {
-
-        characteristics.push({
-
-          label,
-
-          value: formatter(value)
-
-        });
-
-      }
-
-    }
-
-    const type = getProductType(product, category);
-
-    if (type === "property" || type === "residence") {
-
-      add("Type", product.property_type);
-
-      add("Localisation", product.location);
-
-      add("Pièces", product.rooms_count);
-
-      add("Chambres", product.bedrooms_count);
-
-      add("Disponibilité", product.availability);
-
-      add("Capacité", product.capacity);
-
-      add("Tarification", product.pricing_type);
-
-      add("Heure d'arrivée", product.check_in_time);
-
-      add("Heure de départ", product.check_out_time);
-
-      add("Équipements", product.amenities);
-
-      add("Conditions", product.conditions);
-
-      if (product.monthly_price !== null && product.monthly_price !== undefined) {
-
-        add(
-
-          "Prix mensuel",
-
-          product.monthly_price,
-
-          value => formatCurrency(value)
-
-        );
-
-      }
-
-      if (product.deposit_amount !== null && product.deposit_amount !== undefined) {
-
-        add(
-
-          "Caution",
-
-          product.deposit_amount,
-
-          value => formatCurrency(value)
-
-        );
-
-      }
-
-    }
-
-    /*
-
-      Caractéristiques supplémentaires éventuellement ajoutées
-
-      par le système vendeur.
-
-    */
-
-    const futureFields = [
-
-      ["brand", "Marque"],
-
-      ["model", "Modèle"],
-
-      ["storage", "Stockage"],
-
-      ["ram", "RAM"],
-
-      ["processor", "Processeur"],
-
-      ["material", "Matière"],
-
-      ["condition", "État"],
-
-      ["quantity_info", "Quantité"],
-
-      ["ingredients", "Ingrédients"]
-
-    ];
-
-    futureFields.forEach(([key, label]) => {
-
-      if (product[key] !== undefined && product[key] !== null) {
-
-        add(label, product[key]);
-
-      }
-
-    });
-
-    return characteristics;
-
-  }
-
-  function formatCurrency(value) {
-
-    const number = Number(value);
-
-    if (!Number.isFinite(number)) {
-
-      return String(value);
-
-    }
-
-    return `${new Intl.NumberFormat("fr-FR", {
-
-      maximumFractionDigits: 0
-
-    }).format(number)} FCFA`;
-
-  }
-
-  window.MarketBouakeProductTypes = {
-
-    normalize,
-
-    isPropertyProduct,
-
-    getProductType,
-
-    getTransactionMode,
-
-    getImages,
-
-    getPrice,
-
-    getOldPrice,
-
-    getDiscount,
-
-    getAvailability,
-
-    getProductOptions,
-
-    getCharacteristics,
-
-    formatCurrency
-
-  };
+        Object.freeze(MarketBouakeProductTypes);
 
 })();
