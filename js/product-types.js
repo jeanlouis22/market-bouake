@@ -4,93 +4,227 @@
 
    product-types.js
 
-   JOUR 4 — FICHIER DÉFINITIF
+   JOUR 4 — TYPES ET MODES DE TRANSACTION DES PRODUITS
 
-   ============================================================
+   FICHIER DÉFINITIF
 
-   Rôle :
+   ------------------------------------------------------------
 
-   - Identifier le type réel d'une annonce/produit
+   RESPONSABILITÉS
 
-   - Déterminer les actions pertinentes
+   ------------------------------------------------------------
 
-   - Déterminer les caractéristiques pertinentes
+   - déterminer le type réel d'une offre
 
-   - Ne jamais inventer de données
+   - déterminer son mode de transaction
 
-   - Préparer la fiche produit pour les futurs modules
+   - gérer les produits classiques
 
-   IMPORTANT :
+   - gérer les produits sur réservation
 
-   Ce fichier ne gère PAS :
+   - gérer les offres nécessitant un contact
 
-   - le panier complet       → Jour 5
+   - gérer les offres "Je suis intéressé"
 
-   - les favoris complets    → Jour 5
+   - gérer les offres avec plusieurs modes
 
-   - la recherche            → Jour 6
+   - déterminer les options disponibles
 
-   - la réservation complète → Jour 8
+   - déterminer si la quantité est applicable
 
-   - l'espace vendeur        → Jour 11
+   - déterminer si les tailles sont applicables
 
-   Il sert uniquement à déterminer le comportement d'affichage.
+   - préparer les informations nécessaires à produit.html
 
-============================================================ */
+   ------------------------------------------------------------
 
-(function () {
+   NE GÈRE PAS
+
+   ------------------------------------------------------------
+
+   - panier complet → Jour 5
+
+   - favoris complet → Jour 5
+
+   - recherche → Jour 6
+
+   - catégories interactives → Jour 6
+
+   - thèmes → Jour 7
+
+   - immobilier complet → Jour 8
+
+   - authentification → Jour 9
+
+   IMPORTANT
+
+   Aucun texte, prix, option ou caractéristique fictive
+
+   n'est créé par ce module.
+
+   ============================================================ */
+
+(() => {
 
     "use strict";
 
-    const MarketBouakeProductTypes = {
+    /* ========================================================
 
-        /* ======================================================
+       1. CONFIGURATION
 
-           TYPES PRINCIPAUX
+       ======================================================== */
 
-        ====================================================== */
+    const CONFIG = {
 
-        TYPES: Object.freeze({
+        defaultType: "product",
 
-            STANDARD: "standard",
+        defaultTransaction: "cart",
 
-            PROPERTY: "property",
+        transactionModes: [
 
-            RESIDENCE: "residence",
+            "cart",
 
-            SERVICE: "service",
+            "reservation",
 
-            RESERVATION: "reservation"
+            "interest",
 
-        }),
+            "contact",
 
-        /* ======================================================
+            "cart_reservation",
 
-           MODES D'ACTION
+            "reservation_interest",
 
-        ====================================================== */
+            "cart_contact",
 
-        ACTIONS: Object.freeze({
+            "interest_contact"
 
-            CART: "cart",
+        ]
 
-            INTEREST: "interest",
+    };
 
-            RESERVATION: "reservation",
+    /* ========================================================
 
-            CONTACT: "contact"
+       2. OUTILS
 
-        }),
+       ======================================================== */
 
-        /* ======================================================
+    function normalize(value) {
 
-           TYPES IMMOBILIERS RECONNUS
+        return String(value || "")
 
-        ====================================================== */
+            .normalize("NFD")
 
-        PROPERTY_KEYWORDS: Object.freeze([
+            .replace(/[\u0300-\u036f]/g, "")
+
+            .toLowerCase()
+
+            .trim();
+
+    }
+
+    function hasValue(value) {
+
+        return (
+
+            value !== undefined &&
+
+            value !== null &&
+
+            String(value).trim() !== ""
+
+        );
+
+    }
+
+    function toBoolean(value) {
+
+        if (typeof value === "boolean") {
+
+            return value;
+
+        }
+
+        if (typeof value === "number") {
+
+            return value !== 0;
+
+        }
+
+        const valueNormalized = normalize(value);
+
+        return (
+
+            valueNormalized === "true" ||
+
+            valueNormalized === "1" ||
+
+            valueNormalized === "yes" ||
+
+            valueNormalized === "oui"
+
+        );
+
+    }
+
+    function arrayValue(value) {
+
+        if (Array.isArray(value)) {
+
+            return value.filter(item =>
+
+                hasValue(item)
+
+            );
+
+        }
+
+        return [];
+
+    }
+
+    /* ========================================================
+
+       3. DÉTECTION IMMOBILIER / RÉSIDENCE
+
+       ======================================================== */
+
+    function isRealEstate(product) {
+
+        if (!product) {
+
+            return false;
+
+        }
+
+        const type = normalize(
+
+            product.product_type ||
+
+            product.type ||
+
+            product.offer_type ||
+
+            product.property_type
+
+        );
+
+        const category = normalize(
+
+            product.category_name ||
+
+            product.category?.name ||
+
+            product.category
+
+        );
+
+        const realEstateWords = [
 
             "immobilier",
+
+            "immobilier & residence",
+
+            "immobilier et residence",
 
             "maison",
 
@@ -102,960 +236,1442 @@
 
             "villa",
 
-            "résidence",
-
             "residence",
+
+            "résidence",
 
             "logement",
 
-            "location",
+            "location"
 
-            "propriété",
+        ];
 
-            "propriete"
+        if (
 
-        ]),
+            realEstateWords.some(word =>
 
-        /* ======================================================
+                type.includes(normalize(word))
 
-           NORMALISATION
+            )
 
-        ====================================================== */
+        ) {
 
-        normalize(value) {
+            return true;
 
-            if (value === null || value === undefined) {
+        }
 
-                return "";
+        if (
 
-            }
+            realEstateWords.some(word =>
 
-            return String(value)
+                category.includes(normalize(word))
 
-                .trim()
+            )
 
-                .toLowerCase()
+        ) {
 
-                .normalize("NFD")
+            return true;
 
-                .replace(/[\u0300-\u036f]/g, "");
+        }
 
-        },
+        const propertyFields = [
 
-        /* ======================================================
+            "property_type",
 
-           TEST IMMOBILIER
+            "monthly_price",
 
-        ====================================================== */
+            "deposit_amount",
 
-        isProperty(product) {
+            "rooms_count",
 
-            if (!product || typeof product !== "object") {
+            "bedrooms_count",
 
-                return false;
+            "check_in_time",
 
-            }
+            "check_out_time",
 
-            /*
+            "capacity"
 
-             * Les produits immobiliers possèdent actuellement
+        ];
 
-             * plusieurs colonnes spécifiques dans Supabase :
+        return propertyFields.some(field =>
 
-             *
+            product[field] !== undefined &&
 
-             * property_type
+            product[field] !== null
 
-             * monthly_price
+        );
 
-             * deposit_amount
+    }
 
-             * location
+    /* ========================================================
 
-             * rooms_count
+       4. DÉTECTION RÉSIDENCE
 
-             * bedrooms_count
+       ======================================================== */
 
-             * availability
+    function isResidence(product) {
 
-             * conditions
-
-             * check_in_time
-
-             * check_out_time
-
-             * capacity
-
-             * amenities
-
-             * pricing_type
-
-             */
-
-            const propertyFields = [
-
-                product.property_type,
-
-                product.monthly_price,
-
-                product.deposit_amount,
-
-                product.rooms_count,
-
-                product.bedrooms_count,
-
-                product.check_in_time,
-
-                product.check_out_time,
-
-                product.capacity,
-
-                product.amenities,
-
-                product.pricing_type
-
-            ];
-
-            const hasPropertyData = propertyFields.some(value => {
-
-                return value !== null &&
-
-                       value !== undefined &&
-
-                       value !== "";
-
-            });
-
-            if (hasPropertyData) {
-
-                return true;
-
-            }
-
-            /*
-
-             * Vérification complémentaire du nom.
-
-             */
-
-            const name = this.normalize(product.name);
-
-            if (
-
-                name &&
-
-                this.PROPERTY_KEYWORDS.some(keyword => {
-
-                    return name.includes(this.normalize(keyword));
-
-                })
-
-            ) {
-
-                return true;
-
-            }
+        if (!product) {
 
             return false;
 
-        },
+        }
 
-        /* ======================================================
+        const values = [
 
-           TYPE IMMOBILIER
+            product.product_type,
 
-        ====================================================== */
+            product.type,
 
-        getPropertyType(product) {
+            product.offer_type,
 
-            if (!product) {
+            product.property_type,
 
-                return null;
+            product.category_name,
 
-            }
+            product.category?.name
 
-            const type = this.normalize(product.property_type);
+        ]
 
-            if (type) {
+            .filter(hasValue)
 
-                return type;
+            .map(normalize);
 
-            }
+        return values.some(value =>
 
-            const name = this.normalize(product.name);
+            value.includes("residence") ||
 
-            if (name.includes("residence") ||
+            value.includes("résidence")
 
-                name.includes("studio meubl") ||
+        );
 
-                name.includes("appartement meubl")) {
+    }
 
-                return this.TYPES.RESIDENCE;
+    /* ========================================================
 
-            }
+       5. DÉTECTION PRODUIT CLASSIQUE
 
-            return this.TYPES.PROPERTY;
+       ======================================================== */
 
-        },
+    function isStandardProduct(product) {
 
-        /* ======================================================
+        if (!product) {
 
-           DÉTERMINATION DU TYPE
+            return false;
 
-        ====================================================== */
+        }
 
-        getType(product) {
+        return !isRealEstate(product);
 
-            if (!product || typeof product !== "object") {
+    }
 
-                return this.TYPES.STANDARD;
+    /* ========================================================
 
-            }
+       6. DÉTECTION MODE DE TRANSACTION
 
-            if (this.isProperty(product)) {
+       ======================================================== */
 
-                const propertyType = this.getPropertyType(product);
+    function getExplicitTransactionMode(product) {
 
-                if (
+        if (!product) {
 
-                    propertyType === "residence" ||
+            return null;
 
-                    propertyType === "residence meublee" ||
+        }
 
-                    propertyType === "residence meuble"
+        const possibleFields = [
 
-                ) {
+            "transaction_mode",
 
-                    return this.TYPES.RESIDENCE;
+            "transaction_type",
 
-                }
+            "purchase_mode",
 
-                return this.TYPES.PROPERTY;
+            "order_mode",
 
-            }
+            "sales_mode",
 
-            return this.TYPES.STANDARD;
+            "selling_mode",
 
-        },
+            "action_type"
 
-        /* ======================================================
+        ];
 
-           MODE DE TRANSACTION
+        for (const field of possibleFields) {
 
-        ====================================================== */
+            if (!hasValue(product[field])) {
 
-        getTransactionMode(product) {
-
-            const type = this.getType(product);
-
-            /*
-
-             * Immobilier :
-
-             * pas de panier commercial classique.
-
-             */
-
-            if (type === this.TYPES.PROPERTY) {
-
-                return this.ACTIONS.INTEREST;
+                continue;
 
             }
 
-            /*
+            const value = normalize(
 
-             * Résidence :
-
-             * réservation préparée.
-
-             *
-
-             * La réservation complète sera développée
-
-             * au JOUR 8.
-
-             */
-
-            if (type === this.TYPES.RESIDENCE) {
-
-                return this.ACTIONS.RESERVATION;
-
-            }
-
-            /*
-
-             * Pour les produits standards, le comportement
-
-             * actuel est l'achat via panier.
-
-             */
-
-            return this.ACTIONS.CART;
-
-        },
-
-        /* ======================================================
-
-           ACTIONS DISPONIBLES
-
-        ====================================================== */
-
-        getAvailableActions(product) {
-
-            const mode = this.getTransactionMode(product);
-
-            switch (mode) {
-
-                case this.ACTIONS.INTEREST:
-
-                    return Object.freeze([
-
-                        this.ACTIONS.INTEREST,
-
-                        this.ACTIONS.CONTACT
-
-                    ]);
-
-                case this.ACTIONS.RESERVATION:
-
-                    return Object.freeze([
-
-                        this.ACTIONS.RESERVATION,
-
-                        this.ACTIONS.CONTACT
-
-                    ]);
-
-                case this.ACTIONS.CONTACT:
-
-                    return Object.freeze([
-
-                        this.ACTIONS.CONTACT
-
-                    ]);
-
-                case this.ACTIONS.CART:
-
-                default:
-
-                    return Object.freeze([
-
-                        this.ACTIONS.CART,
-
-                        this.ACTIONS.CONTACT
-
-                    ]);
-
-            }
-
-        },
-
-        /* ======================================================
-
-           PANIER AUTORISÉ ?
-
-        ====================================================== */
-
-        canUseCart(product) {
-
-            return this.getTransactionMode(product) === this.ACTIONS.CART;
-
-        },
-
-        /* ======================================================
-
-           RÉSERVATION AUTORISÉE ?
-
-        ====================================================== */
-
-        canReserve(product) {
-
-            return this.getTransactionMode(product) === this.ACTIONS.RESERVATION;
-
-        },
-
-        /* ======================================================
-
-           INTÉRESSÉ AUTORISÉ ?
-
-        ====================================================== */
-
-        canShowInterest(product) {
-
-            return this.getTransactionMode(product) === this.ACTIONS.INTEREST;
-
-        },
-
-        /* ======================================================
-
-           OPTIONS DE TAILLE
-
-        ====================================================== */
-
-        hasSizes(product) {
-
-            if (!product || !Array.isArray(product.sizes)) {
-
-                return false;
-
-            }
-
-            return product.sizes.some(size => {
-
-                return size !== null &&
-
-                       size !== undefined &&
-
-                       String(size).trim() !== "";
-
-            });
-
-        },
-
-        getSizes(product) {
-
-            if (!this.hasSizes(product)) {
-
-                return [];
-
-            }
-
-            return product.sizes
-
-                .map(size => String(size).trim())
-
-                .filter(Boolean);
-
-        },
-
-        /* ======================================================
-
-           STOCK
-
-        ====================================================== */
-
-        getStock(product) {
-
-            if (!product) {
-
-                return 0;
-
-            }
-
-            const stock = Number(product.stock);
-
-            if (!Number.isFinite(stock) || stock < 0) {
-
-                return 0;
-
-            }
-
-            return stock;
-
-        },
-
-        isOutOfStock(product) {
-
-            /*
-
-             * Le stock concerne principalement les produits
-
-             * commerciaux.
-
-             *
-
-             * Pour l'immobilier/résidence, on ne considère
-
-             * pas automatiquement stock = 0 comme une rupture
-
-             * commerciale.
-
-             */
-
-            if (!this.canUseCart(product)) {
-
-                return false;
-
-            }
-
-            return this.getStock(product) <= 0;
-
-        },
-
-        /* ======================================================
-
-           PROMOTION
-
-        ====================================================== */
-
-        getPrice(product) {
-
-            if (!product) {
-
-                return 0;
-
-            }
-
-            const price = Number(product.price);
-
-            return Number.isFinite(price) && price >= 0
-
-                ? price
-
-                : 0;
-
-        },
-
-        /*
-
-         * La table products actuelle ne contient pas encore
-
-         * de colonne "old_price".
-
-         *
-
-         * Nous ne fabriquons donc aucune promotion.
-
-         *
-
-         * Cette fonction est volontairement préparée pour
-
-         * accepter plus tard les vraies données de promotion.
-
-         */
-
-        getPromotion(product) {
-
-            if (!product || typeof product !== "object") {
-
-                return null;
-
-            }
-
-            const oldPrice = Number(
-
-                product.old_price ??
-
-                product.original_price ??
-
-                product.previous_price
-
-            );
-
-            const newPrice = Number(
-
-                product.new_price ??
-
-                product.sale_price
+                product[field]
 
             );
 
             if (
 
-                Number.isFinite(oldPrice) &&
+                value === "cart" ||
 
-                Number.isFinite(newPrice) &&
+                value === "panier" ||
 
-                oldPrice > 0 &&
-
-                newPrice >= 0 &&
-
-                newPrice < oldPrice
+                value === "achat"
 
             ) {
 
-                const percentage = Math.round(
-
-                    ((oldPrice - newPrice) / oldPrice) * 100
-
-                );
-
-                return Object.freeze({
-
-                    active: true,
-
-                    oldPrice,
-
-                    newPrice,
-
-                    percentage
-
-                });
+                return "cart";
 
             }
-
-            return Object.freeze({
-
-                active: false,
-
-                oldPrice: null,
-
-                newPrice: null,
-
-                percentage: null
-
-            });
-
-        },
-
-        /* ======================================================
-
-           CARACTÉRISTIQUES
-
-        ====================================================== */
-
-        getCharacteristics(product) {
-
-            if (!product) {
-
-                return [];
-
-            }
-
-            const characteristics = [];
-
-            /*
-
-             * Immobilier
-
-             */
-
-            if (this.isProperty(product)) {
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Type",
-
-                    product.property_type
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Localisation",
-
-                    product.location
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Pièces",
-
-                    product.rooms_count
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Chambres",
-
-                    product.bedrooms_count
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Disponibilité",
-
-                    product.availability
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Capacité",
-
-                    product.capacity
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Équipements",
-
-                    product.amenities
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Conditions",
-
-                    product.conditions
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Type de tarification",
-
-                    product.pricing_type
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Heure d'arrivée",
-
-                    product.check_in_time
-
-                );
-
-                this.addCharacteristic(
-
-                    characteristics,
-
-                    "Heure de départ",
-
-                    product.check_out_time
-
-                );
-
-                return characteristics;
-
-            }
-
-            /*
-
-             * Produit standard
-
-             *
-
-             * On n'invente aucune caractéristique.
-
-             * Les tailles existantes sont simplement récupérées.
-
-             */
-
-            if (this.hasSizes(product)) {
-
-                characteristics.push({
-
-                    key: "sizes",
-
-                    label: "Tailles disponibles",
-
-                    value: this.getSizes(product).join(", ")
-
-                });
-
-            }
-
-            return characteristics;
-
-        },
-
-        addCharacteristic(list, label, value) {
 
             if (
 
-                value === null ||
+                value === "reservation" ||
 
-                value === undefined ||
+                value === "reserve" ||
 
-                String(value).trim() === ""
+                value === "reserver"
 
             ) {
 
-                return;
+                return "reservation";
 
             }
 
-            list.push({
+            if (
 
-                key: this.normalize(label).replace(/\s+/g, "_"),
+                value === "interest" ||
 
-                label,
+                value === "interested" ||
 
-                value
+                value === "interesse" ||
 
-            });
+                value === "interesse"
 
-        },
+            ) {
 
-        /* ======================================================
-
-           INFORMATIONS DE DISPONIBILITÉ
-
-        ====================================================== */
-
-        getAvailability(product) {
-
-            if (!product) {
-
-                return {
-
-                    available: false,
-
-                    label: "Indisponible"
-
-                };
+                return "interest";
 
             }
 
-            if (this.isOutOfStock(product)) {
+            if (
 
-                return {
+                value === "contact" ||
 
-                    available: false,
+                value === "contact_seller" ||
 
-                    label: "Rupture de stock"
+                value === "contact_vendeur"
 
-                };
+            ) {
+
+                return "contact";
+
+            }
+
+            if (
+
+                value === "cart_reservation" ||
+
+                value === "panier_reservation"
+
+            ) {
+
+                return "cart_reservation";
 
             }
 
-            /*
+            if (
 
-             * Pour les produits immobiliers, on utilise la
+                value === "reservation_interest"
 
-             * disponibilité renseignée par le vendeur.
+            ) {
 
-             */
-
-            if (this.isProperty(product)) {
-
-                if (product.availability) {
-
-                    return {
-
-                        available: true,
-
-                        label: String(product.availability)
-
-                    };
-
-                }
-
-                return {
-
-                    available: true,
-
-                    label: "Disponible"
-
-                };
+                return "reservation_interest";
 
             }
+
+            if (
+
+                value === "cart_contact"
+
+            ) {
+
+                return "cart_contact";
+
+            }
+
+            if (
+
+                value === "interest_contact"
+
+            ) {
+
+                return "interest_contact";
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    /* ========================================================
+
+       7. DÉTECTION DES DRAPEAUX DE TRANSACTION
+
+       ======================================================== */
+
+    function getTransactionFlags(product) {
+
+        if (!product) {
 
             return {
 
-                available: true,
+                cart: false,
 
-                label: "Disponible"
+                reservation: false,
+
+                interest: false,
+
+                contact: false
 
             };
 
-        },
+        }
 
-        /* ======================================================
+        return {
 
-           RÉSUMÉ COMPLET POUR PRODUCT-DETAIL.JS
+            cart:
 
-        ====================================================== */
+                toBoolean(product.allow_cart) ||
 
-        analyze(product) {
+                toBoolean(product.can_add_to_cart) ||
 
-            const type = this.getType(product);
+                toBoolean(product.is_cart_enabled),
 
-            const transactionMode = this.getTransactionMode(product);
+            reservation:
 
-            return Object.freeze({
+                toBoolean(product.allow_reservation) ||
 
-                type,
+                toBoolean(product.reservable) ||
 
-                transactionMode,
+                toBoolean(product.is_reservable) ||
 
-                isProperty:
+                toBoolean(product.requires_reservation),
 
-                    type === this.TYPES.PROPERTY ||
+            interest:
 
-                    type === this.TYPES.RESIDENCE,
+                toBoolean(product.allow_interest) ||
 
-                isResidence:
+                toBoolean(product.is_interest_enabled) ||
 
-                    type === this.TYPES.RESIDENCE,
+                toBoolean(product.interest_enabled),
 
-                canUseCart:
+            contact:
 
-                    this.canUseCart(product),
+                toBoolean(product.allow_contact) ||
 
-                canReserve:
+                toBoolean(product.contact_required) ||
 
-                    this.canReserve(product),
+                toBoolean(product.contact_to_order)
 
-                canShowInterest:
+        };
 
-                    this.canShowInterest(product),
+    }
 
-                canContact: true,
+    /* ========================================================
 
-                hasSizes:
+       8. MODE PAR DÉFAUT
 
-                    this.hasSizes(product),
+       ======================================================== */
 
-                sizes:
+    function getDefaultTransactionMode(product) {
 
-                    this.getSizes(product),
+        if (isResidence(product)) {
 
-                stock:
+            return "reservation";
 
-                    this.getStock(product),
+        }
 
-                outOfStock:
+        if (isRealEstate(product)) {
 
-                    this.isOutOfStock(product),
+            return "interest";
 
-                availability:
+        }
 
-                    this.getAvailability(product),
+        return CONFIG.defaultTransaction;
 
-                promotion:
+    }
 
-                    this.getPromotion(product),
+    /* ========================================================
 
-                characteristics:
+       9. MODE FINAL
 
-                    this.getCharacteristics(product),
+       ======================================================== */
 
-                actions:
+    function getTransactionMode(product) {
 
-                    this.getAvailableActions(product)
+        if (!product) {
+
+            return CONFIG.defaultTransaction;
+
+        }
+
+        const explicit =
+
+            getExplicitTransactionMode(product);
+
+        if (explicit) {
+
+            return explicit;
+
+        }
+
+        const flags =
+
+            getTransactionFlags(product);
+
+        const activeModes = [];
+
+        if (flags.cart) {
+
+            activeModes.push("cart");
+
+        }
+
+        if (flags.reservation) {
+
+            activeModes.push("reservation");
+
+        }
+
+        if (flags.interest) {
+
+            activeModes.push("interest");
+
+        }
+
+        if (flags.contact) {
+
+            activeModes.push("contact");
+
+        }
+
+        if (activeModes.length === 1) {
+
+            return activeModes[0];
+
+        }
+
+        if (
+
+            flags.cart &&
+
+            flags.reservation
+
+        ) {
+
+            return "cart_reservation";
+
+        }
+
+        if (
+
+            flags.reservation &&
+
+            flags.interest
+
+        ) {
+
+            return "reservation_interest";
+
+        }
+
+        if (
+
+            flags.cart &&
+
+            flags.contact
+
+        ) {
+
+            return "cart_contact";
+
+        }
+
+        if (
+
+            flags.interest &&
+
+            flags.contact
+
+        ) {
+
+            return "interest_contact";
+
+        }
+
+        return getDefaultTransactionMode(
+
+            product
+
+        );
+
+    }
+
+    /* ========================================================
+
+       10. ACTIONS DISPONIBLES
+
+       ======================================================== */
+
+    function getActions(product) {
+
+        const mode =
+
+            getTransactionMode(product);
+
+        const actions = {
+
+            cart: false,
+
+            reservation: false,
+
+            interest: false,
+
+            contact: false
+
+        };
+
+        switch (mode) {
+
+            case "cart":
+
+                actions.cart = true;
+
+                break;
+
+            case "reservation":
+
+                actions.reservation = true;
+
+                break;
+
+            case "interest":
+
+                actions.interest = true;
+
+                break;
+
+            case "contact":
+
+                actions.contact = true;
+
+                break;
+
+            case "cart_reservation":
+
+                actions.cart = true;
+
+                actions.reservation = true;
+
+                break;
+
+            case "reservation_interest":
+
+                actions.reservation = true;
+
+                actions.interest = true;
+
+                break;
+
+            case "cart_contact":
+
+                actions.cart = true;
+
+                actions.contact = true;
+
+                break;
+
+            case "interest_contact":
+
+                actions.interest = true;
+
+                actions.contact = true;
+
+                break;
+
+        }
+
+        return actions;
+
+    }
+
+    /* ========================================================
+
+       11. QUANTITÉ
+
+       ======================================================== */
+
+    function canUseQuantity(product) {
+
+        if (!product) {
+
+            return false;
+
+        }
+
+        const actions =
+
+            getActions(product);
+
+        return (
+
+            actions.cart === true &&
+
+            !isRealEstate(product)
+
+        );
+
+    }
+
+    /* ========================================================
+
+       12. STOCK
+
+       ======================================================== */
+
+    function getStock(product) {
+
+        if (!product) {
+
+            return {
+
+                known: false,
+
+                quantity: null,
+
+                available: false
+
+            };
+
+        }
+
+        if (
+
+            product.stock === undefined ||
+
+            product.stock === null ||
+
+            product.stock === ""
+
+        ) {
+
+            return {
+
+                known: false,
+
+                quantity: null,
+
+                available: true
+
+            };
+
+        }
+
+        const quantity = Number(
+
+            product.stock
+
+        );
+
+        if (!Number.isFinite(quantity)) {
+
+            return {
+
+                known: false,
+
+                quantity: null,
+
+                available: true
+
+            };
+
+        }
+
+        return {
+
+            known: true,
+
+            quantity,
+
+            available: quantity > 0
+
+        };
+
+    }
+
+    /* ========================================================
+
+       13. OPTIONS DYNAMIQUES
+
+       ======================================================== */
+
+    function getOptions(product) {
+
+        if (!product) {
+
+            return [];
+
+        }
+
+        const options = [];
+
+        /* ----------------------------------------------------
+
+           SIZES / TAILLES
+
+           ---------------------------------------------------- */
+
+        const sizes =
+
+            arrayValue(product.sizes);
+
+        if (sizes.length) {
+
+            options.push({
+
+                key: "size",
+
+                label: "Taille",
+
+                type: "select",
+
+                values: sizes
 
             });
 
         }
 
+        /* ----------------------------------------------------
+
+           AUTRES OPTIONS
+
+           ---------------------------------------------------- */
+
+        const possibleOptionFields = [
+
+            "options",
+
+            "product_options",
+
+            "variants",
+
+            "attributes"
+
+        ];
+
+        for (const field of possibleOptionFields) {
+
+            const value = product[field];
+
+            if (!value) {
+
+                continue;
+
+            }
+
+            if (Array.isArray(value)) {
+
+                value.forEach(option => {
+
+                    if (!option) {
+
+                        return;
+
+                    }
+
+                    if (
+
+                        typeof option === "object" &&
+
+                        hasValue(option.name)
+
+                    ) {
+
+                        options.push({
+
+                            key:
+
+                                option.key ||
+
+                                normalize(option.name)
+
+                                    .replace(/\s+/g, "_"),
+
+                            label: option.name,
+
+                            type:
+
+                                option.type ||
+
+                                "select",
+
+                            values:
+
+                                arrayValue(
+
+                                    option.values
+
+                                )
+
+                        });
+
+                    }
+
+                });
+
+            }
+
+            else if (
+
+                typeof value === "object"
+
+            ) {
+
+                Object.entries(value)
+
+                    .forEach(
+
+                        ([key, optionValue]) => {
+
+                            if (
+
+                                Array.isArray(
+
+                                    optionValue
+
+                                )
+
+                            ) {
+
+                                options.push({
+
+                                    key,
+
+                                    label: key,
+
+                                    type: "select",
+
+                                    values:
+
+                                        optionValue
+
+                                });
+
+                            }
+
+                        }
+
+                    );
+
+            }
+
+        }
+
+        return options;
+
+    }
+
+    /* ========================================================
+
+       14. CARACTÉRISTIQUES
+
+       ======================================================== */
+
+    function getCharacteristics(product) {
+
+        if (!product) {
+
+            return [];
+
+        }
+
+        const result = [];
+
+        const ignoredKeys = new Set([
+
+            "id",
+
+            "name",
+
+            "description",
+
+            "price",
+
+            "old_price",
+
+            "stock",
+
+            "seller_id",
+
+            "shop_id",
+
+            "category_id",
+
+            "category",
+
+            "category_name",
+
+            "image_url_1",
+
+            "image_url_2",
+
+            "image_url_3",
+
+            "created_at",
+
+            "updated_at",
+
+            "is_active",
+
+            "sizes",
+
+            "options",
+
+            "product_options",
+
+            "variants",
+
+            "attributes"
+
+        ]);
+
+        if (
+
+            product.characteristics &&
+
+            typeof product.characteristics ===
+
+                "object"
+
+        ) {
+
+            Object.entries(
+
+                product.characteristics
+
+            ).forEach(([key, value]) => {
+
+                if (!hasValue(value)) {
+
+                    return;
+
+                }
+
+                result.push({
+
+                    key,
+
+                    label: key,
+
+                    value
+
+                });
+
+            });
+
+        }
+
+        return result;
+
+    }
+
+    /* ========================================================
+
+       15. GALERIE
+
+       ======================================================== */
+
+    function getImages(product) {
+
+        if (!product) {
+
+            return [];
+
+        }
+
+        const images = [
+
+            product.image_url_1,
+
+            product.image_url_2,
+
+            product.image_url_3,
+
+            product.image_url_4,
+
+            product.image_url_5
+
+        ]
+
+            .filter(image =>
+
+                typeof image === "string" &&
+
+                image.trim()
+
+            )
+
+            .map(image => image.trim());
+
+        return [
+
+            ...new Set(images)
+
+        ];
+
+    }
+
+    /* ========================================================
+
+       16. PRIX
+
+       ======================================================== */
+
+    function getPricing(product) {
+
+        if (!product) {
+
+            return {
+
+                price: null,
+
+                oldPrice: null,
+
+                hasPromotion: false
+
+            };
+
+        }
+
+        const price =
+
+            product.price !== undefined &&
+
+            product.price !== null
+
+                ? Number(product.price)
+
+                : null;
+
+        const oldPrice =
+
+            product.old_price !== undefined &&
+
+            product.old_price !== null
+
+                ? Number(product.old_price)
+
+                : null;
+
+        const hasPromotion =
+
+            Number.isFinite(price) &&
+
+            Number.isFinite(oldPrice) &&
+
+            oldPrice > price;
+
+        let discount = null;
+
+        if (hasPromotion) {
+
+            discount = Math.round(
+
+                ((oldPrice - price) /
+
+                    oldPrice) *
+
+                    100
+
+            );
+
+        }
+
+        return {
+
+            price,
+
+            oldPrice:
+
+                hasPromotion
+
+                    ? oldPrice
+
+                    : null,
+
+            hasPromotion,
+
+            discount
+
+        };
+
+    }
+
+    /* ========================================================
+
+       17. DISPONIBILITÉ
+
+       ======================================================== */
+
+    function getAvailability(product) {
+
+        const stock =
+
+            getStock(product);
+
+        const actions =
+
+            getActions(product);
+
+        if (
+
+            actions.cart &&
+
+            stock.known &&
+
+            stock.quantity <= 0
+
+        ) {
+
+            return {
+
+                available: false,
+
+                label: "Rupture de stock",
+
+                stock
+
+            };
+
+        }
+
+        return {
+
+            available: true,
+
+            label: "Disponible",
+
+            stock
+
+        };
+
+    }
+
+    /* ========================================================
+
+       18. TYPE D'OFFRE
+
+       ======================================================== */
+
+    function getType(product) {
+
+        if (isResidence(product)) {
+
+            return "residence";
+
+        }
+
+        if (isRealEstate(product)) {
+
+            return "real_estate";
+
+        }
+
+        return CONFIG.defaultType;
+
+    }
+
+    /* ========================================================
+
+       19. LIBELLÉ DU TYPE
+
+       ======================================================== */
+
+    function getTypeLabel(product) {
+
+        const type =
+
+            getType(product);
+
+        switch (type) {
+
+            case "residence":
+
+                return "Résidence";
+
+            case "real_estate":
+
+                return "Immobilier";
+
+            default:
+
+                return "Produit";
+
+        }
+
+    }
+
+    /* ========================================================
+
+       20. RÉSUMÉ COMPLET
+
+       ======================================================== */
+
+    function analyze(product) {
+
+        if (!product) {
+
+            return null;
+
+        }
+
+        return {
+
+            id: product.id || null,
+
+            type: getType(product),
+
+            typeLabel:
+
+                getTypeLabel(product),
+
+            isStandardProduct:
+
+                isStandardProduct(product),
+
+            isRealEstate:
+
+                isRealEstate(product),
+
+            isResidence:
+
+                isResidence(product),
+
+            transactionMode:
+
+                getTransactionMode(product),
+
+            actions:
+
+                getActions(product),
+
+            quantityEnabled:
+
+                canUseQuantity(product),
+
+            stock:
+
+                getStock(product),
+
+            availability:
+
+                getAvailability(product),
+
+            options:
+
+                getOptions(product),
+
+            characteristics:
+
+                getCharacteristics(product),
+
+            images:
+
+                getImages(product),
+
+            pricing:
+
+                getPricing(product)
+
+        };
+
+    }
+
+    /* ========================================================
+
+       21. VALIDATION DU PRODUIT
+
+       ======================================================== */
+
+    function validate(product) {
+
+        const errors = [];
+
+        const warnings = [];
+
+        if (!product) {
+
+            errors.push(
+
+                "Produit inexistant."
+
+            );
+
+            return {
+
+                valid: false,
+
+                errors,
+
+                warnings
+
+            };
+
+        }
+
+        if (!hasValue(product.id)) {
+
+            errors.push(
+
+                "Identifiant du produit absent."
+
+            );
+
+        }
+
+        if (!hasValue(product.name)) {
+
+            errors.push(
+
+                "Nom du produit absent."
+
+            );
+
+        }
+
+        const actions =
+
+            getActions(product);
+
+        const stock =
+
+            getStock(product);
+
+        if (
+
+            actions.cart &&
+
+            stock.known &&
+
+            stock.quantity <= 0
+
+        ) {
+
+            warnings.push(
+
+                "Le produit est en rupture de stock."
+
+            );
+
+        }
+
+        if (
+
+            getImages(product).length === 0
+
+        ) {
+
+            warnings.push(
+
+                "Aucune image du produit n'est disponible."
+
+            );
+
+        }
+
+        return {
+
+            valid: errors.length === 0,
+
+            errors,
+
+            warnings
+
+        };
+
+    }
+
+    /* ========================================================
+
+       22. API PUBLIQUE
+
+       ======================================================== */
+
+    window.MarketBouakeProductTypes = {
+
+        CONFIG,
+
+        normalize,
+
+        isRealEstate,
+
+        isResidence,
+
+        isStandardProduct,
+
+        getType,
+
+        getTypeLabel,
+
+        getTransactionMode,
+
+        getActions,
+
+        getStock,
+
+        canUseQuantity,
+
+        getOptions,
+
+        getCharacteristics,
+
+        getImages,
+
+        getPricing,
+
+        getAvailability,
+
+        analyze,
+
+        validate
+
     };
 
-    /* ==========================================================
+    /* ========================================================
 
-       EXPOSITION GLOBALE
+       23. ÉVÉNEMENT DE DISPONIBILITÉ
 
-    ========================================================== */
+       ======================================================== */
 
-    window.MarketBouakeProductTypes =
+    document.dispatchEvent(
 
-        Object.freeze(MarketBouakeProductTypes);
+        new CustomEvent(
+
+            "marketbouake:product-types-ready"
+
+        )
+
+    );
+
+    console.info(
+
+        "Market Bouaké — product-types.js chargé."
+
+    );
 
 })();
